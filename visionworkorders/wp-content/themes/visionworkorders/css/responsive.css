@@ -1,0 +1,60 @@
+@media screen and (min-width:768px) and (max-width:1024px){ 
+.vt_header .navbar-default .navbar-nav>li {margin-left: 17px;}
+.vt_header .navbar-default .navbar-nav>li>a{font-size: 14px;}
+.vt_header .navbar-default .navbar-nav>li>a.vt_buy {padding: 5px 5px;}
+.vt_header .vt_top_contdetail {margin-top: 10px;}
+.vt_header .navbar-default {margin-top: 5px;margin-bottom: 0;}
+.vt_banner_row #carousel-example-generic {height: auto;}
+.vt_banner_row .carousel-caption{right: 10%; left: 10%; top:50px;}
+.vt_banner_row .carousel-indicators {top: inherit; bottom: 10px;}
+.vt_banner_row .carousel-caption h2 {font-size: 26px!important;}
+.vt_banner_row .carousel-caption p {font-size: 16px;}
+.vt_about_row{margin-top: 35px;}
+.vt_about_row .vt_col_inner {margin-top:30px;}
+.vt_about_row .vt_home_about_content h1{margin-top:0px;}
+.vt_mobile_app .vt_download_section h2{margin-top: 0px;}
+.vt_clients_wrapper .vt_partner_btn {margin-top: 20px; margin-right: 0; margin-left: 15px; float:left;}
+.vt_clients_wrapper .vt_clients_logo_wrapper .vt_client {margin-bottom: 20px;}
+.vt_footer_wrapper .vt_foot_cdetail:nth-child(3) {margin-top:40px;}
+.vt_footer_wrapper .vt_foot_nav_wrap .vt_logo_foot {display:none;}
+.vt_footer_wrapper .vt_foot_nav_wrap .vt_subscribe_newsletter .vt_submit{width: 38%;}
+}
+@media screen and (max-width:767px){
+h1, h2{font-size:24px!important;}
+.vt_large_btn{padding: 15px 30px;}
+.vt_header .vt_top_contdetail {display: none;}
+.vt_header .vt_top_contdetail ul li {margin-left:0px; padding-right:0px; border-right:none;}
+.vt_header .navbar-default {float: none;}
+.vt_header .navbar-default .container-fluid>.navbar-header {margin-right: 0;}
+.vt_header .navbar-default .navbar-toggle{margin-right:0; }
+.vt_header .navbar-default .navbar-toggle:focus, .vt_header .navbar-default .navbar-toggle:hover{background-color:#ff6600;border-color: #ff6600;}
+.vt_header .navbar-default .navbar-toggle:focus .icon-bar, .vt_header .navbar-default .navbar-toggle:hover .icon-bar {background-color: #fff;}
+.vt_header .navbar-default ul.navbar-nav {margin:0px;}
+.vt_header .navbar-default .navbar-nav>li{display:list-item; margin-left: 0;}
+.vt_header .navbar-default .navbar-nav>li>a {line-height: 35px; border-bottom:1px solid #e7e7e7; background:#f2f2f2; padding-left:10px;}
+.vt_header .navbar-default .navbar-nav>li>a.vt_buy {border-radius: 0;}
+.vt_banner_row #carousel-example-generic {height: auto;}
+.vt_about_row {margin-top:25px;padding-bottom: 45px;}
+.vt_about_row .vt_col_inner {margin:20px 0;}
+.vt_about_row .vt_content_inner {margin-top:25px;}
+.vt_about_row .vt_prodesk_view {margin-top:25px;}
+.vt_mobile_app {padding-top: 45px;padding-bottom: 45px;}
+.vt_mobile_app .vt_download_section {text-align:left; margin-top:45px;}
+.vt_mobile_app .vt_download_section .vt_download_btn {float: left;}
+.vt_testimonials_wrapper {padding-top: 45px;}
+.vt_clients_wrapper{padding-top: 45px; padding-bottom:45px;}
+.vt_clients_wrapper .vt_partner_btn {float: left; margin-top: 20px;margin-right: 0;padding-left: 15px; padding-right: 15px; margin-left: 15px;}
+.vt_clients_wrapper .vt_clients_logo_wrapper .vt_client {margin-bottom: 20px;}
+.vt_footer_wrapper .vt_foot_cdetail{margin-bottom:20px; border-left:none;}
+.vt_footer_wrapper .vt_foot_cdetail h3 { word-break: break-all;}
+.vt_footer_wrapper .vt_foot_nav_wrap {margin-top: 0;}
+.vt_footer_wrapper .vt_foot_nav_wrap .vt_logo_foot {display:none;}
+.vt_footer_wrapper .vt_foot_nav_wrap .vt_subscribe_newsletter .vt_subinput{width:50%;}
+.vt_footer_wrapper .vt_foot_nav_wrap .vt_subscribe_newsletter label br {display:none;}
+.vt_footer_wrapper .vt_foot_nav_wrap .vt_subscribe_newsletter .vt_submit {font-size: 14px; letter-spacing: 0; width:50%;}
+}
+
+@media screen and (min-width:568px) and (max-width:767px) {
+.vt_header .navbar-default .navbar-toggle{margin-top: 25px;}
+.vt_clients_wrapper .vt_partner_btn {padding: 15px 50px;}
+}
