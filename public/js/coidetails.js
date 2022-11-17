@@ -80,6 +80,7 @@ function updateCoidetails()
 			$('#holder_name_error').html("Please Enter Certificate Holder Information");
 			submit_flag = false;
 	}
+	
 	if(certificate_description==''){
 			$('#description_name_error').html("Please Enter Description of Special Terms");
 			submit_flag = false;
