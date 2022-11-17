@@ -1085,7 +1085,7 @@ public function getDateFormat($data = null) {
             $data = date("Y-m-d h:i:s");
 
         //return date("Y-m-d h:i:s", strtotime($data));
-		return date("m-d-Y", strtotime($data));
+		return date("F-d-Y", strtotime($data));
 }
 
 	
