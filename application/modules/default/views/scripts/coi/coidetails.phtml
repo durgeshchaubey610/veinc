@@ -170,6 +170,13 @@ font-weight: bold;
 		<?php }else{?>
 		<p>No Report Exists</p>
 		<?php } ?>
+		
+		<h1 style="margin-top:30px" >Send Certificate To</h1>
+		<?php if(!empty($this->coiDetails)){?>
+		<p> <?php echo $this->coiDetails[0]->coi_au_details_send_certificate_to; ?></p>
+		<?php }else{?>
+		<p>No Report Exists</p>
+		<?php } ?>
     </div>
 </div>
 

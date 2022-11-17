@@ -66,7 +66,6 @@ function checkNewcoidetails()
 	}
 }
 
-
 function updateCoidetails() 
 {
  $('#updatenewcoidetails').attr('disabled',true);
@@ -75,6 +74,7 @@ function updateCoidetails()
     var uniquecc = $("#uniquecc").val();
 	var certificate_holder = $("#certificate_holder").val();
 	var certificate_description = $("#certificate_description").val();
+	var send_certificate_to = $("#send_certificate_to").val();
 	var submit_flag = true;
 	if(certificate_holder==''){
 			$('#holder_name_error').html("Please Enter Certificate Holder Information");
@@ -82,6 +82,11 @@ function updateCoidetails()
 	}
 	if(certificate_description==''){
 			$('#description_name_error').html("Please Enter Description of Special Terms");
+			submit_flag = false;
+	}
+	
+		if(send_certificate_to==''){
+			$('#send_certificate_name_error').html("Please Enter Send Certificate To");
 			submit_flag = false;
 	}
 	
@@ -94,7 +99,7 @@ function updateCoidetails()
 				url         : baseUrl+"coi/updatecoidetailstest",
 				type        : "post",
 				datatype    : 'json',
-				data        : {coi_au_details_ID:cid,Building_ID:bid,uniqueCostCenter:uniquecc,coi_au_details_holder:certificate_holder,coi_au_details_specialterms:certificate_description},
+				data        : {coi_au_details_ID:cid,Building_ID:bid,uniqueCostCenter:uniquecc,coi_au_details_holder:certificate_holder,coi_au_details_specialterms:certificate_description,coi_au_details_send_certificate_to:send_certificate_to},
 				success     : function( data ) {
 				var content = $.parseJSON(data);
                     if(content.status=='success'){
