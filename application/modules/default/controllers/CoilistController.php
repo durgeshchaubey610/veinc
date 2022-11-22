@@ -746,7 +746,7 @@ public function deletecoivendorAction(){
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Employee Benefits')
 			  $content = str_replace('[[++GLEmployeeBen]]', $DR['coi_au_defaults_Vendor'], $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Combined Single Limit')
-			  $content = str_replace('[[++ALComSingleLimit]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++ALComSingleLimit]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Bodily Injury (Per person)')
 			  $content = str_replace('[[++ALBodilyPerPerson]]', $DR['coi_au_defaults_Vendor'], $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Bodily Injury (Per accident)')
@@ -796,7 +796,9 @@ public function deletecoivendorAction(){
 		$coilistD = new Model_CoiList();        
 		
         $userData = $tenantUserModel->getTenantUserById($tenantId);
+       
         $tenantData = $tenant->getTenantById($tenantId);
+         //print_r($tenantData);
 		$coilistDetail = $coilistD->getcoiList($coiId);
 		    if(!empty($coilistDetail))
 		    {
@@ -837,6 +839,10 @@ public function deletecoivendorAction(){
 		    }
 			  
                $detail['tenantName'] = $tenantData[0]->tenantName;
+               // add by durgesh for username and firstnamelastname
+                $detail['useName'] = $tenantData[0]->userName;
+                $detail['firstnamelastname'] = $tenantData[0]->firstname." ".$tenantData[0]->lastname;
+               
                $detail['email'] = $tenantData[0]->email;					
                $detail['address1'] = $tenantData[0]->address1;
                $detail['address2'] = $tenantData[0]->address2;
@@ -873,10 +879,14 @@ public function deletecoivendorAction(){
             if ($buildingcoiDetails) {
 			$buildingcoiData = $buildingcoiDetails[0];
             $detail['certificate_holder'] = $buildingcoiData['coi_au_details_holder'];
-			$detail['details_specialterms'] = $buildingcoiData['coi_au_details_specialterms'];                
+			$detail['details_specialterms'] = $buildingcoiData['coi_au_details_specialterms'];   
+			// add by durgesh for coi_au_details_send_certificate_to
+			$detail['coi_au_details_send_certificate_to'] = $buildingcoiData['coi_au_details_send_certificate_to'];
             }
         }
+        //print_r($detail);
         $res = $this->sendTenantMail($detail);
+        
         
         if (count($res) == '1')
             echo true;
@@ -893,7 +903,7 @@ public function deletecoivendorAction(){
             $mail->addTo($detail['email']);
             // $mail->addTo('mark.lucas@voc-tech.com');
             // $mail->addTo('rob.palermo@voc-tech.com');
-            // $mail->addTo('durgeshchaubey@virtualemployee.com');
+            // $mail->addTo('parmatma@virtualemployee.com');
             $esubject = $email_data['subject'];
             $econtent = $email_data['content'];
            
@@ -968,7 +978,13 @@ public function deletecoivendorAction(){
             $content = str_replace('[[++buildingCity]]', $detail['building_city'], $content);
 			$content = str_replace('[[++buildingState]]', $detail['building_state'], $content);
 			$content = str_replace('[[++buildingPostalCode]]', $detail['building_postalCode'], $content);
+			
+			$content = str_replace('[[++tenantuseName]]', $detail['firstname'], $content);
             $content = str_replace('[[++tenantName]]', $detail['tenantName'], $content);
+            
+            $content = str_replace('[[++useName]]', $detail['useName'], $content);
+            $content = str_replace('[[++firstnamelastname]]', $detail['firstnamelastname'], $content);
+            
             $content = str_replace('[[++TenAddress1]]', $detail['address1'], $content);
             $content = str_replace('[[++TenAddress2]]', $detail['address2'], $content);
             $content = str_replace('[[++TenCity]]', $detail['city'], $content);
@@ -982,21 +998,21 @@ public function deletecoivendorAction(){
 			
 			foreach($detail as $DR ){
 			if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Each Occurrence')
-			  $content = str_replace('[[++GLEachOcc]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++GLEachOcc]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 			else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Damage to Rented Premises')
-			  $content = str_replace('[[++GLDRP]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++GLDRP]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Med EXP (Any One Person)')
-			  $content = str_replace('[[++GLMedExp]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++GLMedExp]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Personal & ADV Injury')
-			  $content = str_replace('[[++GLPersonal]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++GLPersonal]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'General Aggregate')
-			  $content = str_replace('[[++GLGeneral]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++GLGeneral]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Products - Comp/OP AGG')
-			  $content = str_replace('[[++GLProducts]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++GLProducts]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Employee Benefits')
-			  $content = str_replace('[[++GLEmployeeBen]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++GLEmployeeBen]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Combined Single Limit')
-			  $content = str_replace('[[++ALComSingleLimit]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++ALComSingleLimit]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Bodily Injury (Per person)')
 			  $content = str_replace('[[++ALBodilyPerPerson]]', $DR['coi_au_defaults_Tenant'], $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Bodily Injury (Per accident)')
@@ -1004,22 +1020,24 @@ public function deletecoivendorAction(){
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Property Damage (Per accident)')
 			  $content = str_replace('[[++ALPropPerAccident]]', $DR['coi_au_defaults_Tenant'], $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Underinsured motorist BI split')
-			  $content = str_replace('[[++ALUnderinsuredMot]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++ALUnderinsuredMot]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Umbrella Liability' && trim($DR['coi_vt_default_description']) == 'Each Occurrence')
-			  $content = str_replace('[[++ULEachOccurance]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++ULEachOccurance]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Umbrella Liability' && trim($DR['coi_vt_default_description']) == 'Aggregate')
-			  $content = str_replace('[[++ULAggregate]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++ULAggregate]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Workers Compensation' && trim($DR['coi_vt_default_description']) == 'E.L. Each Accident')
-			  $content = str_replace('[[++WCEachAccident]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++WCEachAccident]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Workers Compensation' && trim($DR['coi_vt_default_description']) == 'E.L. Disease - EA Employee')
-			  $content = str_replace('[[++WCEachEmployee]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++WCEachEmployee]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Workers Compensation' && trim($DR['coi_vt_default_description']) == 'E.L. Disease – Policy Limit')
-			  $content = str_replace('[[++WCPolocyLimit]]', $DR['coi_au_defaults_Tenant'], $content);
+			  $content = str_replace('[[++WCPolocyLimit]]', number_format($DR['coi_au_defaults_Tenant']), $content);
 		    		    
 			}
             
 			$content = str_replace('[[++CertificateHolder]]', $detail['certificate_holder'], $content);
 			$content = str_replace('[[++SpecialTerms]]', $detail['details_specialterms'], $content);
+			// add by durgesh for coi_au_details_send_certificate_to
+			$content = str_replace('[[++coi_au_details_send_certificate_to]]', $detail['coi_au_details_send_certificate_to'], $content);
 			
 			///// Footer 
             $content = str_replace('[[++footerInfo]]', $footer_data['footer_info'], $content);

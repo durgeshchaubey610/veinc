@@ -38,7 +38,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
         if($recoverFlag){
           $select = $db->select()
                          ->from(array('t'=>'tenant'))
-                         ->joinLeft(array('u'=>'users'),'u.uid = t.userId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id', 'note_notification'=>'u.note_notification'))
+                         ->joinLeft(array('u'=>'users'),'u.uid = t.userId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','userName'=>'u.userName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id', 'note_notification'=>'u.note_notification'))
 						 ->joinLeft(array('st' => 'states'),'st.state_code = t.state_code',array('st.state as statename'))
                          ->where('t.id=?',$id)
                          ->where('t.remove_status=1 OR t.userStatus = 1 OR t.history_remove=0');
@@ -47,7 +47,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
         else{			
           $select = $db->select()
                          ->from(array('t'=>'tenant'))
-                         ->joinLeft(array('u'=>'users'),'u.uid = t.userId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id', 'note_notification'=>'u.note_notification'))
+                         ->joinLeft(array('u'=>'users'),'u.uid = t.userId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','userName'=>'u.userName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id', 'note_notification'=>'u.note_notification'))
 						 ->joinLeft(array('st' => 'states'),'st.state_code = t.state_code',array('st.state as statename'))
                          ->where('t.id=?',$id); 
 
