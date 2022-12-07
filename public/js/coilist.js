@@ -626,8 +626,7 @@ function sendcoiemail(tid, cid, tname) {
     });
 }
 
-function sendcoivendoremail(tid, cid, tname) {
-	debugger
+function sendcoivendoremail(tid, cid, tname) {	
     $('.loader').show();
     $('.error-txt').html('');
     $('.message').html("");
