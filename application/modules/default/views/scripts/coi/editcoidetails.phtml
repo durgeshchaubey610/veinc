@@ -21,7 +21,7 @@ echo $this->headLink()->appendStylesheet($this->baseUrl() . '/public/css/multipl
 						    <input type="hidden" id="cid" name="cid" value="<?php echo $this->coiDetails->coi_au_details_ID; ?>">
 							<input type="hidden" id="bid" name="bid" value="<?php echo $this->coiDetails->Building_ID; ?>">
 							<input type="hidden" id="uniquecc" name="uniquecc" value="<?php echo $this->coiDetails->uniqueCostCenter; ?>">
-                            <label for="report_name">Certificate Holder information : <span class="required">*</span></label>
+                            <label for="report_name">Certificate Holder information: <span class="required">*</span></label>
                             <span id="holder_name_error" class="uofficeErr"></span>
                             <textarea class="input_field_12em" name="certificate_holder" id="certificate_holder"  style="width: 300px;
     height:90px;"><?php echo $this->coiDetails->coi_au_details_holder; ?></textarea>

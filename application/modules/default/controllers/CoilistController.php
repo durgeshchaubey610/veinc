@@ -594,7 +594,16 @@ public function deletecoivendorAction(){
 			   $detail['expirationDate'] = date("d-m-Y", strtotime($coilistDetail[0]['coi_au_date_to']));
 		    }
 			  
-               $detail['tenantName'] = $vendorData[0]->first_name." ".$vendorData[0]->last_name;
+               //$detail['tenantName'] = $vendorData[0]->first_name." ".$vendorData[0]->last_name;
+               $detail['tenantName'] = $vendorData[0]->first_name;
+               $detail['firstnamelastname'] = $vendorData[0]->first_name." ".$vendorData[0]->last_name;
+                //$detail['TenAddress1'] = $vendorData[0]->address1;
+                //$detail['TenAddress2'] = $vendorData[0]->address2;
+                 $detail['city'] = $vendorData[0]->city;
+               $detail['state'] = $vendorData[0]->state;
+               $detail['postalCode'] = $vendorData[0]->postal_code; 
+              
+               
                $detail['email'] = $vendorData[0]->email;					
                $detail['address1'] = $vendorData[0]->address1;
                $detail['address2'] = $vendorData[0]->address2;
@@ -631,9 +640,12 @@ public function deletecoivendorAction(){
             if ($buildingcoiDetails) {
 			$buildingcoiData = $buildingcoiDetails[0];
             $detail['certificate_holder'] = $buildingcoiData['coi_au_details_holder'];
-			$detail['details_specialterms'] = $buildingcoiData['coi_au_details_specialterms'];                
+			$detail['details_specialterms'] = $buildingcoiData['coi_au_details_specialterms'];    
+			$detail['coi_au_details_send_certificate_to'] = $buildingcoiData['coi_au_details_send_certificate_to'];
             }
         }
+        
+        
         $res = $this->sendVendorMail($detail);
         
         if (count($res) == '1')
@@ -652,7 +664,8 @@ public function deletecoivendorAction(){
             $mail->addTo($detail['email']);  
 			 // $mail->addTo('mark.lucas@voc-tech.com');
             // $mail->addTo('rob.palermo@voc-tech.com');
-            $mail->addTo('durgeshchaubey@virtualemployee.com');         
+            $mail->addTo('durgeshchaubey@virtualemployee.com');
+             //$mail->addTo('parmatma@virtualemployee.com'); 
             $esubject = $email_data['subject'];
             $econtent = $email_data['content'];
            
@@ -677,7 +690,7 @@ public function deletecoivendorAction(){
 	public function getCOIVendorTemplate($detail) {
 		
         $emailMapper = new Model_Email();
-        $loadTemplate = $emailMapper->loadEmailTemplate(66);
+        $loadTemplate = $emailMapper->loadEmailTemplate(61);
 		//echo "<pre>"; print_r($loadTemplate);die;
         if ($loadTemplate) {
             $emailTemplate = $loadTemplate[0];
@@ -732,44 +745,46 @@ public function deletecoivendorAction(){
 			
 			foreach($detail as $DR ){
 			if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Each Occurrence')
-			  $content = str_replace('[[++GLEachOcc]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++GLEachOcc]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 			else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Damage to Rented Premises')
-			  $content = str_replace('[[++GLDRP]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++GLDRP]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Med EXP (Any One Person)')
-			  $content = str_replace('[[++GLMedExp]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++GLMedExp]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Personal & ADV Injury')
-			  $content = str_replace('[[++GLPersonal]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++GLPersonal]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'General Aggregate')
-			  $content = str_replace('[[++GLGeneral]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++GLGeneral]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Products - Comp/OP AGG')
-			  $content = str_replace('[[++GLProducts]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++GLProducts]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Employee Benefits')
-			  $content = str_replace('[[++GLEmployeeBen]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++GLEmployeeBen]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Combined Single Limit')
 			  $content = str_replace('[[++ALComSingleLimit]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Bodily Injury (Per person)')
-			  $content = str_replace('[[++ALBodilyPerPerson]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++ALBodilyPerPerson]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Bodily Injury (Per accident)')
-			  $content = str_replace('[[++ALBodilyPerAccident]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++ALBodilyPerAccident]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Property Damage (Per accident)')
-			  $content = str_replace('[[++ALPropPerAccident]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++ALPropPerAccident]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Automobile Liability' && trim($DR['coi_vt_default_description']) == 'Underinsured motorist BI split')
-			  $content = str_replace('[[++ALUnderinsuredMot]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++ALUnderinsuredMot]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Umbrella Liability' && trim($DR['coi_vt_default_description']) == 'Each Occurrence')
-			  $content = str_replace('[[++ULEachOccurance]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++ULEachOccurance]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Umbrella Liability' && trim($DR['coi_vt_default_description']) == 'Aggregate')
-			  $content = str_replace('[[++ULAggregate]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++ULAggregate]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Workers Compensation' && trim($DR['coi_vt_default_description']) == 'E.L. Each Accident')
-			  $content = str_replace('[[++WCEachAccident]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++WCEachAccident]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Workers Compensation' && trim($DR['coi_vt_default_description']) == 'E.L. Disease - EA Employee')
-			  $content = str_replace('[[++WCEachEmployee]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++WCEachEmployee]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'Workers Compensation' && trim($DR['coi_vt_default_description']) == 'E.L. Disease – Policy Limit')
-			  $content = str_replace('[[++WCPolocyLimit]]', $DR['coi_au_defaults_Vendor'], $content);
+			  $content = str_replace('[[++WCPolocyLimit]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    		    
 			}
             
+            $content = str_replace('[[++firstnamelastname]]', $detail['firstnamelastname'], $content);
 			$content = str_replace('[[++CertificateHolder]]', $detail['certificate_holder'], $content);
 			$content = str_replace('[[++SpecialTerms]]', $detail['details_specialterms'], $content);
+			$content = str_replace('[[++coi_au_details_send_certificate_to]]', $detail['coi_au_details_send_certificate_to'], $content);
 			
 			///// Footer 
             $content = str_replace('[[++footerInfo]]', $footer_data['footer_info'], $content);
@@ -903,7 +918,7 @@ public function deletecoivendorAction(){
             $mail->addTo($detail['email']);
             // $mail->addTo('mark.lucas@voc-tech.com');
             // $mail->addTo('rob.palermo@voc-tech.com');
-            // $mail->addTo('parmatma@virtualemployee.com');
+            // $mail->addTo('durgeshchaubey@virtualemployee.com');
             $esubject = $email_data['subject'];
             $econtent = $email_data['content'];
            
