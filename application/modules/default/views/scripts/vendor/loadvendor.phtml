@@ -27,7 +27,7 @@ if($customeAccessmodeld[0]) {
 	$vendor_access = $customeAccessmodeld[0];
 }
 $states = $this->states;
-echo $vendor_access->is_write;
+$vendor_access->is_write;
 /* end overriding access */
 if($vendor_access->is_access == 0){
 ?>  
@@ -37,7 +37,7 @@ if($vendor_access->is_access == 0){
 					   <div id="left_right_main" class="vendor_lr_row">
 						 <div id="left_section">
 						   <div class="field_edit_popup">
-								<li class="required">&nbsp;</li><label>Vendor1 Name</label> <span>:</span>
+								<li class="required">&nbsp;</li><label>Vendor Name</label> <span>:</span>
 								 <?php //echo (!empty($uinfo->tenantName))?$uinfo->tenantName:''; ?>
 								<a style="display:table-cell; padding: 0 0 0 3px;" href="#" class="company_name" id="company_name-<?php echo $vid; ?>"><?php echo (!empty($vendor['company_name']))?stripslashes($vendor['company_name']):''; ?></a>
 								<input type="hidden" name="role_id" id="role_id" value="9"/>
