@@ -595,7 +595,7 @@ public function deletecoivendorAction(){
 		    }
 			  
                //$detail['tenantName'] = $vendorData[0]->first_name." ".$vendorData[0]->last_name;
-               $detail['tenantName'] = $vendorData[0]->first_name;
+               $detail['tenantName'] = $vendorData[0]->company_name;
                $detail['firstnamelastname'] = $vendorData[0]->first_name." ".$vendorData[0]->last_name;
                 //$detail['TenAddress1'] = $vendorData[0]->address1;
                 //$detail['TenAddress2'] = $vendorData[0]->address2;
