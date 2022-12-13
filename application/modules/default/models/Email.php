@@ -55,6 +55,25 @@ class Model_Email extends Zend_Db_Table_Abstract {
         $res = $this->fetchAll($select);
         return ($res && sizeof($res) > 0) ? $res->toArray() : false;
     }
+
+    public function loadEmailTemplatebyid($eid = '', $userId = '', $emailLocation='' , $buildId='') {
+        $select = $this->select();
+        if ($eid != '') {
+            $select = $select->where('coi_tid=?', $eid);
+        }
+        if ($userId != '') {
+            $select = $select->where('user_id=?', $userId);
+        }
+        if($buildId!=''){
+            $select = $select->where('build_id=?', $buildId);
+        }
+        if ($emailLocation != '') {
+            $select = $select->where('email_location=?', $emailLocation);
+            //$select = $select->where('status=?', 1);
+        }
+        $res = $this->fetchAll($select);
+        return ($res && sizeof($res) > 0) ? $res->toArray() : false;
+    }
     
 
     public function deleteEmail($eid) {
