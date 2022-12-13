@@ -59,7 +59,7 @@ class Model_Email extends Zend_Db_Table_Abstract {
     public function loadEmailTemplatebyid($eid = '', $userId = '', $emailLocation='' , $buildId='') {
         $select = $this->select();
         if ($eid != '') {
-            $select = $select->where('coi_tid=?', $eid);
+            $select = $select->where('id=?', $eid);
         }
         if ($userId != '') {
             $select = $select->where('user_id=?', $userId);
