@@ -46,6 +46,7 @@ if($vendor_access->is_access == 0){
 								<li class="required">&nbsp;</li><label>First Name</label> <span style="float:left;">:</span>
 								 <a style="display:table-cell; padding: 0 0 0 3px;" href="#" class="first_name" id="first_name-<?php echo $vid; ?>" data-type="text" data-pk="<?php echo $vid; ?>" data-url="<?php echo $this->baseUrl().'/vendor/updatevendor';?>" data-title="Enter First Name" data-placeholder="Required" data-name="first_name"><?php echo (!empty($vendor['first_name']))?$vendor['first_name']:''; ?></a>										
 							  </div>
+							  
 							  <div class="field_edit_popup">
 								<li class="required">&nbsp;</li><label>Last Name</label> <span style="float:left;">:</span>
 								 <a style="display:table-cell; padding: 0 0 0 3px;" href="#" class="last_name" id="last_name-<?php echo $vid; ?>" data-type="text" data-pk="<?php echo $vid; ?>" data-url="<?php echo $this->baseUrl().'/vendor/updatevendor';?>" data-title="Enter Last Name" data-placeholder="Required" data-name="last_name"><?php echo (!empty($vendor['last_name']))?$vendor['last_name']:''; ?></a>										
