@@ -11,7 +11,7 @@ $handler->registerErrorHandlers();
 
 $handler->onBeginProcessData = function ($args) {
 	if ($args->connection == "Con_workorders")
-		$args->connectionString = "server=visionenterprisesinc.com;database=ve_crm_new;user=ve_report;password=Vision@4424!;";
+		$args->connectionString = "server=qaworkorder.com;database=ve_crm_new;user=ve_report;password=Vision@4424!;";
 
 	$args->parameters["buildkey"] = "1,2,44";
 	$args->parameters["Cost_Center_Number"] = "600,1442921703,1460335468";

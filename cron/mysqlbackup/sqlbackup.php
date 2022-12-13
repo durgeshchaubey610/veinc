@@ -31,8 +31,8 @@ echo "IFO-140 - Case Version - " . $CaseVar . "<br> \r";
 
 				switch ($CaseVar){
 			
-						case "visionenterprisesinc.com";
-						case "www.visionenterprisesinc.com";
+						case "qaworkorder.com";
+						case "www.qaworkorder.com";
 							require "../../../croninclude/cron.php";
 							break;
 						

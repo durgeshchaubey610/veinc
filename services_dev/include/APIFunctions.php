@@ -535,11 +535,11 @@ class APIFunctions {
                         }
 
                         if ($reminderStatus && ($wo_status != '6' && $wo_status != '7')) {
-                            $alert_rows = "http://visionenterprisesinc.com/public/images/alert.png";
+                            $alert_rows = "http://qaworkorder.com/public/images/alert.png";
                         } else {
                             if ($wo_status == '1') {
 								
-								$alert_rows = "http://visionenterprisesinc.com/public/images/bell_icon.png";
+								$alert_rows = "http://qaworkorder.com/public/images/bell_icon.png";
                             } 
                         }	
 						if($wo_status == 1){
@@ -622,10 +622,10 @@ class APIFunctions {
                         }
 
                         if ($reminderStatus && ($wo_status != '6' && $wo_status != '7')) {
-                            $alert_rows = "http://visionenterprisesinc.com/public/images/alert.png";
+                            $alert_rows = "http://qaworkorder.com/public/images/alert.png";
                         } else {
                             if ($wo_status == '1') {
-                                $alert_rows = "http://visionenterprisesinc.com/public/images/bell_icon.png";
+                                $alert_rows = "http://qaworkorder.com/public/images/bell_icon.png";
 								
                             } 
                         }

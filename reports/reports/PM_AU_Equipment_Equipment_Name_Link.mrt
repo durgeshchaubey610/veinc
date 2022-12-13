@@ -990,7 +990,7 @@ Type Description : {rsEquipment.Template_Type_Designation_Discrpition}</Text>
               <Expressions isList="true" count="0" />
               <HorAlignment>Center</HorAlignment>
               <IconColor>68, 114, 196</IconColor>
-              <ImageURL>http://www.visionenterprisesinc.com{EquipmentDetails.EquipImage}</ImageURL>
+              <ImageURL>http://www.qaworkorder.com{EquipmentDetails.EquipImage}</ImageURL>
               <Margins>0,0,0,0</Margins>
               <Name>Image2</Name>
               <Page isRef="16" />
