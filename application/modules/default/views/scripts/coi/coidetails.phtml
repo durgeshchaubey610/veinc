@@ -141,9 +141,9 @@ font-weight: bold;
 <div class="middle_btn my_middle_btn create-btn"> 
     <ul>
 	<?php
-        echo "<pre>";
-        print_r($user_info);
-        if($user_info->is_write == 1) { 
+        // echo "<pre>";
+        // print_r($user_info);
+        // if($user_info->is_write == 1) { 
 		 if(empty($this->coiDetails[0]->coi_au_details_ID)){
 		?>
         <li>
@@ -153,7 +153,8 @@ font-weight: bold;
 		<li>
             <a onclick="showEditCoidetails(<?php echo $this->coiDetails[0]->coi_au_details_ID; ?>)" href="javascript:void(0);" class="modalbox create_table_btn">Edit Certificate Information</a>
         <li>
-<?php } }?>
+<?php } 
+//} ?>
     </ul>
 </div>
 
