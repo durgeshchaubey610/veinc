@@ -141,7 +141,8 @@ font-weight: bold;
 <div class="middle_btn my_middle_btn create-btn"> 
     <ul>
 	<?php
-        echo $user_info->is_write; 
+        echo "<pre>";
+        print_r($user_info);
         if($user_info->is_write == 1) { 
 		 if(empty($this->coiDetails[0]->coi_au_details_ID)){
 		?>
