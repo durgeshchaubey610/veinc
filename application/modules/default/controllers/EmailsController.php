@@ -213,7 +213,7 @@ class EmailsController extends Ve_Controller_Base {
 
         if (isset($query['id'])) {
             $emailModel = new Model_Email();
-            $emailData = $emailModel->loadEmailTemplatebyid($query['id']);
+            $emailData = $emailModel->loadEmailTemplate($query['id']);
             $this->view->emailData = $emailData[0];
             $roleMapper = new Model_Role();
             $roleDetail = $roleMapper->getRole();

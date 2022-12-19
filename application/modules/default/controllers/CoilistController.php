@@ -954,6 +954,7 @@ public function deletecoivendorAction(){
     public function getCOITemplate($detail) {
 		
         $emailMapper = new Model_Email();
+		// durgesh chaubey 19 dec 2022 add function for gettemplete id by template name.
 		$coi_temp = "COI Template";
 		$temp_id= $emailMapper->getidbytemplatename($coi_temp);
         $loadTemplate = $emailMapper->loadEmailTemplate($temp_id[0]['id']);
