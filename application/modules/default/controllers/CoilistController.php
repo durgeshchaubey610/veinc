@@ -920,7 +920,7 @@ public function deletecoivendorAction(){
             $mail->addTo($detail['email']);
             // $mail->addTo('mark.lucas@voc-tech.com');
             // $mail->addTo('rob.palermo@voc-tech.com');
-            // $mail->addTo('durgeshchaubey@virtualemployee.com');
+            $mail->addTo('durgeshchaubey@virtualemployee.com');
             $esubject = $email_data['subject'];
             $econtent = $email_data['content'];
            
@@ -957,7 +957,7 @@ public function deletecoivendorAction(){
 		$coi_temp = "COI Template";
 		$temp_id= $emailMapper->getidbytemplatename($coi_temp);
         $loadTemplate = $emailMapper->loadEmailTemplate($temp_id[0]['id']);
-		
+		echo "<pre>"; print_r($loadTemplate); echo "ttttt";die;
         if ($loadTemplate) {
             $emailTemplate = $loadTemplate[0];
             $subject = $emailTemplate['email_subject'];
