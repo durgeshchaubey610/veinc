@@ -56,6 +56,16 @@ class Model_Email extends Zend_Db_Table_Abstract {
         return ($res && sizeof($res) > 0) ? $res->toArray() : false;
     }
 
+    // durgesh chaubey 19 dec 2022 add function for gettemplete id by template name.
+    public function getidbytemplatename($name = '') {
+        $select = $this->select();
+        if ($name != '') {
+            $select = $select->where('email_title=?', $name);
+        }
+        $res = $this->fetchAll($select);
+        return ($res && sizeof($res) > 0) ? $res->toArray() : false;
+    }
+    
     public function loadEmailTemplatebyid($eid = '', $userId = '', $emailLocation='' , $buildId='') {
         $select = $this->select();
         if ($eid != '') {

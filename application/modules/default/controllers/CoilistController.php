@@ -690,7 +690,9 @@ public function deletecoivendorAction(){
 	public function getCOIVendorTemplate($detail) {
 		
         $emailMapper = new Model_Email();
-        $loadTemplate = $emailMapper->loadEmailTemplate(61);
+		$coi_temp = "COI Template";
+		$temp_id= $emailMapper->getidbytemplatename($coi_temp);
+        $loadTemplate = $emailMapper->loadEmailTemplate($temp_id[0]['id']);
 		//echo "<pre>"; print_r($loadTemplate);die;
         if ($loadTemplate) {
             $emailTemplate = $loadTemplate[0];
@@ -952,7 +954,9 @@ public function deletecoivendorAction(){
     public function getCOITemplate($detail) {
 		
         $emailMapper = new Model_Email();
-        $loadTemplate = $emailMapper->loadEmailTemplate(61);
+		$coi_temp = "COI Template";
+		$temp_id= $emailMapper->getidbytemplatename($coi_temp);
+        $loadTemplate = $emailMapper->loadEmailTemplate($temp_id[0]['id']);
 		
         if ($loadTemplate) {
             $emailTemplate = $loadTemplate[0];
