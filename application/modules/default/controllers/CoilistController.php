@@ -957,7 +957,6 @@ public function deletecoivendorAction(){
 		$coi_temp = "COI Template";
 		$temp_id= $emailMapper->getidbytemplatename($coi_temp);
         $loadTemplate = $emailMapper->loadEmailTemplate($temp_id[0]['id']);
-		echo "<pre>"; print_r($loadTemplate); echo "ttttt";die;
         if ($loadTemplate) {
             $emailTemplate = $loadTemplate[0];
             $subject = $emailTemplate['email_subject'];
