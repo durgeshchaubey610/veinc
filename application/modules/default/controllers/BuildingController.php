@@ -680,6 +680,9 @@ class BuildingController extends Ve_Controller_Base {
             $building_logo_src = "";
 
             // Company logo
+            echo "<pre>";
+            print_r($aData);
+
             if (isset($aData['company_logo']) && !empty($aData['company_logo'])) {
                 $building_logo_src = '<img src="' . $uri . '/public/images/clogo/' . $aData['company_logo'] . '">';
             } else {
