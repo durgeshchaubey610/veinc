@@ -662,10 +662,10 @@ public function deletecoivendorAction(){
 		
             $mail = new Zend_Mail('utf-8');
             $mail->addTo($detail['email']);  
-			 // $mail->addTo('mark.lucas@voc-tech.com');
+			// $mail->addTo('mark.lucas@voc-tech.com');
             // $mail->addTo('rob.palermo@voc-tech.com');
-            $mail->addTo('durgeshchaubey@virtualemployee.com');
-             //$mail->addTo('parmatma@virtualemployee.com'); 
+            // $mail->addTo('durgeshchaubey@virtualemployee.com');
+            // $mail->addTo('parmatma@virtualemployee.com'); 
             $esubject = $email_data['subject'];
             $econtent = $email_data['content'];
            
@@ -690,7 +690,9 @@ public function deletecoivendorAction(){
 	public function getCOIVendorTemplate($detail) {
 		
         $emailMapper = new Model_Email();
-        $loadTemplate = $emailMapper->loadEmailTemplate(61);
+		$coi_temp = "COI Template";
+		$temp_id= $emailMapper->getidbytemplatename($coi_temp);
+        $loadTemplate = $emailMapper->loadEmailTemplate($temp_id[0]['id']);
 		//echo "<pre>"; print_r($loadTemplate);die;
         if ($loadTemplate) {
             $emailTemplate = $loadTemplate[0];
@@ -952,8 +954,10 @@ public function deletecoivendorAction(){
     public function getCOITemplate($detail) {
 		
         $emailMapper = new Model_Email();
-        $loadTemplate = $emailMapper->loadEmailTemplate(61);
-		
+		// durgesh chaubey 19 dec 2022 add function for gettemplete id by template name.
+		$coi_temp = "COI Template";
+		$temp_id= $emailMapper->getidbytemplatename($coi_temp);
+        $loadTemplate = $emailMapper->loadEmailTemplate($temp_id[0]['id']);
         if ($loadTemplate) {
             $emailTemplate = $loadTemplate[0];
             $subject = $emailTemplate['email_subject'];

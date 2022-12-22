@@ -123,7 +123,7 @@ if($result_ReturnedEmails->num_rows>0) {
             
            
         /* * *****Get voc-tech logo******* */
-         $uri = "https://visionenterprisesinc.com/";
+         $uri = "https://qaworkorder.com/";
         $sdModel = new Model_SystemDefault();
         $sdData = $sdModel->getSystemDefault();
         $emailContent = $sdData[0];
@@ -175,11 +175,11 @@ if($result_ReturnedEmails->num_rows>0) {
 			   while($row_Returned_WOs = $result_ReturnedWOs->fetch_assoc()){ 
 			          $work_rows .= "<tr>
 			          
-				        <td style='width:20%'><a href='https://visionenterprisesinc.com/vnsreports/index.php?report_key=PM%20-%20Work%20Order%20Report%20-%20Separeted%20Jobs%20link.mrt&Cost_Center_Number=".$buildingData['uniqueCostCenter']."&buildkey=". $PM_WO_Option_BuildingID."&User=".$row_Returned_Emails["uid"]."&PM_WO_Number=".$row_Returned_WOs['WO_Number']."' target='_blank'>".$row_Returned_WOs['WO_Number']."</a></td>
-				        <td style='width:20%'><a href='https://visionenterprisesinc.com/vnsreports/index.php?report_key=PM%20-%20Work%20Order%20Report%20-%20Separeted%20Jobs%20link.mrt&Cost_Center_Number=".$buildingData['uniqueCostCenter']."&buildkey=". $PM_WO_Option_BuildingID."&User=".$row_Returned_Emails["uid"]."&PM_WO_Number=".$row_Returned_WOs['WO_Number']."' target='_blank'>".$row_Returned_WOs['AU_Equipment_Name']."</a></td>
-				        <td style='width:20%'><a href='https://visionenterprisesinc.com/vnsreports/index.php?report_key=PM%20-%20Work%20Order%20Report%20-%20Separeted%20Jobs%20link.mrt&Cost_Center_Number=".$buildingData['uniqueCostCenter']."&buildkey=". $PM_WO_Option_BuildingID."&User=".$row_Returned_Emails["uid"]."&PM_WO_Number=".$row_Returned_WOs['WO_Number']."' target='_blank'>".$row_Returned_WOs['Equipment_Floor']."</a></td>
-				        <td style='width:20%'><a href='https://visionenterprisesinc.com/vnsreports/index.php?report_key=PM%20-%20Work%20Order%20Report%20-%20Separeted%20Jobs%20link.mrt&Cost_Center_Number=".$buildingData['uniqueCostCenter']."&buildkey=". $PM_WO_Option_BuildingID."&User=".$row_Returned_Emails["uid"]."&PM_WO_Number=".$row_Returned_WOs['WO_Number']."' target='_blank'>".$row_Returned_WOs['Equipment_Unit']."</a></td>
-				        <td style='width:20%'><a href='https://visionenterprisesinc.com/vnsreports/index.php?report_key=PM%20-%20Work%20Order%20Report%20-%20Separeted%20Jobs%20link.mrt&Cost_Center_Number=".$buildingData['uniqueCostCenter']."&buildkey=". $PM_WO_Option_BuildingID."&User=".$row_Returned_Emails["uid"]."&PM_WO_Number=".$row_Returned_WOs['WO_Number']."' target='_blank'>".$row_Returned_WOs['Equipment_Location']."</a></td>
+				        <td style='width:20%'><a href='https://qaworkorder.com/vnsreports/index.php?report_key=PM%20-%20Work%20Order%20Report%20-%20Separeted%20Jobs%20link.mrt&Cost_Center_Number=".$buildingData['uniqueCostCenter']."&buildkey=". $PM_WO_Option_BuildingID."&User=".$row_Returned_Emails["uid"]."&PM_WO_Number=".$row_Returned_WOs['WO_Number']."' target='_blank'>".$row_Returned_WOs['WO_Number']."</a></td>
+				        <td style='width:20%'><a href='https://qaworkorder.com/vnsreports/index.php?report_key=PM%20-%20Work%20Order%20Report%20-%20Separeted%20Jobs%20link.mrt&Cost_Center_Number=".$buildingData['uniqueCostCenter']."&buildkey=". $PM_WO_Option_BuildingID."&User=".$row_Returned_Emails["uid"]."&PM_WO_Number=".$row_Returned_WOs['WO_Number']."' target='_blank'>".$row_Returned_WOs['AU_Equipment_Name']."</a></td>
+				        <td style='width:20%'><a href='https://qaworkorder.com/vnsreports/index.php?report_key=PM%20-%20Work%20Order%20Report%20-%20Separeted%20Jobs%20link.mrt&Cost_Center_Number=".$buildingData['uniqueCostCenter']."&buildkey=". $PM_WO_Option_BuildingID."&User=".$row_Returned_Emails["uid"]."&PM_WO_Number=".$row_Returned_WOs['WO_Number']."' target='_blank'>".$row_Returned_WOs['Equipment_Floor']."</a></td>
+				        <td style='width:20%'><a href='https://qaworkorder.com/vnsreports/index.php?report_key=PM%20-%20Work%20Order%20Report%20-%20Separeted%20Jobs%20link.mrt&Cost_Center_Number=".$buildingData['uniqueCostCenter']."&buildkey=". $PM_WO_Option_BuildingID."&User=".$row_Returned_Emails["uid"]."&PM_WO_Number=".$row_Returned_WOs['WO_Number']."' target='_blank'>".$row_Returned_WOs['Equipment_Unit']."</a></td>
+				        <td style='width:20%'><a href='https://qaworkorder.com/vnsreports/index.php?report_key=PM%20-%20Work%20Order%20Report%20-%20Separeted%20Jobs%20link.mrt&Cost_Center_Number=".$buildingData['uniqueCostCenter']."&buildkey=". $PM_WO_Option_BuildingID."&User=".$row_Returned_Emails["uid"]."&PM_WO_Number=".$row_Returned_WOs['WO_Number']."' target='_blank'>".$row_Returned_WOs['Equipment_Location']."</a></td>
 				       </tr>";
 				
 				}

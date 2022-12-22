@@ -18,7 +18,7 @@ class DBConnect{
 		define("DB_PASSWORD", "vision@123"); */
 		define( 'API_ACCESS_KEY', 'AIzaSyAk8wM98zDQPj4ePYRtN8iNsS5DmTXT-rg' );
 		define( 'API_SERVER_KEY', 'AAAA-U2-qNo:APA91bGWaVXme5PrAufzTCfnq6EAXZDI18RZUFXwCbFQ-htDhcpNHb5oGkadynIoyCzA9zqxedTmMapAByhDdub4aWhJtIFtoBzFAU9sanuVTBwBv0JlgJRQIoo6KhRmM7aJPDW9ElD2');
-		define("BASE_URL", "http://visionenterprisesinc.com/"); 
+		define("BASE_URL", "http://qaworkorder.com/"); 
 		define("DB_HOST", "localhost");
 		define("DB_USER", "ve_crm_new");
 		define("DB_DATABASE", "ve_crm_new");

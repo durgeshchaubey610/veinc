@@ -30,11 +30,11 @@ $handler->onBeginProcessData = function ($args) {
 	
 		switch ($_SERVER['SERVER_NAME']){
 			
-			case "visionenterprisesinc.com" ;
+			case "qaworkorder.com" ;
 				$args->connectionString = "server=localhost;database=ve_crm_new;user=ve_report;password=Vision@4424!;";
 				break;
 				
-			case "www.visionenterprisesinc.com" ;
+			case "www.qaworkorder.com" ;
 				$args->connectionString = "server=localhost;database=ve_crm_new;user=ve_report;password=Vision@4424!;";
 				break;				
 				

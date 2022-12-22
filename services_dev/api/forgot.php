@@ -10,7 +10,7 @@ if (isset($_POST['email']) && $_POST['email'] != "") {
         if(!empty($userDetail)) { 
                 
           $ch = curl_init();
-          curl_setopt($ch, CURLOPT_URL, "http://www.visionenterprisesinc.com/sendemail");
+          curl_setopt($ch, CURLOPT_URL, "http://www.qaworkorder.com/sendemail");
           curl_setopt($ch, CURLOPT_POST, true);
           curl_setopt($ch, CURLOPT_POSTFIELDS, $userDetail);
           curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
