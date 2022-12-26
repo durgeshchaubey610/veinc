@@ -1099,8 +1099,7 @@ public function getHeaderData($company) {
         $data['building_logo_src'] = $building_logo_src;
         $data['voctech_logo_src'] = $voctech_logo_src;
         $data['corp_account_number'] = $aData['corp_account_number'];
-        $data['date'] = $this->getDateFormat();
-		print_r($data);die;
+        $data['date'] = $this->getDateFormat();		
         return $data;
     }
 public function getFooterData() {
