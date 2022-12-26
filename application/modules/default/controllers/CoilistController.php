@@ -1072,6 +1072,7 @@ public function getHeaderData($company) {
         /* * *****Get voc-tech logo******* */
         $sdModel = new Model_SystemDefault();
         $sdData = $sdModel->getSystemDefault();
+		print_r($sdData);echo "ll";
         $emailContent = $sdData[0];
         $voc_logo = $emailContent['voc_logo'];
 
