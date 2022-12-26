@@ -1076,10 +1076,8 @@ public function getHeaderData($company) {
         $voc_logo = $emailContent['voc_logo'];
 
         if (isset($voc_logo) && !empty($voc_logo)) {
-			echo "uploads if";die;
             $voctech_logo_src = '<img src="' . $uri . 'public/images/uploads/' . $voc_logo . '">';
         } else {
-			echo "uploads else";die;
             $voctech_logo_src = "";
         }
 
@@ -1092,10 +1090,8 @@ public function getHeaderData($company) {
 
         // Company logo
         if (isset($aData['company_logo']) && !empty($aData['company_logo'])) {
-			echo "clogo if";die;
             $building_logo_src = '<img src="' . $uri . 'public/images/clogo/' . $aData['company_logo'] . '">';
         } else {
-			echo "clogo else";die;
             //$building_logo_src	=	'<img src="'.$uri.'/public/images/logo.png">';				
             $building_logo_src = '';
         }
@@ -1104,6 +1100,7 @@ public function getHeaderData($company) {
         $data['voctech_logo_src'] = $voctech_logo_src;
         $data['corp_account_number'] = $aData['corp_account_number'];
         $data['date'] = $this->getDateFormat();
+		print_r($data);die;
         return $data;
     }
 public function getFooterData() {
