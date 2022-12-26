@@ -12,8 +12,7 @@ class Model_SystemDefault extends Zend_Db_Table_Abstract {
    
    
     public function getSystemDefault() {
-        $select = $this->select(); 
-		echo  $select ; echo "query";     
+        $select = $this->select();      
         
         $res = $this->fetchAll( $select );
         
