@@ -35,7 +35,7 @@ function checkNewcoidetails()
 	}
 
 	if(send_certificate_to==''){
-		$('#send_certificate_name_error').html("Please Enter Send Certificate To");
+		$('#send_certificate_name_add_error').html("Please Enter Send Certificate To");
 		submit_flag = false;
 }
 	
