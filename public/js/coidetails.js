@@ -22,6 +22,7 @@ function checkNewcoidetails()
     $('#addnewcoidetails').attr('disabled',true);
 	var certificate_holder = $("#certificate_holder").val();
 	var certificate_description = $("#certificate_description").val();
+	var send_certificate_to = $("#send_certificate_to").val();	
 	
 	var submit_flag = true;
 	if(certificate_holder==''){
@@ -32,6 +33,11 @@ function checkNewcoidetails()
 			$('#description_name_error').html("Please Enter Description of Special Terms");
 			submit_flag = false;
 	}
+
+	if(send_certificate_to==''){
+		$('#send_certificate_name_error').html("Please Enter Send Certificate To");
+		submit_flag = false;
+}
 	
 	if(!submit_flag) {
 		$('#addnewcoidetails').attr('disabled',false);
@@ -42,7 +48,7 @@ function checkNewcoidetails()
 				url         : baseUrl+"coi/createnewcoidetails",
 				type        : "post",
 				datatype    : 'json',
-				data        : {coi_au_details_holder:certificate_holder,coi_au_details_specialterms:certificate_description},
+				data        : {coi_au_details_holder:certificate_holder,coi_au_details_specialterms:certificate_description,coi_au_details_send_certificate_to:send_certificate_to},
 				success     : function( data ) {
 				var content = $.parseJSON(data);
                     if(content.status=='success'){
