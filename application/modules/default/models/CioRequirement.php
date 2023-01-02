@@ -40,23 +40,18 @@ public function insertCoirequirement($updateData) {
 				->joinLeft(array('car' => 'coi_au_requirements'), 'cvd.coi_vt_default_ID = car.coi_vt_default_ID');
         if ($select_build_id != "") {
             $select1 = $db->select()
-                        ->from(array('cr'=>'coi_au_requirements'))
-                        ->where('cr.Building_ID = ?', $select_build_id);
+            ->from(array('cr'=>'coi_au_requirements'))
+            ->where('cr.Building_ID = ?', $select_build_id);
             $databyid = $db->fetchAll($select1);
             if(!empty($databyid)){
                 $select = $select->where('car.Building_ID = ?', $select_build_id);
             }
         }
-         $wvv='General';
-         $select = $select->where("cvd.coi_vt_defaults_tab like '%" . $wvv . "%'");
-
-         $sql = $select->__toString();
-         echo "$sql\n";
+        $wvv='General';
+        $select = $select->where("cvd.coi_vt_defaults_tab like '%" . $wvv . "%'");
         
         $res = $db->fetchAll($select);
 
-        echo '<pre>';
-        print_r($res);
         return ($res && sizeof($res) > 0) ? $res : false;
     }
 
@@ -68,7 +63,13 @@ public function insertCoirequirement($updateData) {
                 ->from(array('cvd' =>'coi_vt_defaults'))
 				->joinLeft(array('car' => 'coi_au_requirements'), 'cvd.coi_vt_default_ID = car.coi_vt_default_ID');
         if ($select_build_id != "") {
-            		 $select = $select->where('Building_ID = ?', $select_build_id);
+            $select1 = $db->select()
+            ->from(array('cr'=>'coi_au_requirements'))
+            ->where('cr.Building_ID = ?', $select_build_id);
+            $databyid = $db->fetchAll($select1);
+            if(!empty($databyid)){
+                $select = $select->where('car.Building_ID = ?', $select_build_id);
+            }
         }
           $wvv='Automobile';
          $select = $select->where("coi_vt_defaults_tab like '%" . $wvv . "%'");
@@ -85,7 +86,13 @@ public function insertCoirequirement($updateData) {
                 ->from(array('cvd' =>'coi_vt_defaults'))
 				->joinLeft(array('car' => 'coi_au_requirements'), 'cvd.coi_vt_default_ID = car.coi_vt_default_ID');
         if ($select_build_id != "") {
-            		 $select = $select->where('Building_ID = ?', $select_build_id);
+            $select1 = $db->select()
+            ->from(array('cr'=>'coi_au_requirements'))
+            ->where('cr.Building_ID = ?', $select_build_id);
+            $databyid = $db->fetchAll($select1);
+            if(!empty($databyid)){
+                $select = $select->where('car.Building_ID = ?', $select_build_id);
+            }
         }
           $wvv='Umbrella';
          $select = $select->where("coi_vt_defaults_tab like '%" . $wvv . "%'");
@@ -102,7 +109,13 @@ public function insertCoirequirement($updateData) {
                 ->from(array('cvd' =>'coi_vt_defaults'))
 				->joinLeft(array('car' => 'coi_au_requirements'), 'cvd.coi_vt_default_ID = car.coi_vt_default_ID');
         if ($select_build_id != "") {
-            		 $select = $select->where('Building_ID = ?', $select_build_id);
+            $select1 = $db->select()
+            ->from(array('cr'=>'coi_au_requirements'))
+            ->where('cr.Building_ID = ?', $select_build_id);
+            $databyid = $db->fetchAll($select1);
+            if(!empty($databyid)){
+                $select = $select->where('car.Building_ID = ?', $select_build_id);
+            }
         }
           $wvv='Workers';
          $select = $select->where("coi_vt_defaults_tab like '%" . $wvv . "%'");
