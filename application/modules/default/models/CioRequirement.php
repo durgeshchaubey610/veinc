@@ -32,7 +32,7 @@ public function insertCoirequirement($updateData) {
         return ($res && sizeof($res) > 0) ? $res->toArray() : false;
     } 
 	
-	public function GetAllGeneralRequirment($select_build_id) {
+	public function GetAllGeneralRequirment($select_build_id="") {
         $db = Zend_Db_Table::getDefaultAdapter();
      	  
         $select = $db->select()
