@@ -44,7 +44,8 @@ public function insertCoirequirement($updateData) {
          $wvv='General';
          $select = $select->where("cvd.coi_vt_defaults_tab like '%" . $wvv . "%'");
 
-
+         $sql = $select->__toString();
+         echo "$sql\n";
         
         $res = $db->fetchAll($select);
 
