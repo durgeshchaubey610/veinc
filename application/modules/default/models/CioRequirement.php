@@ -48,7 +48,7 @@ public function insertCoirequirement($updateData) {
             }
         }
         $wvv='General';
-        $select = $select->where("cvd.coi_vt_defaults_tab like '%" . $wvv . "%'");
+        $select = $select->where("cvd.coi_vt_defaults_tab like '%" . $wvv . "%'")->group('cvd.coi_vt_default_ID');
         
         $res = $db->fetchAll($select);
 
@@ -71,8 +71,8 @@ public function insertCoirequirement($updateData) {
                 $select = $select->where('car.Building_ID = ?', $select_build_id);
             }
         }
-          $wvv='Automobile';
-         $select = $select->where("coi_vt_defaults_tab like '%" . $wvv . "%'");
+        $wvv='Automobile';
+        $select = $select->where("coi_vt_defaults_tab like '%" . $wvv . "%'")->group('cvd.coi_vt_default_ID');
 
         
         $res = $db->fetchAll($select);
@@ -95,7 +95,7 @@ public function insertCoirequirement($updateData) {
             }
         }
           $wvv='Umbrella';
-         $select = $select->where("coi_vt_defaults_tab like '%" . $wvv . "%'");
+         $select = $select->where("coi_vt_defaults_tab like '%" . $wvv . "%'")->group('cvd.coi_vt_default_ID');
 
         
         $res = $db->fetchAll($select);
@@ -118,7 +118,7 @@ public function insertCoirequirement($updateData) {
             }
         }
           $wvv='Workers';
-         $select = $select->where("coi_vt_defaults_tab like '%" . $wvv . "%'");
+         $select = $select->where("coi_vt_defaults_tab like '%" . $wvv . "%'")->group('cvd.coi_vt_default_ID');
 
         
         $res = $db->fetchAll($select);
