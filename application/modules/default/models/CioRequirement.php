@@ -39,10 +39,10 @@ public function insertCoirequirement($updateData) {
                 ->from(array('cvd' =>'coi_vt_defaults'))
 				->joinLeft(array('car' => 'coi_au_requirements'), 'cvd.coi_vt_default_ID = car.coi_vt_default_ID');
         if ($select_build_id != "") {
-            		 $select = $select->where('Building_ID = ?', $select_build_id);
+            		 $select = $select->where('car.Building_ID = ?', $select_build_id);
         }
          $wvv='General';
-         $select = $select->where("coi_vt_defaults_tab like '%" . $wvv . "%'");
+         $select = $select->where("cvd.coi_vt_defaults_tab like '%" . $wvv . "%'");
 
 
         
