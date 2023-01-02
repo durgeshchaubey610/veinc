@@ -107,9 +107,6 @@ class CoiController extends Ve_Controller_Base {
         $tempdatasecond= $template->GetAllAutomobileRequirment($select_build_id);
         $templatteumbrella=$template->GetAllUmbrellaRequirment($select_build_id);
         $templatteWorkers=$template->GetAllWorkersRequirment($select_build_id);
-        
-        echo '<pre>';
-        print_r($tempdata);
 		
         $this->view->companyListing = $companyListing;
         $this->view->select_build_id = $select_build_id;

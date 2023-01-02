@@ -47,6 +47,9 @@ public function insertCoirequirement($updateData) {
 
         
         $res = $db->fetchAll($select);
+
+        echo '<pre>';
+        print_r($res);
         return ($res && sizeof($res) > 0) ? $res : false;
     }
 
