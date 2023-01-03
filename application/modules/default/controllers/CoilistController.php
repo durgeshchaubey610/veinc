@@ -920,6 +920,7 @@ public function deletecoivendorAction(){
             // $mail->addTo('mark.lucas@voc-tech.com');
             // $mail->addTo('rob.palermo@voc-tech.com');
 			$mail->addTo('durgeshchaubey@virtualemployee.com');
+			$mail->addTo('parmatma@virtualemployee.com');
             $esubject = $email_data['subject'];
             $econtent = $email_data['content'];
            
