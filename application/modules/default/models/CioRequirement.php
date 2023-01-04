@@ -147,8 +147,6 @@ public function insertCoirequirement($updateData) {
             $where = $this->getAdapter()->quoteInto('coi_au_requir_ID = ?', $id);
             $this->_errorMessage = "";
            // $data['updated_date'] = date('Y-m-d H:i:s');
-           print_r($data); echo "where =";
-           print_r($where);die;
            
             return $this->update($data, $where);
         } catch (Exception $e) {

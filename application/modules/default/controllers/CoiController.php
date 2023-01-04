@@ -137,14 +137,11 @@ public function editrequirementAction(){
 public function updaterequirementAction()
 {
     $query = $this->_request->getParams();
-    //print_r($query);die;
-
         $id = $query['id'];
            if(isset($query['id'])) {        
                 $updateData = array();
                 $updateData['coi_au_defaults_Tenant'] = str_replace(',', '', $query['coi_au_defaults_Tenant']);
-                $updateData['coi_au_defaults_Vendor'] = str_replace(',', '', $query['coi_au_defaults_Vendor']);  
-                //print_r($updateData);die;
+                $updateData['coi_au_defaults_Vendor'] = str_replace(',', '', $query['coi_au_defaults_Vendor']);               
 
                 $requirementmodel = new Model_CioRequirement();
 				$res = $requirementmodel->updaterequirement($updateData, $id);
