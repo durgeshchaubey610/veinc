@@ -752,7 +752,7 @@ public function deletecoivendorAction(){
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Med EXP (Any One Person)')
 			  $content = str_replace('[[++GLMedExp]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Personal & ADV Injury')
-			  $content = str_replace('[[++GLPersonal]]', number_format($DR['coi_au_defaults_Vendor']), $content);
+			  $content = str_replace('[[+++]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'General Aggregate')
 			  $content = str_replace('[[++GLGeneral]]', number_format($DR['coi_au_defaults_Vendor']), $content);
 		    else if(trim($DR['coi_vt_defaults_tab']) == 'General Liability' && trim($DR['coi_vt_default_description']) == 'Products - Comp/OP AGG')
@@ -900,7 +900,7 @@ public function deletecoivendorAction(){
 			$detail['coi_au_details_send_certificate_to'] = $buildingcoiData['coi_au_details_send_certificate_to'];
             }
         }
-        //print_r($detail);
+        print_r($detail);
         $res = $this->sendTenantMail($detail);
         
         
