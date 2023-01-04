@@ -137,7 +137,7 @@ public function editrequirementAction(){
 public function updaterequirementAction()
 {
     $query = $this->_request->getParams();
-    
+    print_r($query);die;
 
         $id = $query['id'];
            if(isset($query['id'])) {        
