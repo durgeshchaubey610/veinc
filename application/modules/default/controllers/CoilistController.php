@@ -705,6 +705,7 @@ public function deletecoivendorAction(){
             $header_data = $this->getHeaderData($company);
             $footer_data = $this->getFooterData();
 			
+			
             $roleManager = 'Company Admin';
             /* * ***change the key with value in the content *** */
             $currDate = date('F d, Y');
