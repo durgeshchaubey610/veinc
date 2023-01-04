@@ -900,7 +900,7 @@ public function deletecoivendorAction(){
 			$detail['coi_au_details_send_certificate_to'] = $buildingcoiData['coi_au_details_send_certificate_to'];
             }
         }
-        print_r($detail);
+       // print_r($detail);
         $res = $this->sendTenantMail($detail);
         
         
@@ -958,6 +958,7 @@ public function deletecoivendorAction(){
 		$coi_temp = "COI Template";
 		$temp_id= $emailMapper->getidbytemplatename($coi_temp);
         $loadTemplate = $emailMapper->loadEmailTemplate($temp_id[0]['id']);
+		print_r($loadTemplate);die("DD");
         if ($loadTemplate) {
             $emailTemplate = $loadTemplate[0];
             $subject = $emailTemplate['email_subject'];
