@@ -340,7 +340,7 @@ class BuildingController extends Ve_Controller_Base {
                     $coidetailss = new Model_CioRequirement();
 					foreach($coidetailList as $Lcoi){
                         $datacoi = array();					  
-                        $datacoi['Building_ID'] = $buildingID;
+                        $datacoi['Building_ID'] = $buildingId;
                         $datacoi['uniqueCostCenter'] = $data['uniqueCostCenter'];
                         $datacoi['coi_vt_default_ID'] = $Lcoi->coi_vt_default_ID;
                         $datacoi['coi_au_defaults_Tenant'] = $Lcoi->coi_vt_defaults_Tenant;
