@@ -341,7 +341,7 @@ class BuildingController extends Ve_Controller_Base {
 					foreach($coidetailList as $Lcoi){
                         $datacoi = array();					  
                         $datacoi['Building_ID'] = $buildingID;
-                        $datacoi['uniqueCostCenter'] = $this->getRequest()->getPost('costCenter');
+                        $datacoi['uniqueCostCenter'] = $data['uniqueCostCenter'];
                         $datacoi['coi_vt_default_ID'] = $Lcoi->coi_vt_default_ID;
                         $datacoi['coi_au_defaults_Tenant'] = $Lcoi->coi_vt_defaults_Tenant;
                         $datacoi['coi_au_defaults_Vendor'] = $Lcoi->coi_vt_defaults_Vendor;
