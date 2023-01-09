@@ -599,6 +599,11 @@ function cancelServiceTemplate(){
 } 
 
 function sendcoiemail(tid, cid, tname) {
+
+	let msg = "Please add email ID First.";
+	if(tname){
+		let msg = "Notification email successfully sent to COI Tenant User "+tname;
+	}
     $('.loader').show();
     $('.error-txt').html('');
     $('.message').html("");
@@ -609,7 +614,7 @@ function sendcoiemail(tid, cid, tname) {
         success: function (data) {
             $('.loader').hide();
             if (data == true) {
-                $('.message').text("Notification email successfully sent to COI Tenant User "+tname);
+                $('.message').text(msg);
                 $('.message').show();
             } else {
                 //alert('There was an error');			
