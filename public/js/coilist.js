@@ -600,9 +600,12 @@ function cancelServiceTemplate(){
 
 function sendcoiemail(tid, cid, tname) {
 
-	let msg = "Please add email ID First.";
+	var msg = "Please add email ID First.";
 	if(tname){
-		let msg = "Notification email successfully sent to COI Tenant User "+tname;
+		if(tname.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi)){		
+		  msg = "Notification email successfully sent to Vendor User "+tname;		 
+
+		}
 	}
     $('.loader').show();
     $('.error-txt').html('');
@@ -632,9 +635,12 @@ function sendcoiemail(tid, cid, tname) {
 }
 
 function sendcoivendoremail(tid, cid, tname) {	
-	let msg = "Please add email ID First.";
+	var msg = "Please add email ID First.";
 	if(tname){
-		let msg = "Notification email successfully sent to Vendor User "+tname;
+		if(tname.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi)){		
+		  msg = "Notification email successfully sent to Vendor User "+tname;		 
+
+		}
 	}
     $('.loader').show();
     $('.error-txt').html('');
