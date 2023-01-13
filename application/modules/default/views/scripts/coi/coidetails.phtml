@@ -59,6 +59,10 @@ if ($this->view_type != 'detail') {
         padding: 10px 10px 40px;
         margin-top: 20px;
     }
+    .row label {
+        float:none !important;
+        width: 100%;
+    }
 </style>
 <ol id="toc">
     <?php
@@ -142,12 +146,29 @@ if ($reportDetailLinks != '') {
 
 
 <?php if (in_array(4, $buildhasAccess)) { ?>
+    <div class="middle_btn my_middle_btn create-btn">
+        <ul>
+            <?php if ($user_info->is_write == 1) {
+                if (empty($this->coiDetails[0]->coi_au_details_ID)) {
+            ?>
+                    <li>
+                        <a id="updatenewcoidetails" name="add" class="confirm next" onclick="checkNewcoidetails()" class="modalbox create_table_btn">Add Certificate Information</a>
+                    <li>
+                    <?php } else { ?>
+                    <li>
+                        <a id="updatenewcoidetails" name="add" class="confirm next" onclick="updateCoidetails()" class="modalbox create_table_btn">Edit Certificate Information</a>
+                    <li>
+                <?php }
+            } ?>
+        </ul>
+    </div>
+
     <div class="col-sm-12">
-    <div class="message" style="margin-top:25px;">                  		  			
+        <div class="message" style="margin-top:25px;">
             <span id="success_msg" class="alert-success"></span>
             <span id="error_msg"></span>
+        </div>
     </div>
-   </div>
     <div class="row">
         <!---star edid form with editor -->
         <form method="post" class="bbq">
@@ -166,46 +187,15 @@ if ($reportDetailLinks != '') {
                 <input type="hidden" id="bid" name="bid" value="<?php echo $this->coiDetails[0]->Building_ID; ?>">
                 <input type="hidden" id="uniquecc" name="uniquecc" value="<?php echo $this->coiDetails[0]->uniqueCostCenter; ?>">
             </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <label for="report_name">Certificate Holder information: <span class="required">*</span></label><span class="ufirstErr" id="holder_name_error"></span> <br />
-                </div>
-                <div class="col-sm-12">
-                    <textarea class="input_field_12em1 et_editor" name="certificate_holder" id="certificate_holder" style="display:block !important;"><?php echo $this->coiDetails[0]->coi_au_details_holder; ?></textarea>
-                </div>
-                <div class="col-sm-12">
-                    <label for="report_name" style="width:100%;">DESCRIPTION OF OPERATIONS/LOCATIONS/VEHICLES/SPECIAL TERMS: <span class="required">*</span></label><span class="uofficeErr" id="description_error"></span> <br />
-                </div>
-                <div class="col-sm-12">
-                    <div class="et_editor"><textarea class="input_field_12em et_editor" name="certificate_description" id="certificate_description" rows="4" cols="50"><?php echo $this->coiDetails[0]->coi_au_details_specialterms; ?></textarea>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <label for="report_name" style="width:100%;">Send Certificate To: <span class="required">*</span></label><span class="uofficeErr" id="send_to_error"></span> <br />
-                </div>
-                <div class="col-sm-12">
-                    <textarea class="input_field_12em" name="send_certificate_to" id="send_certificate_to" style="width: 300px;
-				height:90px;"><?php echo $this->coiDetails[0]->coi_au_details_send_certificate_to; ?></textarea>
-                </div>
-            </div>
-            <div class="confirmBtn float_none">
-                <?php if ($user_info->is_write == 1) {
-                    if (empty($this->coiDetails[0]->coi_au_details_ID)) {
-                ?>
-                        <input type="button" value="Add Certificate Information" id="updatenewcoidetails" name="add" class="confirm next" onclick="checkNewcoidetails()()" />
-
-                    <?php } else { ?>
-
-                        <input type="button" value="Edit Certificate Information" id="updatenewcoidetails" name="add" class="confirm next" onclick="updateCoidetails()" />
-
-                <?php }
-                } ?>
-                <!-- <input type="button" value="Cancel" name="cancel" class="cancel" onclick="cancelReport()" /> -->
-            </div>
-
+            <label for="report_name">Certificate Holder information: <span class="required">*</span></label><span class="ufirstErr" id="holder_name_error"></span> <br />
+            <textarea class="et_editor" name="certificate_holder" id="certificate_holder"><?php echo $this->coiDetails[0]->coi_au_details_holder; ?></textarea><br />
+            <label for="report_name" style="display:inline-block;">DESCRIPTION OF OPERATIONS/LOCATIONS/VEHICLES/SPECIAL TERMS: <span class="required">*</span></label><span class="uofficeErr" id="description_error"></span> <br />
+            <textarea class="et_editor" name="certificate_description" id="certificate_description"><?php echo $this->coiDetails[0]->coi_au_details_specialterms; ?></textarea><br />
+            <label for="report_name">Send Certificate To: <span class="required">*</span></label><span class="uofficeErr" id="send_to_error"></span> <br />
+            <textarea class="input_field_12em" name="send_certificate_to" id="send_certificate_to"><?php echo $this->coiDetails[0]->coi_au_details_send_certificate_to; ?></textarea>
         </form>
     </div>
-    <!---end edid form with editor -->
+    <!---end edid form with editor -->   
     
 <?php
 } else {
@@ -243,9 +233,28 @@ if ($reportDetailLinks != '') {
     }
     CKEDITOR.disableAutoInline = true;
     $(document).ready(function() {
-        CKEDITOR.disableAutoInline = true;
-        $('#certificate_description').ckeditor(); // Use CKEDITOR.replace() if element is <textarea>.
-        $('#certificate_holder').ckeditor();
-        $('#send_certificate_to').ckeditor();
+        CKEDITOR.disableAutoInline = false;
+        CKEDITOR.replace('certificate_description', {
+            removePlugins: 'toolbar,elementspath',
+            allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
+            width: ['900px'],
+            height: ['50px'],
+
+
+        });
+        CKEDITOR.replace('certificate_holder', {
+            removePlugins: 'toolbar,elementspath',
+            allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
+            width: ['900px'],
+            height: ['50px'],
+
+        });
+        CKEDITOR.replace('send_certificate_to', {
+            removePlugins: 'toolbar,elementspath',
+            allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
+            width: ['900px'],
+            height: ['50px'],
+
+        });  
     });
 </script>
