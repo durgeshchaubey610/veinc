@@ -62,6 +62,14 @@ if ($this->view_type != 'detail') {
     .row label {
         float:none !important;
         width: 100%;
+        text-transform: lowercase;
+    }
+   
+    .cke_bottom{
+        padding:0 !important;
+        background-image:none !important;
+        background:none !important;
+        border-top:none !important;
     }
 </style>
 <ol id="toc">
@@ -236,25 +244,23 @@ if ($reportDetailLinks != '') {
         CKEDITOR.disableAutoInline = false;
         CKEDITOR.replace('certificate_description', {
             removePlugins: 'toolbar,elementspath',
-            allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
-            width: ['900px'],
-            height: ['50px'],
-
-
+            ///allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
+            width: ['350px'],
+            height: ['40px'],
         });
         CKEDITOR.replace('certificate_holder', {
             removePlugins: 'toolbar,elementspath',
-            allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
-            width: ['900px'],
-            height: ['50px'],
+           // allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
+            width: ['350px'],
+            height: ['40px'],
 
         });
         CKEDITOR.replace('send_certificate_to', {
             removePlugins: 'toolbar,elementspath',
-            allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
-            width: ['900px'],
-            height: ['50px'],
+            //allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
+            width: ['350px'],
+            height: ['40px'],
 
-        });  
+        });    
     });
 </script>
