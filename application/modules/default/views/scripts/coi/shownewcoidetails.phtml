@@ -120,5 +120,25 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/ckeditor/ada
             $(".ms-drop ul li:eq(1)").css("display", "none");
         });
 
+        CKEDITOR.disableAutoInline = false;
+        CKEDITOR.replace('certificate_description', {
+            //removePlugins: 'toolbar,elementspath',
+            height: ['70px'],
+        });
+        CKEDITOR.replace('certificate_holder', {
+            //removePlugins: 'toolbar,elementspath',
+           // allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
+            //width: ['250px'],
+            height: ['70px'],
+
+        });
+        CKEDITOR.replace('send_certificate_to', {
+            //removePlugins: 'toolbar,elementspath',
+            //allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
+            //width: ['250px'],
+            height: ['70px'],
+
+        });  
+
     });
 </script>
