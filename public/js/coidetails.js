@@ -18,12 +18,10 @@ $(function () {
 
 function checkNewcoidetails() {
 	parent.CheckForSessionpop(baseUrl);
-	$('#addnewcoidetails').attr('disabled', true);
 	var certificate_holder = CKEDITOR.instances.certificate_holder.getData();
 	var certificate_description = CKEDITOR.instances.certificate_description.getData();
 	var send_certificate_to = CKEDITOR.instances.send_certificate_to.getData();
 	var isError = false;
-
 	if (certificate_holder.length == 0) {
 		$("#holder_name_error").html("Please Enter Certificate Holder Information");
 		isError = true;
@@ -34,7 +32,7 @@ function checkNewcoidetails() {
 		$("#description_error").html("Please Enter Description of Special Terms");
 		isError = true;
 	} else {
-		$("#holder_nadescription_errorme_error").html("");
+		$("#description_error").html("");
 	}
 	if (send_certificate_to.length == 0) {
 		$("#send_to_error").html("Please Enter Send Certificate To");
@@ -42,7 +40,6 @@ function checkNewcoidetails() {
 	} else {
 		$("#send_to_error").html("");
 	}
-
 	if (!isError) {
 		$('.loader').show();
 		$.ajax({
@@ -54,15 +51,10 @@ function checkNewcoidetails() {
 				var content = $.parseJSON(data);
 				if (content.status == 'success') {
 					$('.loader').hide();
-					//parent.jQuery.fancybox.close();
-					$('#success_msg').html('COI-Detail added successfully!');
+					parent.jQuery.fancybox.close();
+					parent.location.reload();					
+					//$('#success_msg').html('COI-Detail added successfully!');
 					//$("#success_msg").focus();
-					$(window).scrollTop($('#success_msg').position().top);
-					setTimeout(function () {
-						parent.location.reload();
-					}, 2000);
-
-
 				} else {
 					alert('Error occurred');
 					location.reload();
@@ -80,7 +72,6 @@ function checkNewcoidetails() {
 }
 
 function updateCoidetails() {
-	$('#updatenewcoidetails').attr('disabled', true);
 	var cid = $("#cid").val();
 	var bid = $("#bid").val();
 	var uniquecc = $("#uniquecc").val();
@@ -88,8 +79,6 @@ function updateCoidetails() {
 	var certificate_description = CKEDITOR.instances.certificate_description.getData(); //$("#email_content").val(); //tinymce.get('content').getContent();
 	var send_certificate_to = CKEDITOR.instances.send_certificate_to.getData(); //$("#email_content").val(); //tinymce.get('content').getContent();
 	var isError = false;
-
-	var submit_flag = true;
 	if (certificate_holder.length == 0) {
 		$("#holder_name_error").html("Please enter certificate holder");
 		isError = true;
@@ -97,7 +86,7 @@ function updateCoidetails() {
 		$("#holder_name_error").html("");
 	}
 	if (certificate_description.length == 0) {
-		$("#description_error").html("Please enter description of operations/locations/vehicles/special term");
+		$("#description_name_error").html("Please enter description of special term");
 		isError = true;
 	} else {
 		$("#holder_nadescription_errorme_error").html("");
@@ -108,7 +97,6 @@ function updateCoidetails() {
 	} else {
 		$("#send_to_error").html("");
 	}
-
 	if (!isError) {
 		$('.loader').show();
 		$.ajax({
@@ -119,15 +107,9 @@ function updateCoidetails() {
 			success: function (data) {
 				var content = $.parseJSON(data);
 				if (content.status == 'success') {
-					$('#success_msg').html('COI-Detail edited successfully!');
-					//$("#success_msg").focus();
-					$(window).scrollTop($('#success_msg').position().top);
-					setTimeout(function () {
-						parent.location.reload();
-					}, 2000);
 					$('.loader').hide();
-
-
+					$('#success_msg').html('COI-Detail edited successfully!');
+					parent.location.reload();
 				} else {
 					alert('Error occurred');
 					location.reload();

@@ -2,7 +2,8 @@
 echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/coidetails.js');
 echo $this->headScript()->appendFile($this->baseUrl() . '/public/jquery/multiple-select1.js');
 echo $this->headLink()->appendStylesheet($this->baseUrl() . '/public/css/multiple-select.css');
-
+echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/ckeditor/ckeditor.js');
+echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/ckeditor/adapters/jquery.js');
 
 ?>
 <div class="container-right" id="user-Complete" >
@@ -26,25 +27,24 @@ echo $this->headLink()->appendStylesheet($this->baseUrl() . '/public/css/multipl
                             <textarea class="input_field_12em" name="certificate_holder" id="certificate_holder"  style="width: 300px;
     height:90px;"><?php echo $this->coiDetails->coi_au_details_holder; ?></textarea>
                         </div>
-				<div id="report_nameDiv" class="row">
-				<label for="report_name">Description of Special Terms: <span class="required">*</span></label>
-				<span id="description_name_error" class="uofficeErr"></span>
-				<textarea class="input_field_12em" name="certificate_description" id="certificate_description"  style="width: 300px;
-				height:90px;"><?php echo $this->coiDetails->coi_au_details_specialterms; ?></textarea>
-				</div>
-						
-				<div id="report_nameDiv" class="row">
-				<label for="report_name">Send Certificate To: <span class="required">*</span></label>
-				<span id="send_certificate_name_error" class="uofficeErr"></span>
-				<textarea class="input_field_12em" name="send_certificate_to" id="send_certificate_to"  style="width: 300px;
-				height:90px;"><?php echo $this->coiDetails->coi_au_details_send_certificate_to; ?></textarea>
-				</div>
-
-                        <div class="confirmBtn float_none">
-                            <input type="button" value="Save" id="updatenewcoidetails" name="add" class="confirm next" onclick="updateCoidetails()"/>
-                            <input type="button" value="Cancel" name="cancel" class="cancel" onclick="cancelReport()"/>                                
+                        <div id="report_nameDiv" class="row">
+                            <label for="report_name">Description of Special Terms: <span class="required">*</span></label>
+                            <span id="description_name_error" class="uofficeErr"></span>
+                            <textarea class="input_field_12em et_editor" name="certificate_description" id="certificate_description" style="width: 300px;"><?php echo $this->coiDetails->coi_au_details_specialterms; ?></textarea>
+                           
                         </div>
 
+                        <div id="report_nameDiv" class="row">
+                            <label for="report_name">Send Certificate To: <span class="required">*</span></label>
+                            <span id="send_to_error" class="uofficeErr"></span>
+                            <textarea class="input_field_12em " name="send_certificate_to" id="send_certificate_to" style="width: 300px;
+				height:90px;"><?php echo $this->coiDetails->coi_au_details_send_certificate_to; ?></textarea>
+                        </div>
+
+                        <div class="confirmBtn float_none">
+                            <input type="button" value="Save" id="updatenewcoidetails" name="add" class="confirm next" onclick="updateCoidetails()" />
+                            <input type="button" value="Cancel" name="cancel" class="cancel" onclick="cancelReport()" />
+                        </div>
                     </form>                        
                 </div>
             </div>
@@ -69,6 +69,25 @@ echo $this->headLink()->appendStylesheet($this->baseUrl() . '/public/css/multipl
         $('.ms-choice').click(function () {
             $(".ms-drop ul li:eq(1)").css("display", "none");
         });
+        CKEDITOR.disableAutoInline = false;
+        CKEDITOR.replace('certificate_description', {
+            //removePlugins: 'toolbar,elementspath',
+            height: ['70px'],
+        });
+        CKEDITOR.replace('certificate_holder', {
+            //removePlugins: 'toolbar,elementspath',
+           // allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
+            //width: ['250px'],
+            height: ['70px'],
+
+        });
+        CKEDITOR.replace('send_certificate_to', {
+            //removePlugins: 'toolbar,elementspath',
+            //allowedContent: 'p h1 h2 strong em; a[!href]; img[!src,width,height];',
+            //width: ['250px'],
+            height: ['70px'],
+
+        });  
 
     });
 </script>
