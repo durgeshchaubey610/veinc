@@ -55,12 +55,14 @@ if ($this->view_type != 'detail') {
         font-weight: bold;
     }
 
-    .coi-details p {
-        width: 45%;
-        margin-left: 25px;
+    .coi-details .wrap{
+        width: 45%;       
         border: 1px solid;
         padding: 10px 10px 40px;
         margin-top: 20px;
+    }
+    .col-lg-12.coi-details {
+        padding:0px !important;
     }
 
     .cke_bottom{
@@ -203,22 +205,21 @@ if ($reportDetailLinks != '') {
     <div class="col-lg-12 coi-details" style="overflow:auto">
 	    <h1>Certificate Holder </h1>
 		<?php if(!empty($this->coiDetails)){?>
-	    <p><?php echo strip_tags($this->coiDetails[0]->coi_au_details_holder); ?></p>
+	    <div class="wrap"><?php echo strip_tags($this->coiDetails[0]->coi_au_details_holder); ?></div>
 		<?php }else{?>
-		<p>No Report Exists</p>
+        <div class="wrap">No Report Exists</div>
 		<?php } ?>
     <h1 style="margin-top:30px" >DESCRIPTION OF OPERATIONS/LOCATIONS/VEHICLES/SPECIAL TERMS</h1>
 	    <?php if(!empty($this->coiDetails)){?>
-	    <p> <?php echo strip_tags($this->coiDetails[0]->coi_au_details_specialterms); ?></p>
+        <div class="wrap"><?php echo strip_tags($this->coiDetails[0]->coi_au_details_specialterms); ?></div>
 		<?php }else{?>
-		<p>No Report Exists</p>
-		<?php } ?>
-		
+        <div class="wrap">No Report Exists</div>
+		<?php } ?>		
 		<h1 style="margin-top:30px" >Send Certificate To</h1>
 		<?php if(!empty($this->coiDetails)){?>
-		<p> <?php echo strip_tags($this->coiDetails[0]->coi_au_details_send_certificate_to); ?></p>
+        <div class="wrap"><?php echo strip_tags($this->coiDetails[0]->coi_au_details_send_certificate_to); ?></div>
 		<?php }else{?>
-		<p>No Report Exists</p>
+        <div class="wrap">No Report Exists</div>
 		<?php } ?>
     </div>
 </div>
