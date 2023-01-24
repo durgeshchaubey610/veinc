@@ -705,6 +705,7 @@ public function deletecoivendorAction(){
             $header_data = $this->getHeaderData($company);
             $footer_data = $this->getFooterData();
 			
+			
             $roleManager = 'Company Admin';
             /* * ***change the key with value in the content *** */
             $currDate = date('F d, Y');
@@ -919,7 +920,8 @@ public function deletecoivendorAction(){
             $mail->addTo($detail['email']);
             // $mail->addTo('mark.lucas@voc-tech.com');
             // $mail->addTo('rob.palermo@voc-tech.com');
-			$mail->addTo('durgeshchaubey@virtualemployee.com');
+			$mail->addTo('durgeshchaubey@virtualemployee.com');			
+            $mail->addTo('dadhikuriyal@virtualemployee.com');		
             $esubject = $email_data['subject'];
             $econtent = $email_data['content'];
            

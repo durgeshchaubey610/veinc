@@ -599,6 +599,14 @@ function cancelServiceTemplate(){
 } 
 
 function sendcoiemail(tid, cid, tname) {
+
+	var msg = "Please add email ID First.";
+	if(tname){
+		if(tname.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi)){		
+		  msg = "Notification email successfully sent to Vendor User "+tname;		 
+
+		}
+	}
     $('.loader').show();
     $('.error-txt').html('');
     $('.message').html("");
@@ -609,7 +617,7 @@ function sendcoiemail(tid, cid, tname) {
         success: function (data) {
             $('.loader').hide();
             if (data == true) {
-                $('.message').text("Notification email successfully sent to COI Tenant User "+tname);
+                $('.message').text(msg);
                 $('.message').show();
             } else {
                 //alert('There was an error');			
@@ -627,6 +635,13 @@ function sendcoiemail(tid, cid, tname) {
 }
 
 function sendcoivendoremail(tid, cid, tname) {	
+	var msg = "Please add email ID First.";
+	if(tname){
+		if(tname.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi)){		
+		  msg = "Notification email successfully sent to Vendor User "+tname;		 
+
+		}
+	}
     $('.loader').show();
     $('.error-txt').html('');
     $('.message').html("");
@@ -637,7 +652,7 @@ function sendcoivendoremail(tid, cid, tname) {
         success: function (data) {
             $('.loader').hide();
             if (data == true) {
-                $('.message').text("Notification email successfully sent to Vendor User "+tname);
+                $('.message').text(msg);
                 $('.message').show();
             } else {
                 //alert('There was an error');			

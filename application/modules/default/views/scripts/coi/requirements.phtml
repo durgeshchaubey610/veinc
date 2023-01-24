@@ -174,8 +174,8 @@ if ($this->view_type != 'detail') {
 						foreach ($this->templatedetails as $val){ ?>
                                  <tr>
                                 <td><?php echo $val->coi_vt_default_description ;?></td>
-                                <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $val->coi_au_defaults_Tenant);?></td>
-                                <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $val->coi_au_defaults_Vendor);?></td>
+                                <td style="text-align: right;"><?php echo number_format($val->coi_au_defaults_Tenant);?></td>
+                                <td style="text-align: right;"><?php echo number_format($val->coi_au_defaults_Vendor);?></td>
                                 <?php if($user_info->is_write == 1){ ?>
                                <td style="text-align: center;"><div class="col02 coladdlastcol lastcol edit_delete_icon">
                                     <?php $id= $val->coi_au_requir_ID;?>
@@ -215,8 +215,8 @@ if ($this->view_type != 'detail') {
 							foreach ($this->templatedetailsseconnd as $valst){ ?>
                                  <tr>
                                 <td><?php echo $valst->coi_vt_default_description ;?></td>
-                                <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $valst->coi_au_defaults_Tenant);?></td>
-                                <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $valst->coi_au_defaults_Vendor);?></td>
+                                <td style="text-align: right;"><?php echo number_format($valst->coi_au_defaults_Tenant);?></td>
+                                <td style="text-align: right;"><?php echo number_format($valst->coi_au_defaults_Vendor);?></td>
                                 <?php if($user_info->is_write == 1){ ?>
                               <td style="text-align: center;">
                                     <div class="col02 coladdlastcol lastcol edit_delete_icon">
@@ -271,8 +271,8 @@ if ($this->view_type != 'detail') {
 						foreach ($this->templatedetailsthird as $ute){ ?>
                                  <tr>
                                 <td><?php echo $ute->coi_vt_default_description ;?></td>
-                                <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $ute->coi_au_defaults_Tenant);?></td>
-                                <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $ute->coi_au_defaults_Vendor);?></td>
+                                <td style="text-align: right;"><?php echo number_format($ute->coi_au_defaults_Tenant);?></td>
+                                <td style="text-align: right;"><?php echo number_format($ute->coi_au_defaults_Vendor);?></td>
                                 <?php if($user_info->is_write == 1){ ?>
                                 <td style="text-align: center;">
                                     <div class="col02 coladdlastcol lastcol edit_delete_icon">
@@ -333,8 +333,8 @@ if ($this->view_type != 'detail') {
             ?>
                                  <tr>
                                 <td><?php echo $workorv->coi_vt_default_description ;?></td>
-                                <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $workorv->coi_au_defaults_Tenant);?></td>
-                                <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $workorv->coi_au_defaults_Vendor);?></td>
+                                <td style="text-align: right;"><?php echo number_format($workorv->coi_au_defaults_Tenant);?></td>
+                                <td style="text-align: right;"><?php echo number_format($workorv->coi_au_defaults_Vendor);?></td>
                                 <?php if($user_info->is_write == 1){ ?>
                                 <td style="text-align: center;">
                                     <div class="col02 coladdlastcol lastcol edit_delete_icon">

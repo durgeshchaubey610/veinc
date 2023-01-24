@@ -333,6 +333,23 @@ class BuildingController extends Ve_Controller_Base {
                 //echo '<pre>';print_r($data); die;
                 $buildingId = $buildingMapper->addBuilding($data);
 
+                //add by durgesh for building id
+                $coidetails = new Model_CioTemplate();
+			    $coidetailList = $coidetails->GetAllData();
+			    if(!empty($coidetailList)){
+                    $coidetailss = new Model_CioRequirement();
+					foreach($coidetailList as $Lcoi){
+                        $datacoi = array();					  
+                        $datacoi['Building_ID'] = $buildingId;
+                        $datacoi['uniqueCostCenter'] = $data['uniqueCostCenter'];
+                        $datacoi['coi_vt_default_ID'] = $Lcoi->coi_vt_default_ID;
+                        $datacoi['coi_au_defaults_Tenant'] = $Lcoi->coi_vt_defaults_Tenant;
+                        $datacoi['coi_au_defaults_Vendor'] = $Lcoi->coi_vt_defaults_Vendor;
+                      
+                        $coidetailList = $coidetailss->insertCoirequirement($datacoi);
+                    }
+			    }
+
                 //create admin user
                 $userDataArray = array();
                 $userDataArray['uid'] = @$adminuserdata['uid'];
