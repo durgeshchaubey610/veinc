@@ -1079,7 +1079,7 @@ public function getHeaderData($company) {
         $voc_logo = $emailContent['voc_logo'];
 
         if (isset($voc_logo) && !empty($voc_logo)) {
-            $voctech_logo_src = '<img src="' . $uri . 'public/images/uploads/' . $voc_logo . '">';
+            $voctech_logo_src = '<img src="' . $uri . 'public/images/uploads/' . $voc_logo . '" style="max-height:150px">';
         } else {
             $voctech_logo_src = "";
         }
@@ -1093,7 +1093,7 @@ public function getHeaderData($company) {
 
         // Company logo
         if (isset($aData['company_logo']) && !empty($aData['company_logo'])) {
-            $building_logo_src = '<img src="' . $uri . 'public/images/clogo/' . $aData['company_logo'] . '">';
+            $building_logo_src = '<img src="' . $uri . 'public/images/clogo/' . $aData['company_logo'] . '" style="max-height:150px" >';
         } else {
             //$building_logo_src	=	'<img src="'.$uri.'/public/images/logo.png">';				
             $building_logo_src = '';
