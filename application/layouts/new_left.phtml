@@ -581,7 +581,7 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
     }
     // tenant user menu
  
-    if ($userRoleID == 5 || $userRoleID == 7) {
+    if ($userRoleID == 7) {
 		
         ?>
         <li onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active"<?php } ?>> 
@@ -598,22 +598,54 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
             </ul>
         </li>   
 
-
-        <?php /* if ($userRoleID == 5) { ?>  
-          <li <?php if ($controller == 'emails') { ?> class="active"<?php } ?>>
-          <a href="javascript:void(0)" <?php if (in_array($controller, $uacontr) && in_array($actionnm, $uaaction)) { ?> class="head_select_nav"<?php } ?>>Email Templates<span class="fa arrow whitefont_color"></span></a>
-          <ul class="nav nav-second-level">
-          <li><a href="<?php echo BASEURL . 'emails/list' ?>" <?php if ($controller == 'emails' && $actionnm == 'list') { ?>class="menuselected"<?php } ?>>Note Notification</a>
-          </li>
-          </ul>
-          </li>
-          <?php
-          } */
-        ?>
-
-        
-
     <?php }
+
+    if($userRoleID == 5){?>
+           <li  class="menuver22" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active"<?php } ?>> 
+            <a href="javascript:void(0)" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="head_select_nav"<?php } ?>>Tenant Administration<span class="fa arrow whitefont_color"></span></a>
+            <ul class="nav nav-second-level" <?php if ($controller == 'tenant' || $controller == 'workorder') { ?>style="display:block;"<?php } ?>>	  
+                <li><a href="<?php echo BASEURL . 'tenant/tenantuser' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantuser') { ?>class="menuselected"<?php } ?>>Tenant Information</a></li>
+                <li><a href="<?php echo BASEURL . 'workorder/index' ?>" <?php if ($controller == 'workorder' && $actionnm == 'index') { ?>class="menuselected"<?php } ?>>Work Orders</a></li>
+                <li><a href="<?php echo BASEURL . 'workorder/createworkorder' ?>" <?php if ($controller == 'workorder' && $actionnm == 'createworkorder') { ?>class="menuselected"<?php } ?>>Create Work Order</a></li>
+            </ul>
+            <ul class="nav nav-second-level">
+              <?php if(!empty($conf_acc)) : ?>
+                <li><a href="<?php echo BASEURL . 'tenant/conavailability/' ?>" <?php if ($controller == 'tenant' && $actionnm == 'conavailability') { ?>class="menuselected"<?php } ?>>Conference Availability</a></li>
+		<?php endif; ?>                
+            </ul>
+        </li>      
+
+        <li  class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active"<?php } ?>> 
+            <a href="javascript:void(0)" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="head_select_nav"<?php } ?>>Work Orders<span class="fa arrow whitefont_color"></span></a>
+            <ul class="nav nav-second-level" <?php if ($controller == 'tenant' || $controller == 'workorder') { ?>style="display:block;"<?php } ?>>	  
+                <li><a href="<?php echo BASEURL . 'tenant/tenantuser' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantuser') { ?>class="menuselected"<?php } ?>>Tenant Information</a></li>
+                <li><a href="<?php echo BASEURL . 'workorder/index' ?>" <?php if ($controller == 'workorder' && $actionnm == 'index') { ?>class="menuselected"<?php } ?>>Work Orders</a></li>
+                <li><a href="<?php echo BASEURL . 'workorder/createworkorder' ?>" <?php if ($controller == 'workorder' && $actionnm == 'createworkorder') { ?>class="menuselected"<?php } ?>>Create Work Order</a></li>
+            </ul>           
+        </li>  
+        <li  class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active"<?php } ?>> 
+           <a href="javascript:void(0)" class="head_select_nav">Conference Availability</a>
+        </li>  
+        <li  class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active"<?php } ?>> 
+           <a href="javascript:void(0)" class="head_select_nav" >Certificate of Insurance</a>
+        </li>  
+
+        <li  class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active"<?php } ?>> 
+           <a href="javascript:void(0)" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="head_select_nav"<?php } ?>>Tenant Administration<span class="fa arrow whitefont_color"></span></a>
+            <ul class="nav nav-second-level" <?php if ($controller == 'tenant' || $controller == 'workorder') { ?>style="display:block;"<?php } ?>>	  
+                <li><a href="<?php echo BASEURL . 'tenant/tenantuser' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantuser') { ?>class="menuselected"<?php } ?>>Tenant Information</a></li>
+                <li><a href="<?php echo BASEURL . 'workorder/index' ?>" <?php if ($controller == 'workorder' && $actionnm == 'index') { ?>class="menuselected"<?php } ?>>My Account Info</a></li>
+                <li><a href="<?php echo BASEURL . 'workorder/createworkorder' ?>" <?php if ($controller == 'workorder' && $actionnm == 'createworkorder') { ?>class="menuselected"<?php } ?>>Current Users Accounts</a></li>
+            </ul>
+            <ul class="nav nav-second-level">
+              <?php if(!empty($conf_acc)) : ?>
+                <li><a href="<?php echo BASEURL . 'tenant/conavailability/' ?>" <?php if ($controller == 'tenant' && $actionnm == 'conavailability') { ?>class="menuselected"<?php } ?>>Conference Availability</a></li>
+		<?php endif; ?>                
+            </ul>
+        </li>         
+
+   <?php        
+   }
     ?>
 
     <?php
@@ -780,6 +812,41 @@ $(document).ready(function(){
     }else{
        $(".show-collapes").trigger("click"); 
     }
+
+    if(getCookie("tenantversion")=="22.12"){
+    $('.menuver22').show();
+    $('.menuver23').hide();
+    $('.tentVesionWrap .inner-switch').removeClass('tnt-v22').addClass('tnt-v23');
+    $('.tentVesionWrap .inner-switch').text('23.0');
+}else if(getCookie("tenantversion")=="23.01"){
+    $('.tentVesionWrap .inner-switch').removeClass('tnt-v23').addClass('tnt-v22');
+    $('.tentVesionWrap .inner-switch').text('22.12'); 
+    $('.menuver23').show();
+    $('.menuver22').hide();    
+}else{
+    $('.tentVesionWrap .inner-switch').removeClass('tnt-v22').addClass('tnt-v23');
+    $('.tentVesionWrap .inner-switch').text('23.01'); 
+    $('.menuver22').show();
+    $('.menuver23').hide();    
+}
+
+ $(".tentVesionWrap").click(function(){
+      if($('.tentVesionWrap .inner-switch').hasClass('tnt-v23')==true){
+            $('.tentVesionWrap .inner-switch').removeClass('tnt-v23').addClass('tnt-v22');
+            $('.tentVesionWrap .inner-switch').text('20.12');            
+             setCookie("tenantversion","23.01");
+             $('.menuver23').show();
+             $('.menuver22').hide();
+      }else if($('.tentVesionWrap .inner-switch').hasClass('tnt-v22')==true){
+            $('.tentVesionWrap .inner-switch').removeClass('tnt-v22').addClass('tnt-v23');
+            $('.tentVesionWrap .inner-switch').text('23.01');
+            setCookie("tenantversion","20.12"); 
+            $('.menuver22').show();
+            $('.menuver23').hide();        
+      }
+  
+ });
+
         
 });
 function setCookie(cname, cvalue, exdays) {
@@ -805,7 +872,15 @@ function getCookie(cname) {
 }
 </script>
  
- 
+ <?php 
+if ($userRoleID == 5 ) { ?>
+ <div class="switch tentVesionWrap">Switch to Version 
+  <span class="inner-switch tnt-v22">20.12</span>
+ <!--- 20.12 | 23.01-->
+</div>
+<?php } ?>
+
+
  <?php if($user_id!=1): ?>
     <script>
         $(".fgWhite").attr("style","display:block");

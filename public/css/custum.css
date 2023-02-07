@@ -5226,6 +5226,15 @@ span#autoGenerate-error {
     padding: 10px 15px;
 }
 
+/*Tenant Version Menu */
+.tentVesionWrap {
+    color: #fff;
+    padding: 10px 17px;
+    position: fixed;   
+    bottom: 10px;   
+    background :#243342!important;
+    width:247px;
+}
 /* popup issue*/
 
 .modal-backdrop {
