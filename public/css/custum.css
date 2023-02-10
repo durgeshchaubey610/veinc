@@ -5233,7 +5233,13 @@ span#autoGenerate-error {
     position: fixed;   
     bottom: 10px;   
     background :#243342!important;
-    width:247px;
+    width:250px;
+}
+.menuver22 .nav>li{
+    overflow:hidden;
+}
+.menuver23 .nav>li{
+    overflow:hidden;
 }
 /* popup issue*/
 
@@ -5884,3 +5890,10 @@ width:100%;
 .page-heading-detail-wrap .page-heading-detail-wrap-btn { text-align: center; padding: 0px; }
     
 }
+
+@media (min-width:767px){
+    .nav>li{
+        overflow:hidden;
+    }
+} 
+
