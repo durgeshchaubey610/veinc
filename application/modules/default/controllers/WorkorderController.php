@@ -49,7 +49,7 @@ class WorkorderController extends Ve_Controller_Base {
 		 $page=$this->_getParam('page',1);
 		 $order=$this->_getParam('order','woId');
 		 $dir=$this->_getParam('dir','DESC');
-		 if($this->roleId=='7')		 
+		 if($this->roleId=='7' || $this->roleId=='5')		 
 		 $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir,$this->userId);
 		 else
 		 $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir);
