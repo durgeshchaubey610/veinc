@@ -2081,17 +2081,28 @@ class TenantController extends Ve_Controller_Base {
 
     public function coidetailAction() {
       
-        $msgId = $this->_getParam('msg', 0);
-        $msg = '';
-        
-        $tm = new Zend_Session_Namespace('tenant_message');
-       
         $tenant = new Model_Tenant();
         $tenantuser = $tenant->getTenantByUser($this->userId);
-        //var_dump($tenantuser);
+        $buildingId = $_SESSION['current_building'];
+        if(!empty($buildingId)){
+        $buildingMapper = new Model_Building();
+        $getcostcenter = $buildingMapper->getcostcenterByBuildingId($buildingId);   
+        $cdModel = new Model_CoiDetails();		
+        $coiDetails = $cdModel->getCoidetails($buildingId);
+        $data['Building_ID'] = $buildingId;
+        $data['uniqueCostCenter'] = $getcostcenter[0]->uniqueCostCenter;				 
+        }       
+        $template = new Model_CioRequirement(); 
+        $tempdata= $template->GetAllGeneralRequirment($buildingId);		
+        $tempdatasecond= $template->GetAllAutomobileRequirment($buildingId);
+        $templatteumbrella=$template->GetAllUmbrellaRequirment($buildingId);
+        $templatteWorkers=$template->GetAllWorkersRequirment($buildingId);
+        $this->view->templatedetails = $tempdata;
+        $this->view->templatedetailsseconnd =$tempdatasecond;
+        $this->view->templatedetailsthird=$templatteumbrella; 
+        $this->view->templatteWorkers=$templatteWorkers;
+        $this->view->coiDetails = $coiDetails;
 
-        $this->view->roleId = $this->roleId;
-        $this->view->coidetail = $tenantuser[0];
     }
 
 
