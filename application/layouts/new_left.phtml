@@ -607,7 +607,7 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
         </li>  
         <?php if($userRoleID == 5){?>
         <li  class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active"<?php } ?>> 
-           <a href="javascript:void(0)" class="head_select_nav" >Certificate of Insurance</a>
+         <a href="<?php echo BASEURL . 'tenant/coidetail/' ?>" class="head_select_nav" >Certificate of Insurance</a>
         </li>  
        <?php } ?>
         <li  class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active"<?php } ?>> 

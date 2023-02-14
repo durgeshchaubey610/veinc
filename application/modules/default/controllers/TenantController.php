@@ -2074,6 +2074,27 @@ class TenantController extends Ve_Controller_Base {
         
     }
 
+
+      /*     * *
+     * Show tenant coi's detail
+     */
+
+    public function coidetailAction() {
+      
+        $msgId = $this->_getParam('msg', 0);
+        $msg = '';
+        
+        $tm = new Zend_Session_Namespace('tenant_message');
+       
+        $tenant = new Model_Tenant();
+        $tenantuser = $tenant->getTenantByUser($this->userId);
+        //var_dump($tenantuser);
+
+        $this->view->roleId = $this->roleId;
+        $this->view->coidetail = $tenantuser[0];
+    }
+
+
 }
 
 ?>

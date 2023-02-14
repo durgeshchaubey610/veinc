@@ -1,0 +1,97 @@
+<?php
+echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
+
+?>
+<div class="content active tenantcoi" id="contents">
+    <div class="coi-title">
+        <h3>Certificate of Insurance</h3>
+    </div>
+    <div class="row coi_table_row">
+        <div class="col" style="overflow:auto">
+            <div class="report_table_scroll">
+                <table class="table table-bordered">
+                    <tr class="coi_thead ">
+                        <!--<th colspan="6" class="thead_heading">Existing Reports <?php echo $this->layout()->whatever; ?></th>-->
+
+                    <tr>
+                    <tr class="coi_thead">
+                        <th>Current Status </th>
+                        <th><strong>Expirtation Date </strong></th>
+                        <th>COI on File</th>
+                        <th>Number of Days untill COI Expires </th>
+                    </tr>
+                    <?php if (isset($this->reportDetails) && !empty($this->reportDetails)) { ?>
+
+                        <tr class="create_report_table">
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+                    <?php } else { ?>
+                    <tr>
+                        <td colspan='6' style="text-align:center;"> No Report Exists </td>
+                    </tr>
+<?php } ?>
+
+                    <tr>
+                                            <td colspan='6' style="text-align:left;"> <strong>Requirements</strong> </td>
+                    </tr>
+                    <tr>
+                        <td colspan='6' style="text-align:left;"> No Report Exists </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <table>
+                                <tr>
+                                    <td colspan='2' style="text-align:center;">
+                                          <strong>Certificate Holder</strong>
+                                    </td>
+                                    <td colspan='2' style="text-align:center;">
+                                    <strong>DESCRIPTION OF OPERATIONS/LOCATIONS/VEHICLES/SPECIAL TERMS</strong>>
+                                    </td>
+                                    <td colspan='2' style="text-align:center;">                                       
+                                        <strong>Send Certificate To</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan='6' style="text-align:center;"> No Report Exists </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<a href="#show_Edit_Report_div" id="show_Edit_Report_div_href" class="modalbox"> </a>
+<div id="show_Edit_Report_div" class="show_Edit_Report_div" style="display:none"></div>
+
+<script>
+    function showNewPop(url) {
+        CheckForSessionpop(baseUrl);
+        //$('form#first_form input#tenantName').trigger('click');
+        $('a[href="#showNewPop"]').fancybox({
+            type: 'iframe',
+            href: url,
+            width: 750,
+            height: 600,
+            'beforeClose': function() {
+                $('.loader').hide();
+            },
+            'afterLoad': function() {
+                $.fancybox.hideLoading();
+                $('.loader').show();
+                setInterval(function() {
+                    $('.loader').hide();
+                }, 5000);
+            },
+            afterShow: function() {
+
+            }
+        });
+    }
+</script>

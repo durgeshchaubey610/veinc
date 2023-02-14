@@ -5895,5 +5895,23 @@ width:100%;
     .nav>li{
         overflow:hidden;
     }
+    .tenantcoi h3{
+        font-size: 17px;
+        background: #504f4d;
+        padding: 9px 11px;
+        color: #fff;
+        text-align:center;
+    }
+    .tenantcoi_table_row {
+        margin-left: -15px!important;
+        margin-right: -15px!important;
+      }
+      .coi_thead th {
+        border: 1px solid #333!important;
+        text-align: center;
+      }
+      .coi_thead{
+        background: -webkit-linear-gradient(top, #e4e4e4 0%,#a7a7a7 37%,#909090 100%);
+      }
 } 
 
