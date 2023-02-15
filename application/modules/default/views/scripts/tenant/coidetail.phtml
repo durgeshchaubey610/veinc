@@ -2,6 +2,16 @@
 echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
 
 ?>
+<style>
+    .wrap {
+        width: 90%;
+        min-height: 200px;
+        border: 1px solid;
+        padding: 10px 10px 40px;
+        margin-top: 20px;
+        word-break: break-word;
+    }
+</style>
 <div class="content active tenantcoi" id="contents">
     <div class="coi-title">
         <h3>Certificate of Insurance</h3>
@@ -28,47 +38,127 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
                             <td></td>
                         </tr>
                     <?php } else { ?>
-                    <tr>
-                        <td colspan='6' style="text-align:center;"> No Report Exists </td>
-                    </tr>
-<?php } ?>
+                        <tr>
+                            <td colspan='6' style="text-align:center;"> No Report Exists </td>
+                        </tr>
+                    <?php } ?>
 
                     <tr>
-                                            <td colspan='6' style="text-align:left;"> <strong>Requirements</strong> </td>
+                        <td colspan='6' style="text-align:left;"> <strong>Requirements</strong> </td>
+
                     </tr>
                     <tr>
-                        <td colspan='6' style="text-align:left;"> No Report Exists </td>
-                    </tr>
-                    <tr>
-                        <td colspan="4">
+                        <td>
                             <table>
                                 <tr>
-                                    <th colspan='2' style="text-align:left;">
-                                          <strong>Certificate Holder</strong>
-                                     </th>
-                                    <th colspan='2' style="text-align:left;">
-                                    <strong>DESCRIPTION OF OPERATIONS/LOCATIONS/VEHICLES</strong>
-                                    </th>
-                                    <th colspan='2' style="text-align:left;">                                       
-                                        <strong>Send Certificate To</strong>
-                                     </th>
+                                    <th> General Liability</th>
+                                    <th> &nbsp;</th>
                                 </tr>
-                                <tr>
-                                    <td colspan='2' style="text-align:center;">
-                                          <?php echo $this->coiDetails[0]->coi_au_details_holder;?>
-                                      </td>
-                                    <td colspan='2' style="text-align:center;">
-                                    <?php echo $this->coiDetails[0]->coi_au_details_specialterms;?>
-                                    </td>
-                                    <td colspan='2' style="text-align:center;">                                       
-                                    <?php echo $this->coiDetails[0]->coi_au_details_send_certificate_to;?>
-                                   </td>
-                                </tr>
-
-                            </table>
-                        </td>
-                    </tr>                   
+                                <?php
+                                if (!empty($this->templatedetails)) {
+                                    foreach ($this->templatedetails as $val) { ?>
+                                        <tr>
+                                            <td><?php echo $val->coi_vt_default_description; ?></td>
+                                            <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $val->coi_au_defaults_Tenant); ?></td>
+                                        </tr>
+                                <?php  }
+                                }
+                                ?>
+                    </tr>
                 </table>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <th> Automobile Liability</th>
+                            <th> &nbsp;</th>
+                        </tr>
+                        <?php
+                        if (!empty($this->templatedetailsseconnd)) {
+                            foreach ($this->templatedetailsseconnd as $valst) { ?>
+                                <tr>
+                                    <td><?php echo $valst->coi_vt_default_description; ?></td>
+                                    <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $valst->coi_au_defaults_Tenant); ?></td>
+                                </tr>
+                        <?php  }
+                        }
+                        ?>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <th> Umbrella Liability</th>
+                            <th> &nbsp;</th>
+                        </tr>
+                        <?php
+                        if (!empty($this->templatedetailsseconnd)) {
+                            foreach ($this->templatedetailsseconnd as $valst) { ?>
+                                <tr>
+                                    <td><?php echo $valst->coi_vt_default_description; ?></td>
+                                    <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $valst->coi_au_defaults_Tenant); ?></td>
+                                </tr>
+                        <?php  }
+                        }
+                        ?>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <th>Workers Compensation</th>
+                            <th> &nbsp;</th>
+                        </tr>
+                        <?php
+                        if (!empty($this->templatedetailsthird)) {
+                            foreach ($this->templatedetailsthird as $ute) { ?>
+                                <tr>
+                                    <td><?php echo $ute->coi_vt_default_description; ?></td>
+                                    <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $ute->coi_au_defaults_Tenant); ?></td>
+                                </tr>
+                        <?php  }
+                        }
+                        ?>
+                        </tr>
+                    </table>
+                </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <table>
+                            <tr>
+                            <th>Certificate Holder</th>
+                            <th>DESCRIPTION OF OPERATIONS/LOCATIONS/VEHICLES</th>
+                            <th>Send Certificate To</th>
+                            </tr>               
+                                <td>                                    
+                                    <div class="wrap">
+                                        <div>
+                                        <?php echo $this->coiDetails[0]->coi_au_details_holder; ?>
+                                       </div>
+                                    </div>                                            
+                                </td>
+                                <td>                                    
+                                    <div class="wrap">
+                                       <div>
+                                        <?php echo $this->coiDetails[0]->coi_au_details_specialterms; ?>
+                                      </div>
+                                    </div>                                            
+                                </td>
+                                <td>                                    
+                                    <div class="wrap">
+                                    <div>
+                                        <?php echo $this->coiDetails[0]->coi_au_details_send_certificate_to; ?>
+                                    </div>
+                                    </div>                                            
+                                </td>
+                                
+                                           
+                                        </tr>
+                                    </table>
+
             </div>
         </div>
     </div>
