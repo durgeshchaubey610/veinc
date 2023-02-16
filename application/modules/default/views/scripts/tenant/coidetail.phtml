@@ -3,27 +3,35 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
 
 ?>
 <style>
-    table.coidetail_desc th, table.coidetail_desc td {
+table.coidetail_desc {
+ width: 100%;
+ table-layout: fixed;
+ 
+}
+table.coidetail_desc th, table.coidetail_desc td {
  padding: 0 10px;
 }
 table.coidetail_desc .wrap {
  width: auto;
 }
-    .wrap {
-        width: 90%;       
-        border: 1px solid;
-        padding: 10px 10px 40px;
-        margin-top: 20px;
-        word-break: break-word;
-        min-height: 100px;
-    }
-    td, th { 
-     vertical-align: top;
-   }
-   .grd_Clr{
+.wrap {
+    width: 90%;       
+    border: 1px solid;
+    padding: 10px 10px 40px;
+    margin-top: 20px;
+    word-break: break-word;
+    min-height: 100px;
+}
+td, th { 
+    vertical-align: top;
+}
+.grd_Clr{
     background: rgb(222,233,203);
     background: linear-gradient(0deg, rgba(222,233,203,1) 0%, rgba(210,222,182,1) 50%, rgba(245,248,240,1) 100%);
-    }
+}
+tr.grd_Clr th {border: solid 1px #000!important;text-align: center;}
+
+
 </style>
 <div class="content no-padding active tenantcoi" id="contents">
     <div class="coi-title">
