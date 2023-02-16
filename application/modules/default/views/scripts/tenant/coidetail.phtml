@@ -3,6 +3,12 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
 
 ?>
 <style>
+    table.coidetail_desc th, table.coidetail_desc td {
+ padding: 0 10px;
+}
+table.coidetail_desc .wrap {
+ width: auto;
+}
     .wrap {
         width: 90%;       
         border: 1px solid;
@@ -14,6 +20,10 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
     td, th { 
      vertical-align: top;
    }
+   .grd_Clr{
+    background: rgb(222,233,203);
+    background: linear-gradient(0deg, rgba(222,233,203,1) 0%, rgba(210,222,182,1) 50%, rgba(245,248,240,1) 100%);
+    }
 </style>
 <div class="content no-padding active tenantcoi" id="contents">
     <div class="coi-title">
@@ -26,7 +36,7 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
                     <tr class="coi_thead ">
                         <!--<th colspan="6" class="thead_heading">Existing Reports <?php echo $this->layout()->whatever; ?></th>-->
                     <tr>
-                    <tr class="coi_thead">
+                    <tr class="grd_Clr">
                         <th>Current Status </th>
                         <th><strong>Expirtation Date </strong></th>
                         <th>COI on File</th>
