@@ -4,18 +4,18 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
 ?>
 <style>
     .wrap {
-        width: 90%;
-        min-height: 200px;
+        width: 90%;       
         border: 1px solid;
         padding: 10px 10px 40px;
         margin-top: 20px;
         word-break: break-word;
+        min-height: 100px;
     }
     td, th { 
-   vertical-align: top;
+     vertical-align: top;
    }
 </style>
-<div class="content active tenantcoi" id="contents">
+<div class="content no-padding active tenantcoi" id="contents">
     <div class="coi-title">
         <h3>Certificate of Insurance</h3>
     </div>
@@ -32,19 +32,14 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
                         <th>COI on File</th>
                         <th>Number of Days untill COI Expires </th>
                     </tr>
-                    <?php if (isset($this->reportDetails) && !empty($this->reportDetails)) { ?>
-
-                        <tr class="create_report_table">
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td></td>
+                   
+                       
+                        <tr class="coi_report_table">
+                            <td> Current Expired 30-60 days</td>
+                            <td>04 /01 / 2023 </td>
+                            <td> 720.pdf </td>
+                            <td> 51 Days(s)</td>
                         </tr>
-                    <?php } else { ?>
-                        <tr>
-                            <td colspan='6' style="text-align:center;"> No Report Exists </td>
-                        </tr>
-                    <?php } ?>
 
                     <tr>
                         <td colspan='6' style="text-align:left;"> <strong>Requirements</strong> </td>
@@ -130,7 +125,7 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
                 </tr>
                 <tr>
                     <td colspan="4">
-                        <table>
+                        <table class="coidetail_desc">
                             <tr>
                             <th>Certificate Holder</th>
                             <th>DESCRIPTION OF OPERATIONS/LOCATIONS/VEHICLES</th>
@@ -156,8 +151,7 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
                                         <?php echo $this->coiDetails[0]->coi_au_details_send_certificate_to; ?>
                                     </div>
                                     </div>                                            
-                                </td>
-                                
+                                </td>                               
                                            
                                         </tr>
                                     </table>
