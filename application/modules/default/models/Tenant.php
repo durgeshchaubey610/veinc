@@ -402,6 +402,22 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
 
         return ($res && sizeof($res)>0)? $res : false ;               
 	}
+    
+    function getTenantCoiByBId($uid,$tenantId){
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+		 $select = $db->select()
+                         ->from(array('tn'=>'tenant'), array('tenantName','id', 'tenant_number','buildingId'))
+                         ->joinLeft(array('cat' => 'coi_au_tenant'),'cat.tenant_Id = tn.id',array('cat.*'))
+                         ->joinLeft(array('u' => 'users'),'u.uid = tn.userId',array('email'))
+                         ->where('tn.buildingId=?',$uid)
+                         ->where('tn.userId=?',$tenantId)
+                         ->where('tn.remove_status=0');	                  
+			 
+                    $res=$db->fetchAll($select);
+
+                  return ($res && sizeof($res)>0)? $res : false ;  
+    }
    
 }	
 
