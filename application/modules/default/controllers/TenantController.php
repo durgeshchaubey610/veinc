@@ -2097,16 +2097,21 @@ class TenantController extends Ve_Controller_Base {
        //echo '<pre>';
         $tempdatasecond= $template->GetAllAutomobileRequirment($buildingId);
         $templatteumbrella=$template->GetAllUmbrellaRequirment($buildingId);
-        $templatteWorkers=$template->GetAllWorkersRequirment($buildingId);
-        $woCOI = new Model_CioRequirement(); 
-        $requirement_arr = array();        
+        $templatteWorkers=$template->GetAllWorkersRequirment($buildingId);      
+        // where id = $tenantId 
+        $tModel = new Model_Tenant();
+        $bs = $tModel->getTenantCoiByBId($buildingId, $this->userId);      
+        //if(!empty($bs->coi_au_date_to)
+       // echo '<pre>';
+       // print_r($tenantuser);
+        //print_r($bsList);
+       // tenantId == 721       
         $this->view->templatedetails = $tempdata;   
         $this->view->templatedetailsseconnd =$tempdatasecond;
         $this->view->templatedetailsthird=$templatteumbrella; 
         $this->view->templatteWorkers=$templatteWorkers;
         $this->view->coiDetails = $coiDetails;
-
-
+        $this->view->bsCOI = $bs;
     }
 
 
