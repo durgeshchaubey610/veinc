@@ -2090,7 +2090,7 @@ class TenantController extends Ve_Controller_Base {
               $this->_redirect('/tenant/noaccess');
             }
         } 
-        
+
         if(isset($tenantuser[0]->buildingId) && !empty($tenantuser[0]->buildingId)){
             $buildingId = $tenantuser[0]->buildingId;
             $buildingMapper = new Model_Building();
@@ -2128,6 +2128,8 @@ class TenantController extends Ve_Controller_Base {
 
     }
 
+    public function noaccessAction() {
+    }
 
 }
 
