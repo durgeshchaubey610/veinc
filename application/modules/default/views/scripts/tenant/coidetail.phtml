@@ -1,5 +1,5 @@
 <?php
-echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
+echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/coilist.js');
 
 ?>
 <style>
@@ -187,7 +187,12 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
                         <td colspan='4'>
                             <div class="coi-require">
                                 <strong>Requirements</strong>
-                                <a href="#" type="button" class="green-btn">Add / Upload COI</a>
+                                <?php if(empty($this->bsCOI[0]->coi_au_tenant_id)) { ?>
+									<a title="add" href="javascript:void(0);" onclick="showAddCoiTenant('<?php echo $this->bsCOI[0]->id;?>')" class="green-btn">Add / Upload COI</a>
+						            <?php }else{?>
+									<a title="Edit" href="javascript:void(0);" onclick="showEditCoi('<?php echo $this->bsCOI[0]->coi_au_tenant_id;?>')" class="green-btn">Edit / Upload COI</a>
+									<?php }?>
+                                <!-- <a href="#" type="button" >Add / Upload COI</a> -->
                             </div>
                         </td>
 
@@ -308,7 +313,14 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/report.js');
     </div>
 </div>
 
-
+<div id="popup_form" style="display:none" class="service_popup_form">
+					 <a href="#add_service_form" id="add_service_form_href" class="modalbox">&nbsp;</a>					
+					 <div id="add_service_form" class="bd-dft-cls"  style="display:none"></div>
+					 <a href="#edit_service_form" id="edit_service_form_href" class="modalbox">&nbsp;</a>					
+					 <div id="edit_service_form" class="bd-dft-cls"  style="display:none"></div>
+					 <a href="#service_template_form" id="service_template_form_href" class="modalbox">&nbsp;</a>					
+					 <div id="service_template_form" class="bd-dft-cls" style="display:none"></div>					
+</div>
 <a href="#show_Edit_Report_div" id="show_Edit_Report_div_href" class="modalbox"> </a>
 <div id="show_Edit_Report_div" class="show_Edit_Report_div" style="display:none"></div>
 

@@ -2083,6 +2083,14 @@ class TenantController extends Ve_Controller_Base {
       
         $tenant = new Model_Tenant();
         $tenantuser = $tenant->getTenantByUser($this->userId);               
+         
+        //Restriced others user can noly Tenant Admin can Access it
+         if(isset($tenantuser[0]->role_id) && !empty($tenantuser[0]->role_id)){
+            if($tenantuser[0]->role_id !==5){
+              $this->_redirect('/tenant/noaccess');
+            }
+        } 
+        
         if(isset($tenantuser[0]->buildingId) && !empty($tenantuser[0]->buildingId)){
             $buildingId = $tenantuser[0]->buildingId;
             $buildingMapper = new Model_Building();
@@ -2100,18 +2108,24 @@ class TenantController extends Ve_Controller_Base {
         $templatteWorkers=$template->GetAllWorkersRequirment($buildingId);      
         // where id = $tenantId 
         $tModel = new Model_Tenant();
-        $bs = $tModel->getTenantCoiByBId($buildingId, $this->userId);      
+        $bs = $tModel->getTenantCoiByBId($buildingId, $this->userId);	
+      
         //if(!empty($bs->coi_au_date_to)
        // echo '<pre>';
        // print_r($tenantuser);
         //print_r($bsList);
-       // tenantId == 721       
+       // tenantId == 721
+        $woCOI = new Model_CioRequirement(); 
+        $coilist = $woCOI->getReportByBId($this->select_build_id);								
+        
         $this->view->templatedetails = $tempdata;   
         $this->view->templatedetailsseconnd =$tempdatasecond;
         $this->view->templatedetailsthird=$templatteumbrella; 
         $this->view->templatteWorkers=$templatteWorkers;
         $this->view->coiDetails = $coiDetails;
         $this->view->bsCOI = $bs;
+
+
     }
 
 
