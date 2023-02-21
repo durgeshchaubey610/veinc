@@ -2086,7 +2086,7 @@ class TenantController extends Ve_Controller_Base {
          
         //Restriced others user can noly Tenant Admin can Access it
          if(isset($tenantuser[0]->role_id) && !empty($tenantuser[0]->role_id)){
-            if($tenantuser[0]->role_id !==5){
+            if($tenantuser[0]->role_id !=5){
               $this->_redirect('/tenant/noaccess');
             }
         } 
