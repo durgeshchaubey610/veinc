@@ -2127,10 +2127,36 @@ class TenantController extends Ve_Controller_Base {
 
 
     }
+    
+    public function tenantinfoAction() {
+        $msgId = $this->_getParam('msg', 0);
+        $msg = '';
+        if ($msgId == 1) {
+            $msg = 'Tenant user has been created successfully.';
+        }
+
+        if ($msgId == 2) {
+            $msg = 'Tenant user has been updated successfully.';
+        }
+        if ($msgId == 3) {
+            $msg = 'Tenant has been deleted successfully.';
+        }
+        $tm = new Zend_Session_Namespace('tenant_message');
+        if (!isset($tm->msg) && $msgId != 0) {
+            $tm->msg = $msg;
+            $this->_redirect('/tenant/tenantinfo');
+        }
+        $tenant = new Model_Tenant();
+        $tenantuser = $tenant->getTenantByUser($this->userId);
+        //var_dump($tenantuser);
+
+        $this->view->roleId = $this->roleId;
+        $this->view->tenantuser = $tenantuser[0];
+    }
 
     public function noaccessAction() {
     }
-
+ 
 }
 
 ?>
