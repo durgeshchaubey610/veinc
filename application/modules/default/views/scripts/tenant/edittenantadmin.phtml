@@ -1,8 +1,7 @@
 <?php 
 echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
 $tenantData = $this->tenantData;
-$tenantuser = $this->tenantuser;
-
+$tenantadmin = $this->tenantadmin;
 ?>
 <div class="container-right" id="add-tenant-data">
 	<span id="page_heading" class="tu-heading"><h3>Tenant Information (EDIT)</h3></span>
@@ -16,7 +15,46 @@ $tenantuser = $this->tenantuser;
 						<?php }?>
 				   </div>
 				   <section class="w-48 fr ch-home-form">
-					  <form name="editUser" id="editUser" action="<?php echo BASEURL.'tenant/edittuser/tuId/'.$this->tuserDetial->uid;?>" method="post">
+				   <?php if(!empty($tenantadmin[0]->role_id) && $tenantadmin[0]->role_id==5){?>
+					<form name="editUser" id="editUser" class="tenantadmin" action="<?php echo BASEURL.'tenant/edittuser/tuId/'.$this->tuserDetial->uid;?>" method="post">
+						  <input type='hidden' id='tId' name='tId' value="<?php echo $tenantData->id;?>">
+						  				  					  						  					  						  					  
+							  <div class="row">
+								  <label>Tenant Name :<span class="required">*</span></label> <span class="tanameErr" id="taname-error"></span>
+                                  <div class="tt-input-div">
+								  <input type="text"  id="tenantName" name="tenantName" value="<?php echo stripslashes(htmlentities($tenantData->tenantName));?>">
+                                  </div>
+							   </div>
+							  <div class="row">	
+								<label>Main Contact :<span class="required">*</span></label><span class="maincontactErr" id="maincontact-error"></span>
+                                <div class="tt-input-div">
+								<input type="text" required id="main_contact" class="status" name="main_conact">
+					         
+                                </div>
+							</div>									
+							<div class="row">	
+								<label>Contact Phone Number :<span class="required">*</span></label>
+								<span class="uofficeErr" id="office-phone-error"></span> 		
+                                <div class="tt-input-div">
+								<input type="text" id="phone" class="" name="phone" value="<?php echo htmlentities($tenantData->phoneNumber);?>" >
+                                </div>
+							</div>	
+							<div class="row row_textarea">	
+								<label>Billing Address :<span class="required">*</span></label>
+								<span class="uofficeErr" id="office-bill-error"></span> 		
+                                <div class="tt-input-div">
+								<textarea name='billtoAddress' id='billtoAddress' rows="5"> <?php echo htmlentities($tenantData->billtoAddress); ?></textarea>
+                                </div>
+							</div>	
+								
+                        <div class="confirmBtn">								
+							<input type="button" value="Save" name="next" id='edit_tenant_admin' class="confirm next" onclick="editTenantAdmin()"/>
+							<input type="button" value="Cancel" name="cancel" class="cancel" onclick="cancelUser()"/>
+					    </div>
+					  </form>
+				   <?php }else
+				   { ?>
+					<form name="editUser" id="editUser" action="<?php echo BASEURL.'tenant/edittuser/tuId/'.$this->tuserDetial->uid;?>" method="post">
 						  <input type='hidden' id='tId' name='tId' value="<?php echo $tenantData->id;?>">
 						  				  					  						  					  						  					  
 							  <div class="row">
@@ -39,14 +77,13 @@ $tenantuser = $this->tenantuser;
 								</select>
                                 </div>
 							</div>	
-							 
-							<div class="row">	
-							
+						
+							<div class="row">							
 							<label>Suite/Location :<span class="required">*</span></label><span class="usuiteErr" id="suite-error"></span> 
                             <div class="tt-input-div">	
 							<input type="text" required="" id="suite_location" class="" name="suite_location" value="<?php echo htmlentities($tenantData->suite);?>">
                             </div>
-						</div>
+						</div>						
 							<div class="row">	
 								<label>Main Contact Phone Number :<span class="required">*</span></label>
 								<span class="uofficeErr" id="office-phone-error"></span> 		
@@ -67,6 +104,8 @@ $tenantuser = $this->tenantuser;
 							<input type="button" value="Cancel" name="cancel" class="cancel" onclick="cancelUser()"/>
 					    </div>
 					  </form>
+					<?php } ?>
+					
 				   </section>    
 			  </div>
 			  </div>

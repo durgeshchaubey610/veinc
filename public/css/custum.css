@@ -5934,3 +5934,4 @@ width:100%;
         border:3px solid #243442;
      }
 } 
+.tenantadmin .row textarea {height: auto !important;}

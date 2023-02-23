@@ -1915,6 +1915,8 @@ class TenantController extends Ve_Controller_Base {
         $tenantUserModel = new Model_TenantUser();
         $tenantData = $tenant->getTenantById($tuId);
         $tenantuser = $tenantUserModel->getTenantUsers($tenantData[0]->id);
+        $tenantadmin = $tenant->getTenantByUser($this->userId); 
+        $this->view->tenantadmin = $tenantadmin;
         $this->view->tenantData = $tenantData[0];
         $this->view->tenantuser = $tenantuser;
     }
