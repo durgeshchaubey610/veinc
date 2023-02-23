@@ -26,7 +26,7 @@ foreach($sendDetail as $sd){
 }
 
 ?>
-<div class="container-right" id="userinfo-data">
+<div class="container-right tenantpanel-right" id="userinfo-data">
     <?php    
        if($this->roleId!=1 && ($this->roleId==5 || $this->roleId==7)){    
 		$uinfo = $this->tenantuser;
@@ -36,10 +36,9 @@ foreach($sendDetail as $sd){
 		//var_dump($uinfo);
 		?>
 		<section id="first" class="w-48 fr ch-home-form tenant" style="z-index:9999">
-    <section class="ch-form-header t-title">
-        <h3>Tenant Infomation</h3>
-    </section>
-		<div id="contents">
+   
+		<div id="contents" class="no-padding active tenantpanel">
+		        <h3>Tenant Infomation</h3>
 			     <div id="msg">
 					 <span class="message">
 						 <?php $tm = new Zend_Session_Namespace('tenant_message'); 
