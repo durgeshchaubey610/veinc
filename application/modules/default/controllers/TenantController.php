@@ -2129,6 +2129,14 @@ class TenantController extends Ve_Controller_Base {
     }
     
     public function tenantinfoAction() {
+        $tenant = new Model_Tenant();
+        $tenantuser = $tenant->getTenantByUser($this->userId); 
+        //Restriced others user can noly Tenant Admin can Access it
+        if(isset($tenantuser[0]->role_id) && !empty($tenantuser[0]->role_id)){
+            if($tenantuser[0]->role_id !=5){
+              $this->_redirect('/tenant/noaccess');
+            }
+        }
         $msgId = $this->_getParam('msg', 0);
         $msg = '';
         if ($msgId == 1) {
