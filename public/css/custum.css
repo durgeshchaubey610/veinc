@@ -5894,6 +5894,8 @@ width:100%;
     .nav>li{
         overflow:hidden;
     }
+    .tenantcoi{ margin: 0px -15px;}
+    .tenantpanel-right{margin: 0px -15px;}
     .tenantcoi h3{
         font-size: 17px;
         background: #504f4d;
