@@ -201,44 +201,47 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/coilist.js')
 
                     </tr>
                     <tr>
-                        <td>
-                            <table>
+                        <td colspan="4" style="padding:0 15px;">
+                            <table class="inner-rec">
                                 <tr>
-                                    <th> General Liability</th>
-                                    <th> &nbsp;</th>
-                                </tr>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <th> General Liability</th>
+                                                <th> &nbsp;</th>
+                                            </tr>
+                                            <?php
+                                            if (!empty($this->templatedetails)) {
+                                                foreach ($this->templatedetails as $val) { ?>
+                                                    <tr>
+                                                        <td><?php echo $val->coi_vt_default_description; ?></td>
+                                                        <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $val->coi_au_defaults_Tenant); ?></td>
+                                                    </tr>
+                                            <?php  }
+                                            }
+                                            ?>
+                                          </tr>
+                                        </table>
+                                    </td>
+                                     <td>
+                                     <table>
+                                    <tr>
+                                        <th> Automobile Liability</th>
+                                        <th> &nbsp;</th>
+                                    </tr>
                                 <?php
-                                if (!empty($this->templatedetails)) {
-                                    foreach ($this->templatedetails as $val) { ?>
+                                if (!empty($this->templatedetailsseconnd)) {
+                                    foreach ($this->templatedetailsseconnd as $valst) { ?>
                                         <tr>
-                                            <td><?php echo $val->coi_vt_default_description; ?></td>
-                                            <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $val->coi_au_defaults_Tenant); ?></td>
+                                            <td><?php echo $valst->coi_vt_default_description; ?></td>
+                                            <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $valst->coi_au_defaults_Tenant); ?></td>
                                         </tr>
                                 <?php  }
                                 }
                                 ?>
-                    </tr>
-                </table>
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <th> Automobile Liability</th>
-                            <th> &nbsp;</th>
-                        </tr>
-                        <?php
-                        if (!empty($this->templatedetailsseconnd)) {
-                            foreach ($this->templatedetailsseconnd as $valst) { ?>
-                                <tr>
-                                    <td><?php echo $valst->coi_vt_default_description; ?></td>
-                                    <td style="text-align: right;"><?php echo preg_replace("/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/i", "$1,", $valst->coi_au_defaults_Tenant); ?></td>
-                                </tr>
-                        <?php  }
-                        }
-                        ?>
-                        </tr>
-                    </table>
-                </td>
+                            </tr>
+                        </table>
+                        </td>
                 <td>
                     <table>
                         <tr>
@@ -278,6 +281,9 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/coilist.js')
                     </table>
                 </td>
                 </tr>
+                </table>
+                </td>
+                </tr>                
                 <tr>
                     <td colspan="4">
                         <table class="coidetail_desc">
