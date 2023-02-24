@@ -702,7 +702,7 @@ $(window).resize(function() {
 	  $(".navbar-static-side").css("width","250px");
         var width = Math.max(window.screen.width, window.innerWidth);
         if(width>1024){
-            $("#page-wrapper").css("margin","90px 0 0 250px");
+            $("#page-wrapper").css("margin","90px 0 0 <?php echo ($userRoleID == 5)?'233px':'250px';?>");
             $(".sidebar-collapse").css("display","block");
             $(".hide-collapes").show();
             $(".show-collapes").hide();
