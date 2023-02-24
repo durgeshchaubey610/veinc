@@ -5928,6 +5928,9 @@ width:100%;
         font-size: 14px;
         padding: 10px 8px;
       }
+      .inner-rec td {
+        padding: 5px 10px;
+      }
       .inner-rec td table td{
         padding: 3px 5px;
       }
