@@ -1,6 +1,5 @@
 <?php
-echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/coilist.js');
-
+echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
 ?>
 <style>
     table.coidetail_desc {
@@ -193,7 +192,7 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/coilist.js')
                                 <?php if (empty($this->bsCOI[0]->coi_au_tenant_id)) { ?>
                                     <a title="add" href="javascript:void(0);" onclick="showAddCoiTenant('<?php echo $this->bsCOI[0]->id; ?>')" class="green-btn">Add / Upload COI</a>
                                 <?php } else { ?>
-                                    <a title="Edit" href="javascript:void(0);" onclick="showEditCoi('<?php echo $this->bsCOI[0]->coi_au_tenant_id; ?>')" class="green-btn">Edit / Upload COI</a>
+                                    <a title="Edit" href="javascript:void(0);" onclick="showTenantEditCoi('<?php echo $this->bsCOI[0]->coi_au_tenant_id; ?>')" class="green-btn">Edit / Upload COI</a>
                                 <?php } ?>
                                 <!-- <a href="#" type="button" >Add / Upload COI</a> -->
                             </div>

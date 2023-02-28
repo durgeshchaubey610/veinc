@@ -1073,5 +1073,152 @@ function hidepassword() {
 }
 
 
+function showTenantEditCoi(cid){
+	if(cid!=''){
+		$('.loader').show();
+		$.ajax({
+				url         : baseUrl+"tenant/editttenantservice",
+				type        : "post",
+				datatype    : 'json',
+				data        : {cid:cid},
+				success     : function( data ) {
+					$('.loader').hide(); 
+					//$('#edit_wo_form').show();
+					$('#edit_service_form').html(data);
+					//$('#edit_service_form').show();
+					//$('.service_popup_form').show();
+					$('#edit_service_form_href').trigger('click');
+				},
+				error       : function(){
+					$('.loader').hide();
+					alert('There was an error');
+				}  
+				
+			 });
+	 }
+} 
 
 
+function showAddCoiTenant(tId){
+	if(tId!=''){
+		$('.loader').show();
+		$.ajax({
+				url         : baseUrl+"coilist/addservice",
+				type        : "post",
+				datatype    : 'json',
+				data        : {tId:tId},
+				success     : function( data ) {
+					$('.loader').hide(); 
+					//$('#edit_wo_form').show();
+					$('#add_service_form').html(data);
+					//$('#add_service_form').show();
+					//$('.service_popup_form').show();
+					$('#add_service_form_href').trigger('click');
+				},
+				error       : function(){
+					$('.loader').hide();
+					alert('There was an error');
+				}  
+				
+			 });
+	 }
+}
+
+
+/** Tenant Add/Edit popup */
+
+function updateCoi(cid){
+	parent.CheckForSessionpop(baseUrl);
+	if(cid!=''){
+		
+		var submit_flag=true;
+		$('#save_service').attr('disabled','disabled');
+		var userData = new FormData();	
+		var buliding_id = $('#buliding_id').val();
+		var unique_cost = $('#unique_cost').val();				
+		var tenant_number = $('#tenant_number').val();
+		var tenant_id = $('#tenant_id').val();		
+		var coi_date_from = $('#coi_date_from').val();
+		var coi_type = $('#coi_type').val();
+		var edit_expiration_date = $('#edit_expiration_date').val();
+		var equipmentmenual = $("#equipmentmenual").val().trim();
+      
+        if(edit_expiration_date==''){			
+			$('#cerror_expiration').html('Please enter Expiration Date.');
+			submit_flag = false;
+		}else{
+			$('#cerror_expiration').html('');
+		}
+        
+        var manual = $("#equipmentmenual").prop('files')[0];
+		var flag_val = escape($("#equipmentmenual").attr('name'));
+		
+        if (typeof manual !== 'undefined') {
+        var ext = manual.name.split(".");
+        var type_ext = ext[ext.length - 1];
+        //console.log(type_ext);
+        if (type_ext !== 'pdf' && type_ext !== 'PDF') {
+            $("#equipmentmenual").focus();
+            $("#equipmentmenual").addClass('error-border');
+            $("#equipmentmenual_error").html("Please upload Only a PDF File");
+            submit_flag = false;
+        } else {
+            $("#equipmentmenual_error").html("");
+            $("#equipmentmenual").removeClass('error-border');
+        }
+    }
+   
+         if(submit_flag==false){			 
+			$('#save_service').attr('disabled',false);
+			return false; 
+		 }else{			 
+			   
+			   if (typeof manual !== 'undefined') {
+			    userData.append('file[' + flag_val + ']', manual);  
+			   }
+                userData.append('building_id', buliding_id);
+				userData.append('uniquecostcenter', unique_cost);
+				userData.append('tenant_number', tenant_number);
+				userData.append('tenant_Id', tenant_id);
+				userData.append('coi_au_date_from', coi_date_from);
+				userData.append('coi_au_date_to', edit_expiration_date);
+				userData.append('coi_au_Ten_or_Vendor', coi_type);
+				userData.append('coi_au_tenant_id', cid);
+			 
+			    $('.loader').show();
+				$.ajax({
+						url         : baseUrl+"tenant/updateservice",
+						type        : "post",
+						datatype    : 'json',
+						cache       : false,
+                        contentType : false,
+                        processData : false,
+                        data        : userData,
+						success     : function( data ) {
+							$('.loader').hide(); 
+							var content = $.parseJSON(data);
+							if(content.status=='success'){
+								$('#error_msg').html('');
+								$('#success_msg').html(content.msg);
+								location.reload();
+							}else{
+								//alert('Error occurred');
+								$('#success_msg').html('');
+								$('#error_msg').html(content.msg);
+								$('#save_service').attr('disabled',false);
+							}
+						},
+						error       : function(){
+							$('.loader').hide();
+							setInterval(function(){ jAlert('There was an error', 'Vision Work Orders'); }, 1000);
+						}  
+						
+					 });
+		 }
+        
+        
+	}else{
+		alert('Error Occurred');
+		return false;
+	}
+}
