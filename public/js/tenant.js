@@ -1072,7 +1072,6 @@ function hidepassword() {
     }
 }
 
-
 function showTenantEditCoi(cid){
 	if(cid!=''){
 		$('.loader').show();

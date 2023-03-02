@@ -2218,7 +2218,7 @@ class TenantController extends Ve_Controller_Base {
 					 try{						
 						 $submitBuildingService = $cModel->updateBuildService($data,$data['coi_au_tenant_id']);
                          //send email to account manager
-						 $this->sendcoiAccountManagerMail($data,$uploadfile,);
+						 $this->sendcoiAccountManagerMail($data,$uploadfile);
 						 $message['status'] = 'success';
 				         $message['msg']='Coi List Updated successfully.';
 					 }catch(Exception $e){
@@ -2250,6 +2250,16 @@ class TenantController extends Ve_Controller_Base {
         $tenantData['email'] = $tenantuser[0]->email;
         $tenantData['buildingId'] = $tenantuser[0]->buildingId;
         $tenantData['tenantId'] = $tenantuser[0]->tenantId;
+        $tenantData['firstnamelastname'] = $tenantuser[0]->firstname." ".$tenantuser[0]->lastname;
+        $tenantData['email'] = $tenantData[0]->email;					
+        $tenantData['address1'] = $tenantuser[0]->address1;
+        $tenantData['address2'] = $tenantuser[0]->address2;
+        $tenantData['suite'] = $tenantuser[0]->suite;
+        $tenantData['city'] = $tenantuser[0]->city;
+        $tenantData['state'] = $tenantuser[0]->state;
+        $tenantData['postalCode'] = $tenantuser[0]->postalCode; 
+
+        
         $companyModel = new Model_Company();
         //Building info
         $buildingId = $tenantuser[0]->buildingId;
@@ -2265,15 +2275,19 @@ class TenantController extends Ve_Controller_Base {
         $tenantData['coi_au_pdf_upload'] = $bscoiArr[0]->coi_au_pdf_upload;
 
         //Property Manager list Role = 4 
-        $propetyMangerList = $companyModel->getUserBuildingUserByRoleId($buildingId, $nottenant=true,$role_id=4);      
+        $propetyMangerList = $companyModel->getUserBuildingUserByRoleId($buildingId, $nottenant=true,$role_id=4);   
         // Email subject Building Name | Tenant Name | updated COI
+        if(!empty($propetyMangerList)){
         foreach($propetyMangerList as $propertymanger){
            $this->sentCoiUpdatedEmail($buildDataArr,$tenantData,$propertymanger);
+          
+        }
         }
               
     }
 
     public function sentCoiUpdatedEmail($buildData,$tenantData,$propertymanger,$htmlDocId=''){
+       
         $message = array();      
         if(isset($tenantData['buildingId']) && !empty($tenantData['buildingId'])){
             $buildingId = $tenantData['buildingId'];
@@ -2291,59 +2305,88 @@ class TenantController extends Ve_Controller_Base {
                   $htmlDocId = 67; // email template id
             }
             $loadTemplate = $emailMapper->loadEmailTemplate($htmlDocId);
-            if($loadTemplate){                
-            // $header_data	=	$this->getHeaderData($cust_id);
+             if($loadTemplate){  
+                 
+              /******get Company Name ******/
+            $currDate = date('F d, Y');
+
+			$accoutMapper = new Model_Account();
+			$company = $accoutMapper->getcompany($this->cust_id);
+			$companyName = $company[0]['companyName'];
+
+            $header_data = $this->getHeaderData($company);
+            $footer_data = $this->getFooterData();
             // $footer_data	=	$this->getFooterData();
             $emailContent = $loadTemplate[0];
             $emailSubject = $emailContent['email_subject'];
-            $emailBody = $emailContent['email_content']; 
-			$emailBody = str_replace('[[++voctechLogo]]', $header_data['voctech_logo_src'], $emailBody);
+            $emailSubject = str_replace('[[++buildingName]]', $buildData['buildingName'], $emailSubject);
+            $emailSubject = str_replace('[[++tenantname]', $tenantData['tenantName'], $emailSubject);
+            //$emailSubject = str_replace('[[++updatecoi]]', $header_data['building_logo_src'], $emailBody);
+            // End Email subject
+            $content = $emailContent['email_content'];
             
             
-///// header 
-			// $emailBody = str_replace('[[++companyLogo]]', $header_data['building_logo_src'], $emailBody);
-			// $emailBody = str_replace('[[++voctechLogo]]', $header_data['voctech_logo_src'], $emailBody);
-			// $emailBody = str_replace('[[++dateTime]]', $header_data['date'], $emailBody);
-			// $emailBody = str_replace('[[++costNumber]]', $header_data['corp_account_number'], $emailBody);
-///// end header
+            ///// header 
+            $content = str_replace('[[++companyLogo]]', $header_data['building_logo_src'], $content);
+            $content = str_replace('[[++voctechLogo]]', $header_data['voctech_logo_src'], $content);
+            $content = str_replace('[[++currDate]]', $header_data['date'], $content);
+            $content = str_replace('[[++costNumber]]', $header_data['corp_account_number'], $content);
+            ///// end header
+			
+            $content = str_replace('[[++currDate]]', $currDate, $content);
+			$content = str_replace('[[++companyName]]', $companyName, $content);
+			
+			 $content = str_replace('[[++currDate]]', $currDate, $content);
+			$content = str_replace('[[++companyName]]', $companyName, $content);
+            $content = str_replace('[[++buildingName]]', $buildData['buildingName'], $content);
+            $content = str_replace('[[++tenantName]]', $tenantData['tenantName'], $content);
+            $content = str_replace('[[++firstnamelastname]]', $tenantData['firstName'].' '. $tenantData['lastName'], $content);
+           
+			
 
-///// Footer 
-// 			$emailBody = str_replace('[[++footerInfo]]', $footer_data['footer_info'], $emailBody);
-// ///// End Footer
-
+			
+		//	$content = str_replace('[[++Status]]', $detail['status'], $content);
+		//	$content = str_replace('[[++ExpDate]]', $detail['expirationDate'], $content);
+            ///// Footer 
+            $content = str_replace('[[++footerInfo]]', $footer_data['footer_info'], $content);
+           
+            ///// End Footer
+            // ///// End Footer
 			// Email subject start
-                $mail = new Zend_Mail('utf-8');							
-				$mail->addTo($detail['email'], $detail['email']);
-				$mail->setSubject($emailSubject);
-                $setModel = new Model_Setting();
-                $setData = $setModel->getSetting();
-                if($setData){
-					$setting = $setData[0];
-					$mail->setFrom($setting['from_email'],$setting['from_name']);
-					$return_path = new Zend_Mail_Transport_Sendmail('-f'.$setting['from_email']);
-					if($setting['bcc_email'])
-					$mail->addBcc($setting['bcc_email'], $setting['bcc_name']);
-				}else{
-					$mail->setFrom('support@visionworkorders.com','Vision Work Orders');
-					$return_path = new Zend_Mail_Transport_Sendmail('-fsupport@visionworkorders.com');
-				}
-                $setData = $setModel->getSetting();
-                $mail->setFrom($setting['from_email'],$setting['from_name']);
-				Zend_Mail::setDefaultTransport($return_path);
-                $mail->setBodyHtml($emailBody);
-                $filename = $tenantData['coi_au_pdf_upload'];               
+            $mail = new Zend_Mail('utf-8');							
+			$mail->addTo($propertymanger->email);
+			$mail->addTo('dadhikuriyal@teckvalley.com');
+			$mail->setSubject($emailSubject);
+            $setModel = new Model_Setting();
+            $setData = $setModel->getSetting();
+            if($setData){
+            	$setting = $setData[0];
+            	$mail->setFrom($setting['from_email'],$setting['from_name']);
+            	$return_path = new Zend_Mail_Transport_Sendmail('-f'.$setting['from_email']);
+            // 	if($setting['bcc_email'])
+            // 	$mail->addBcc($setting['bcc_email'], $setting['bcc_name']);
+            }else{
+            //	$mail->setFrom('support@visionworkorders.com','Vision Work Orders');
+            //	$return_path = new Zend_Mail_Transport_Sendmail('-fsupport@visionworkorders.com');
+            }
 
-                // pdf attachement
-                $uploaddir = IMAGE_UPLOAD_DIR . '/public/coi/';                
+
+               // $mail->setFrom($setting['from_email'],$setting['from_name']);
+				//Zend_Mail::setDefaultTransport($return_path);
+                $mail->setBodyHtml($content);
+                $filename = $tenantData['coi_au_pdf_upload'];           
+ 
+                // // pdf attachement
+                $uploaddir = IMAGE_UPLOAD_DIR . '/public/coi/';    
+                
                 $content = file_get_contents($uploaddir . '' . $filename); // e.g. ("attachment/abc.pdf")
                 $attachment = new Zend_Mime_Part($content);
                 $attachment->type = 'application/pdf';
                 $attachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
                 $attachment->encoding = Zend_Mime::ENCODING_BASE64;
-                $attachment->filename = 'filename.pdf'; // name of file
+                $attachment->filename = $filename; // name of file
                 $mail->addAttachment($attachment);
-
-                $res = $mail->send();					
+                $res = $mail->send();	
                 return $res;
 
 			
