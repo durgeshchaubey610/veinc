@@ -1926,10 +1926,15 @@ class TenantController extends Ve_Controller_Base {
         if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->getMethod() == 'POST') {
             $data = $this->getRequest()->getPost();
             $updatedata = array();
-            $updatedata['tenantName'] = $data['tenantName'];
-            $updatedata['suite'] = $data['suite_location'];
+            $updatedata['tenantName'] = $data['tenantName'];           
             $updatedata['billtoAddress'] = $data['billtoAddress'];
 
+            if($this->roleId==5){
+                $updatedata['tenantContact'] = $data['tenantContact'];
+                $updatedata['tenantName'] = $data['tenantName']; 
+            }else{
+                $updatedata['suite'] = $data['suite_location'];
+            }
             try {
                 $tenantModel = new Model_Tenant();
                 $res = $tenantModel->updateTenant($updatedata, $data['tId']);
