@@ -32,14 +32,14 @@ foreach($sendDetail as $sd){
 ?>
 <div class="container-right tenantpanel-right" id="userinfo-data">
     <?php    
-       if($this->roleId==7 || $this->roleId==5){    
+     
 		//$uinfo = $this->tenantuser;
 		
 		//var_dump($uinfo);
 		?>
 		<section id="first" class="w-48 fr ch-home-form tenant" style="z-index:9999">
    
-		<div id="contents" class="no-padding active tenantpanel">
+		  <div id="contents" class="no-padding active tenantpanel">
 		        <h3>My Account Info</h3>
 			     <div id="msg">
 					 <span class="message">
@@ -75,11 +75,13 @@ foreach($sendDetail as $sd){
 						  <div class="field_edit_popup">
 							  <label>Office Phone</label> <span>:</span>
 							  <?php echo $this->tenantuser->phoneNumber;?>
-						  </div>	
+						  </div>
+						  <?php if($this->roleId==7){?>	
 						  <div class="field_edit_popup">
 							  <label>Current Access</label> <span>:</span>
 							  <?php echo ($this->tenantuser->role_id==5)?"Tenant Admin":'Tenant user';?>
-						  </div>	
+						  </div>
+						  <?php } ?>	
 						  <div class="field_edit_popup">
 							  <label>Email Type</label> <span>:</span>
 							  <div class="tu-address">
@@ -104,20 +106,17 @@ foreach($sendDetail as $sd){
 							  <div class="tu-address">
 							  <input name="cc_enable" type="checkbox" <?php echo ($this->tenantuser->cc_enable==1)?'checked':''; ?> class="read" name="cc_enable" value="<?php echo $this->tenantuser->cc_enable; ?>">	
 						  </div>
+						  <?php if($this->roleId==7){ ?>	
 						  <div class="field_edit_popup">
 							  <label>Active</label> <span>:</span>
 							  <div class="tu-address">
 							  <input name="cc_enable" type="checkbox" <?php echo ($this->tenantuser->status==1)?'checked':''; ?> class="read" name="status" value="<?php echo $this->tenantuser->status; ?>">	
 						</div>
+						<?php } ?>
 						  </div>
                           </fieldset>
 
-						  <?php if($uinfo->role_id == 5) { ?>
-						  <div class="buttons">
-								 
-								  <a class="modalbox" href="#editTenant" onclick="javascript:editTenant('<?php echo BASEURL.'tenant/edittenantadmin/tuId/'.$uinfo->id;?>')" ><input type="button" class="confirm2" value="Edit Tenant Information" name="tenant_edit"> </a>
-							</div>
-							<?php } ?>
+						
                           <?php /* ?>
                          <fieldset class="fieldset_border">
                                       <legend class="my_legend">User Info:</legend>
@@ -179,20 +178,20 @@ foreach($sendDetail as $sd){
 						  </div>
 						  						  
 					 </fieldset> <?php */ ?>
-					<?php if($this->roleId==5){?>
-						<div class="confirmBtn">
- 							 <a class="modalbox" href="#editTenant" onclick="javascript:editTenant('<?php echo BASEURL.'tenant/edittenantadmin/tuId/'.$uinfo->id;?>')" ></a>
-						</div>
+					  <?php if($this->roleId== 5) { ?>
+						  <div class="buttons">
+								 
+								  <a class="modalbox" href="#editTenant" onclick="javascript:editTenant('<?php echo BASEURL.'tenant/edittenantadmin/tuId/'.$uinfo->id;?>')" ><input type="button" class="confirm2" value="Edit Tenant Information" name="tenant_edit"> </a>
+							</div>
 					<?php } ?>
+					
 					</form>
 				
 			</div>   			
 			
 	  </div>
 	  </section>    
-   <?php }else{?>
-	    You don't have access for this module.
-	  <?php }?>
+ 
 </div>
 
 <div class="messageBox"></div>
