@@ -82,7 +82,11 @@ foreach($sendDetail as $sd){
 						  </div>	
 						  <div class="field_edit_popup">
 							  <label>Email Type</label> <span>:</span>
-							  <div class="tu-address"><?php echo $this->tenantuser->send_as;?></div>
+							  <div class="tu-address">
+							     <?php foreach($sendDetail as $sd){
+										 echo ($sd['sid']==$this->tenantuser->send_as)?$sd['title']:'';?>
+									<?php } ?>
+							</div>
 						  </div>
 						  <div class="field_edit_popup">
 							  <label>Complete Notification</label> <span>:</span>

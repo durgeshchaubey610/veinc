@@ -2184,6 +2184,9 @@ class TenantController extends Ve_Controller_Base {
             if($this->tenantuser[0]->role_id ==5 || $this->tenantuser[0]->role_id ==7){               
                 $this->view->roleId = $this->roleId;
                 $this->view->tenantuser = $this->tenantuser[0];
+                $sendMapper = new Model_SendAs();
+                $sendDetail = $sendMapper->getSendAs();
+                $this->view->sendDetail = $sendDetail;
 
             }
             else{
