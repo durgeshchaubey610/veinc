@@ -14,6 +14,9 @@ class TenantController extends Ve_Controller_Base {
         $this->accessHelper = $this->_helper->access;
         $this->tenant_location = 12;
         $this->trecovery_location = 19;
+
+         //called when object intiatate
+         $this->tenantModel = new Model_Tenant();
     }
 
     // Call befor any action and check is user login or not
@@ -26,6 +29,10 @@ class TenantController extends Ve_Controller_Base {
         $this->userId = Zend_Auth::getInstance()->getStorage()->read()->uid;
         $this->roleId = Zend_Auth::getInstance()->getStorage()->read()->role_id;
         $this->cust_id = Zend_Auth::getInstance()->getStorage()->read()->cust_id;
+
+        if(isset($this->userId) && !empty($this->userId)){
+            $this->tenantuser = $this->tenantModel->getTenantByUser($this->userId); 
+        }
     }
 
     public function indexAction() {
@@ -2167,6 +2174,41 @@ class TenantController extends Ve_Controller_Base {
 
         $this->view->roleId = $this->roleId;
         $this->view->tenantuser = $tenantuser[0];
+    }
+
+    /** Tenant admin and Tenant user account setting  */
+    public function myaccountsettingAction() {
+       
+        //Restriced others user can noly Tenant Admin can Access it
+        if(isset($this->tenantuser[0]->role_id) && !empty($this->tenantuser[0]->role_id)){
+            if($this->tenantuser[0]->role_id ==5 || $this->tenantuser[0]->role_id ==7){               
+                $this->view->roleId = $this->roleId;
+                $this->view->tenantuser = $this->tenantuser[0];
+
+            }
+            else{
+                $this->_redirect('/tenant/noaccess');
+            }
+        }
+        
+        $msgId = $this->_getParam('msg', 0);
+        $msg = '';
+        if ($msgId == 1) {
+            $msg = 'Tenant user has been created successfully.';
+        }
+
+        if ($msgId == 2) {
+            $msg = 'Tenant user has been updated successfully.';
+        }
+        if ($msgId == 3) {
+            $msg = 'Tenant has been deleted successfully.';
+        }
+        $tm = new Zend_Session_Namespace('tenant_message');
+        if (!isset($tm->msg) && $msgId != 0) {
+            $tm->msg = $msg;
+            $this->_redirect('/tenant/tenantinfo');
+        }     
+        
     }
 
     public function noaccessAction() {

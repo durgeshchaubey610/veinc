@@ -619,7 +619,11 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
             <?php if ($userRoleID == 5) { ?>
                 <li><a href="<?php echo BASEURL . 'tenant/tenantinfo' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantinfo') { ?>class="menuselected" <?php } ?>>Tenant Information</a></li>
             <?php } ?>
-                <li><a href="<?php echo BASEURL . 'account/setting' ?>" <?php if ($controller == 'account' && $actionnm == 'setting') { ?>class="menuselected" <?php } ?>>My Account Info</a></li>
+            <?php if ($userRoleID == 5 || $userRoleID == 7) { ?>
+            <li><a href="<?php echo BASEURL . 'tenant/myaccountsetting' ?>" <?php if ($controller == 'tenant' && $actionnm == 'myaccountsetting') { ?>class="menuselected" <?php } ?>>My Account Info</a></li>
+            <?php }else{?>
+                <li><a href="<?php echo BASEURL . 'account/setting' ?>" <?php if ($controller == 'account' && $actionnm == 'setting') { ?>class="menuselected" <?php } ?>>Current Users Accounts</a></li>
+            <?php }?>
                 <li><a href="<?php echo BASEURL . 'account/setting' ?>" <?php if ($controller == 'account' && $actionnm == 'setting') { ?>class="menuselected" <?php } ?>>Current Users Accounts</a></li>
             </ul>
             <ul class="nav nav-second-level">
