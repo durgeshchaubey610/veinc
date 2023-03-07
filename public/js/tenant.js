@@ -949,6 +949,7 @@ function editTenantAdmin() {
     var phone = $.trim($('#phone').val());
     var billtoAddress = $.trim($('#billtoAddress').val());
     var tId = $.trim($('#tId').val());
+    var tenantContact = $.trim($('#tenantContact').val());
     var submit_flag = true;
     var focus_flag = false;
     if (tenantName == '') {
@@ -959,26 +960,26 @@ function editTenantAdmin() {
     } else {
         $('#taname-error').html("");
     }
-    if (main_contact == '') {
-        $('#maincontact-error').html("Main contact can't be blank");
-        if (!focus_flag) {
-            $('#main_contact').focus();
-            focus_flag = true;
-        }
-        submit_flag = false;
-    } else {
-        $('#maincontact-error').html("");
-    }
-    if (suite_location == '') {
-        $('#suite-error').html("Suite/Location can't be blank");
-        if (!focus_flag) {
-            $('#suite_location').focus();
-            focus_flag = true;
-        }
-        submit_flag = false;
-    } else {
-        $('#suite-error').html("");
-    }
+    // if (main_contact == '') {
+    //     $('#maincontact-error').html("Main contact can't be blank");
+    //     if (!focus_flag) {
+    //         $('#main_contact').focus();
+    //         focus_flag = true;
+    //     }
+    //     submit_flag = false;
+    // } else {
+    //     $('#maincontact-error').html("");
+    // }
+    // if (suite_location == '') {
+    //     $('#suite-error').html("Suite/Location can't be blank");
+    //     if (!focus_flag) {
+    //         $('#suite_location').focus();
+    //         focus_flag = true;
+    //     }
+    //     submit_flag = false;
+    // } else {
+    //     $('#suite-error').html("");
+    // }
     if (phone == '') {
         $('#office-phone-error').html("Main Contact Phone Number can't be blank");
         if (!focus_flag) {
@@ -1016,7 +1017,7 @@ function editTenantAdmin() {
             url: baseUrl + 'tenant/updatetenantinfo',
             type: 'post',
             datatype: 'json',
-            data: {tenantName: tenantName, main_contact: main_contact, suite_location: suite_location, phone_number: phone, billtoAddress: billtoAddress, tId: tId},
+            data: {tenantName: tenantName, main_contact: main_contact,tenantContact:tenantContact, suite_location: suite_location, phone_number: phone, billtoAddress: billtoAddress, tId: tId},
             success: function (data) {
                 $('.loader').hide();
                 var content = $.parseJSON(data);
