@@ -181,7 +181,7 @@ foreach($sendDetail as $sd){
 					 </fieldset> <?php */ ?>
 					<?php if($this->roleId==5){?>
 						<div class="confirmBtn">
-							<input type="button" value="Edit My Account Info" name="next" id='edit_tenant_admin_setting' class="confirm next" onclick="editTenantAdminSetting()" />
+ 							 <a class="modalbox" href="#editTenant" onclick="javascript:editTenant('<?php echo BASEURL.'tenant/edittenantadmin/tuId/'.$uinfo->id;?>')" ></a>
 						</div>
 					<?php } ?>
 					</form>
