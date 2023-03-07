@@ -59,11 +59,7 @@ foreach($sendDetail as $sd){
 							
 						  <div class="field_edit_popup">
 							 <label>Tenant Contact </label> <span>:</span>
-							 <?php foreach($tenantuser as $tenantuserval) {
-										if($tenantuserval->main_contact == 1) {
-											echo $tenantuserval->lastName.', '.$tenantuserval->firstName;
-										}
-									}?> 
+							 <?php echo $uinfo->tenantContact;?>
 						  </div>
 
 						  <div class="field_edit_popup">
@@ -143,10 +139,11 @@ foreach($sendDetail as $sd){
 						  </div>
 						  						  
 					 </fieldset> <?php */ ?>
-					 <?php if($uinfo->role_id==5){
+					 <?php if($uinfo->role_id==5 || $uinfo->role_id==7){
+					 
 						    
 						 ?>
-						 <div class="tuser-list" style="overflow:auto">
+						 <div class="tuser-list" style="overflow:auto; display:none;">
 								<table width="100%" class="building_table_grid" style="width:99.9%">
 									<tr>
 										<th width="11%">Last Name</th>
