@@ -1221,3 +1221,12 @@ function updateCoi(cid){
 		return false;
 	}
 }
+
+/** Cancel or close Add/Edit popup */
+function cancelEditService(){
+	$('#edit_service_form').html('');
+	$('#edit_service_form').hide();
+	$('.service_popup_form').hide();
+    $('.fancybox-wrap').hide();
+    $('#fancybox-overlay').hide();
+}
