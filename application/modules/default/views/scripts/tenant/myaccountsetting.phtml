@@ -32,7 +32,7 @@ foreach($sendDetail as $sd){
 ?>
 <div class="container-right tenantpanel-right" id="userinfo-data">
     <?php    
-       if($this->roleId==7){    
+       if($this->roleId==7 || $this->roleId==5){    
 		//$uinfo = $this->tenantuser;
 		
 		//var_dump($uinfo);
@@ -179,83 +179,18 @@ foreach($sendDetail as $sd){
 						  </div>
 						  						  
 					 </fieldset> <?php */ ?>
-
+					<?php if($this->roleId==5){?>
+						<div class="confirmBtn">
+							<input type="button" value="Edit My Account Info" name="next" id='edit_tenant_admin_setting' class="confirm next" onclick="editTenantAdminSetting()" />
+						</div>
+					<?php } ?>
 					</form>
 				
 			</div>   			
 			
 	  </div>
 	  </section>    
-   <?php
-	  }else if($this->roleId==5 ){   ?> 
-<form method="post" name="setting_form" id="setting_form" action="<?php echo BASEURL.'account/setting';?>">
-
-<div id="msg" class="welcome_text"><?php echo $this->msg;?></div>
- <input type="hidden" name="setting_id" value="<?php echo $setting_id;?>"/>
-<div class="setting-div-field">                
-	<div id="fn_div" class="setting_row">
-		<label>From Name :<span class="required">*</span></label>
-		<div class="setting-dt-box"> 
-			<span id="fnErr"  class="field_error"></span>
-			<input name="from_name" id="from_name" type="text" value="<?php echo $from_name;?>"/> 
-		</div>
-	</div>
-	<div id="fe_div" class="setting_row">
-		<label>From Email :<span class="required">*</span></label>
-		<div class="setting-dt-box">
-			<span id="feErr" class="field_error"></span>
-			<input name="from_email" id="from_email" type="text" value="<?php echo $from_email;?>">
-		</div>
-	</div>
-	<div id="bn_div" class="setting_row">
-		<label>Bcc Name :</label>
-		<div class="setting-dt-box">
-			<span id="bnErr" class="field_error"></span>
-			<input name="bcc_name" id="bcc_name" type="text" value="<?php echo $bcc_name;?>">
-		</div>
-	</div>
-	<div id="be_div" class="setting_row">
-		<label>Bcc Email :</label>
-		<div class="setting-dt-box">
-			<span id="beErr" class="field_error"></span>
-			<input name="bcc_email" id="bcc_email" type="text" value="<?php echo $bcc_email;?>">
-		</div>
-	</div>
-									<div id="be_div" class="setting_row">
-										<label>ContactUs Name :</label>
-										<div class="setting-dt-box">
-													<span id="beErr" class="field_error"></span>
-											<input name="contactus_name" id="contactus_name" type="text" value="<?php echo $contactus_name;?>">
-											</div>
-									</div>
-									<div id="be_div" class="setting_row">
-		<label>ContactUs Email :</label>
-		<div class="setting-dt-box">
-			<span id="beErr" class="field_error"></span>
-			<input name="contactus_email" id="contactus_email" type="text" value="<?php echo $contactus_email;?>">
-		</div>
-	</div>
-									<div id="be_div" class="setting_row">
-		<label>Support Name :</label>
-		<div class="setting-dt-box">
-			<span id="beErr" class="field_error"></span>
-			<input name="support_name" id="support_name" type="text" value="<?php echo $support_name;?>">
-		</div>
-	</div>
-									<div id="be_div" class="setting_row">
-		<label>Support Email :</label>
-		<div class="setting-dt-box">
-			<span id="beErr" class="field_error"></span>
-			<input name="support_email" id="support_email" type="text" value="<?php echo $support_email;?>">
-		</div>
-	</div>
-</div> 
-<div class="add-comp-but">
-	<input type="button" class="confirm" name="confirm" value="Save" onclick="settingValidation()">
-		 
-</div>
-</form>	  
-	 <?php } else{?>
+   <?php }else{?>
 	    You don't have access for this module.
 	  <?php }?>
 </div>
