@@ -5957,3 +5957,4 @@ width:100%;
 .tenantadmin .row textarea {height: auto !important;}
 .tenant-panel-form .tte-input-div { width:158px;}
 .content.no-padding{padding: 0 !important;}
+.tenant-panel .container-right{max-width:100%;}
