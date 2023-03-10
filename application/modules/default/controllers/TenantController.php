@@ -2575,6 +2575,22 @@ class TenantController extends Ve_Controller_Base {
         $this->view->message = $message;
         
     }
+
+    public function currentusersAction(){
+      
+		//$tenantuser = $tenantusr->getTenantUsers($uinfo->id);	
+
+        if( isset($this->tenantuser) && !empty($this->tenantuser) ){
+            $uinfo = $this->tenantuser[0];
+            $tenant = new Model_TenantUser();
+            $tenantuser = $tenant->getTenantUsers($uinfo->id);          
+
+          
+        }else{
+            $this->_redirect('/tenant/noaccess');
+        }
+      
+    }
 }
 
 

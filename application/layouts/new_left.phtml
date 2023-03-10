@@ -621,10 +621,11 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
             <?php } ?>
             <?php if ($userRoleID == 5 || $userRoleID == 7) { ?>
             <li><a href="<?php echo BASEURL . 'tenant/myaccountsetting' ?>" <?php if ($controller == 'tenant' && $actionnm == 'myaccountsetting') { ?>class="menuselected" <?php } ?>>My Account Info</a></li>
-            <?php }else{?>
-                <li><a href="<?php echo BASEURL . 'account/setting' ?>" <?php if ($controller == 'account' && $actionnm == 'setting') { ?>class="menuselected" <?php } ?>>Current Users Accounts</a></li>
             <?php }?>
-                <li><a href="<?php echo BASEURL . 'account/setting' ?>" <?php if ($controller == 'account' && $actionnm == 'setting') { ?>class="menuselected" <?php } ?>>Current Users Accounts</a></li>
+            <?php if($userRoleID == 5){?>
+                <li><a href="<?php echo BASEURL . 'tenant/currentusers' ?>" <?php if ($controller == 'tenant' && $actionnm == 'currentuers') { ?>class="menuselected" <?php } ?>>Current Users Accounts</a></li>
+            <?php }?>
+                <!-- <li><a href="<?php echo BASEURL . 'account/setting' ?>" <?php if ($controller == 'account' && $actionnm == 'setting') { ?>class="menuselected" <?php } ?>>Current Users Accounts</a></li> -->
             </ul>
             <?php if ($userRoleID == 5 || $userRoleID == 7) {                 
             }else{ ?>
