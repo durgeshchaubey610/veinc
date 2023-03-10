@@ -59,7 +59,7 @@ foreach($sendDetail as $sd){
 :</legend>
 						  <div class="field_edit_popup">
 							 <label>User Name</label><span>:</span>
-							 <?php echo stripslashes($this->tenantuser->tenantName);?>
+							 <?php echo stripslashes($this->tenantuser->userName);?>
 							 <input type="hidden" name="role_id" id="role_id" value="<?php echo $uinfo->role_id?>"/>
 						   </div>
 							
@@ -69,19 +69,18 @@ foreach($sendDetail as $sd){
 						  </div>
 						  <div class="field_edit_popup">
 							 <label>Name </label> <span>:</span>
-							 <?php echo $this->tenantuser->tenantName;?>
+							 <?php echo $this->tenantuser->firstName.' '.$this->tenantuser->lastName;?>
 						  </div> 
 						 
 						  <div class="field_edit_popup">
 							  <label>Office Phone</label> <span>:</span>
-							  <?php echo $this->tenantuser->phoneNumber;?>
+							  <?php echo $this->tenantuser->userPhoneNumber;?>
 						  </div>
-						  <?php if($this->roleId==7){?>	
 						  <div class="field_edit_popup">
 							  <label>Current Access</label> <span>:</span>
 							  <?php echo ($this->tenantuser->role_id==5)?"Tenant Admin":'Tenant user';?>
 						  </div>
-						  <?php } ?>	
+						
 						  <div class="field_edit_popup">
 							  <label>Email Type</label> <span>:</span>
 							  <div class="tu-address">
@@ -101,18 +100,19 @@ foreach($sendDetail as $sd){
 							  <div class="tu-address">
 							  <input name="note_notification" type="checkbox" <?php echo ($this->tenantuser->note_notification==1)?'checked':''; ?> class="read" name="complete_notification" value="<?php echo $this->tenantuser->note_notification; ?>">	
 						  </div>
+						  <?php if($this->roleId==5){?>	
 						  <div class="field_edit_popup">
 							  <label>Cc Enabled</label> <span>:</span>
 							  <div class="tu-address">
 							  <input name="cc_enable" type="checkbox" <?php echo ($this->tenantuser->cc_enable==1)?'checked':''; ?> class="read" name="cc_enable" value="<?php echo $this->tenantuser->cc_enable; ?>">	
 						  </div>
-						  <?php if($this->roleId==7){ ?>	
+						  <?php }?>							
 						  <div class="field_edit_popup">
 							  <label>Active</label> <span>:</span>
 							  <div class="tu-address">
 							  <input name="cc_enable" type="checkbox" <?php echo ($this->tenantuser->status==1)?'checked':''; ?> class="read" name="status" value="<?php echo $this->tenantuser->status; ?>">	
-						</div>
-						<?php } ?>
+						 </div>
+						
 						  </div>
                           </fieldset>
 
@@ -178,12 +178,10 @@ foreach($sendDetail as $sd){
 						  </div>
 						  						  
 					 </fieldset> <?php */ ?>
-					  <?php if($this->roleId== 5) { ?>
-						  <div class="buttons">
-								 
-								  <a class="modalbox" href="#editTenant" onclick="javascript:editTenant('<?php echo BASEURL.'tenant/edittenantadmin/tuId/'.$uinfo->id;?>')" ><input type="button" class="confirm2" value="Edit Tenant Information" name="tenant_edit"> </a>
-							</div>
-					<?php } ?>
+					  
+						  <div class="buttons">								 
+								  <a class="modalbox" href="#editTenantAdminSetting" onclick="javascript:editTenantAdminSetting('<?php echo BASEURL.'tenant/edittenantadminaccountinfo/tuId/'.$this->tenantuser->tenantuserId;?>')" ><input type="button" class="confirm2" value="Edit My Account Info" name="tenant_edit"> </a>
+							</div>				
 					
 					</form>
 				

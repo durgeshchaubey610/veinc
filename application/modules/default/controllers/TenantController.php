@@ -2443,6 +2443,138 @@ class TenantController extends Ve_Controller_Base {
             }				 
         }
     }
+
+    public function edittenantmyaccountinfoAction() {
+        $this->_helper->layout()->setLayout('popuplayout');
+        $tuId = $this->_getParam('tuId');
+        $tenant = new Model_Tenant();
+        $tenantUserModel = new Model_TenantUser();
+        $tenantData = $tenant->getTenantById($tuId);
+        $tenantuser = $tenantUserModel->getTenantUsers($tenantData[0]->id);
+        $tenantadmin = $tenant->getTenantByUser($this->userId); 
+        $this->view->tenantadmin = $tenantadmin;
+        $this->view->tenantData = $tenantData[0];
+        $this->view->tenantuser = $tenantuser;
+    }
+
+    public function edittenantadminaccountinfoAction() {
+        $this->_helper->layout()->setLayout('popuplayout');
+        $tuId = $this->_getParam('tuId');
+        $message = array();
+        $tenantUserModel = new Model_TenantUser();
+        $tenant = new Model_Tenant();
+        $tenantData = $tenantUserModel->getTenantUserById($tuId);
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $data = $this->getRequest()->getPost();
+            //print_r($data); die;
+            $uid = $data['uid'];
+            $userData = array();
+            $userData['userName'] = html_entity_decode($data['userName']);
+            $userData['email'] = html_entity_decode($data['email']);
+            $userData['firstName'] = addslashes($data['firstname']);
+            $userData['lastName'] = addslashes($data['lastname']);
+          //  $userData['suite_location'] = $data['suite_location'];
+            $userData['phoneNumber'] = $data['phone'];
+            //$userData['role_id'] = $data['access'];
+            $userData['regDate'] = date('Y-m-d H:i:s');           
+            $userData['note_notification'] = addslashes($data['note_notification']);
+            $send_email = 0;
+            if (isset($data['auto']) && $data['auto'] == 1) {
+                $gpass = $this->generateRandomString();
+                $userData['password'] = md5($gpass);
+                $data['password'] = $gpass;
+                $send_email = 1;
+            } else if (!empty($data['password'])) {
+                $userData['password'] = md5($data['password']);
+                $send_email = 1;
+            } else {
+                $data['password'] = '';
+            }
+
+            if ($tenantData[0]->userName != $data['userName'])
+                $send_email = 1;
+
+            if ($tenantData[0]->email != $data['email'])
+                $send_email = 1;
+
+            $userModel = new Model_User();
+            $userNameDetail = $userModel->checkUserName($data['userName'], $uid);
+            $userEmailDetail = $userModel->checkUserEmail($data['email'], $uid);
+            if (!$userNameDetail && !$userEmailDetail) {
+                try {
+                  
+                    $userData['uid'] = $userModel->updateUser($userData, $uid);
+
+                  
+                    if (isset($_FILES['file']['name'])) {
+                        $uploaddir = BASE_PATH . 'public/user_img/';
+                        $uploadfile_name = 'WO-' . time() . '-' . basename($_FILES['file']['name']);
+                        $uploadfile = $uploaddir . '' . $uploadfile_name;
+                        if (!file_exists($uploaddir)) {
+                            mkdir($uploaddir, 0777, true);
+                        }
+                        move_uploaded_file($_FILES["file"]["tmp_name"], $uploadfile);
+                        $file_name = $uploadfile_name;
+                        try {
+                            $userModel->updateUser(array('user_img' => $uploadfile_name), $data['uid']);
+                            $message['status'] = 'success';
+                            $message['msg'] = 'User edit successfully.';
+                        } catch (Exception $e) {
+                            $message['status'] = 'error';
+                            $message['msg'] = 'Error occurred during user edit.';
+                        }
+                    }
+
+
+                    $id = $data['id'];
+                    $tenantUserData['suite_location'] = $data['suite_location'];
+                    if ($this->roleId == 5) {
+                     $tenantUserData['cc_enable'] = $data['cc_enable'];
+                    }
+                    $tenantUserData['send_as'] = $data['send_as'];
+                    $tenantUserData['complete_notification'] = $data['complete_notification'];
+
+
+                    if ($data['welcome_letter'] == 1) {
+                        $this->sendemailAction(true, $data['uid'], $data['tenantId'], $data['password']);
+                    } elseif ($send_email == 1) {
+                        $this->sendemailAction(true, $data['uid'], $data['tenantId'], $data['password']);
+                    }
+
+                    $tenantUserModel->updateTenantUser($tenantUserData, $id);
+                    $build_ID = $data['building'];
+                    $tId = $data['tenantId'];
+                    if ($this->roleId == 5 || $this->roleId == 7) {
+                        //$this->_redirect('/tenant/tenantuser/msg/2');
+                        $json_data['msg'] = "Record successfully updated!";
+                        $json_data['url'] = '/tenant/myaccountsetting/msg/2';
+                        echo json_encode($json_data);
+                        exit;
+                    } else
+                    //$this->_redirect('/tenant/users/bid/'.$build_ID.'/tId/'.$tId.'/msg/2');
+                        $json_data['msg'] = "Record successfully updated!";
+                    $json_data['url'] = '/tenant/users/myaccountsetting/' . $build_ID . '/tId/' . $tId . '/msg/2';
+                    echo json_encode($json_data);
+                    exit;
+                } catch (Exception $e) {
+                    $message['msg'] = 'Error occured';
+                }
+            } else
+                $message['msg'] = 'Error occured';
+        }
+        if ($tenantData) {
+            $tuserDetail = $tenantData[0];
+            $tenantData = $tenant->getTenantById($tuserDetail->tenantId);
+            $this->view->roleId = $this->roleId;
+            $this->view->tenantId = $tuserDetail->tenantId;
+            $this->view->tenantData = $tenantData[0];
+            $this->view->tuserDetial = $tuserDetail;
+            $this->view->tenantuser = $this->tenantuser[0];
+        } else
+            $message['msg'] = 'Invalid Data';
+        $this->view->message = $message;
+        
+    }
 }
 
 
