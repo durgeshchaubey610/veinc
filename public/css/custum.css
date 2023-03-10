@@ -5890,13 +5890,24 @@ width:100%;
 .page-heading-detail-wrap .page-heading-detail-wrap-btn { text-align: center; padding: 0px; }
     
 }
+@media screen and (min-width:1025px) {
+    .tenantcoi{ margin: 0px -15px;}
+    .tenant-panel{ margin: 0px -15px;}
+}
 @media (min-width:767px){
     .nav>li{
         overflow:hidden;
     }
-    .tenantcoi{ margin: 0px -15px;}
     .tenantpanel-right{margin: 0px -15px;}
     .tenantcoi h3{
+        font-size: 17px;
+        background: #504f4d;
+        padding: 20px 11px;
+        color: #fff;
+        text-align:center;
+        margin: 20px -1px;
+    }
+    .tenant-panel h3{
         font-size: 17px;
         background: #504f4d;
         padding: 20px 11px;
@@ -5945,3 +5956,4 @@ width:100%;
 } 
 .tenantadmin .row textarea {height: auto !important;}
 .tenant-panel-form .tte-input-div { width:158px;}
+.content.no-padding{padding: 0 !important;}

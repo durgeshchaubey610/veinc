@@ -25,12 +25,10 @@ foreach($sendDetail as $sd){
 	$send_data[$sd['sid']] = $sd['title'];
 }
 
-// echo '<pre>';
-// print_r($this->tenantuser);
-// die;
-
 ?>
-<div class="container-right tenantpanel-right" id="userinfo-data">
+<div class="content no-padding active tenant-panel">
+
+ <div class="container-right" id="userinfo-data">
     <?php    
      
 		//$uinfo = $this->tenantuser;
@@ -39,7 +37,7 @@ foreach($sendDetail as $sd){
 		?>
 		<section id="first" class="w-48 fr ch-home-form tenant" style="z-index:9999">
    
-		  <div id="contents" class="no-padding active tenantpanel">
+		  <div id="contents" class="active">
 		        <h3>My Account Info</h3>
 			     <div id="msg">
 					 <span class="message">
@@ -191,7 +189,7 @@ foreach($sendDetail as $sd){
 	  </section>    
  
 </div>
-
+</div>
 <div class="messageBox"></div>
 <div class="loader" style="display:none;"> <img src="<?php echo BASEURL.'public/images/loader.gif';?>"></div>
 <script type="text/javascript">
