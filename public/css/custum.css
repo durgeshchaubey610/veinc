@@ -5981,6 +5981,14 @@ width:100%;
 .tenantcoi .container-right {
     max-width: 100% !important;
 }
+.content-center {
+    width: 390px;
+    overflow: hidden;
+    margin: auto;
+}
+.content-center  .field_edit_popup label{    
+    font-weight: bold;
+}
   @media screen and (min-width:250px) and (max-width: 767px){
     .current-users {display: block;overflow-x: auto;white-space: nowrap;}
  }

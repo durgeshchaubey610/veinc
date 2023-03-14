@@ -51,7 +51,7 @@ foreach($sendDetail as $sd){
 				  </div>
 				 <div class="tenatuser_detail">
                   <fieldset class="fieldset_border">
-                          <legend class="my_legend">Tenant Info:</legend>
+				        <div class="content-center">
 						  <div class="field_edit_popup">
 							 <label>Tenant Name</label><span>:</span>
 							 <?php echo stripslashes($uinfo->tenantName);?>
@@ -72,10 +72,10 @@ foreach($sendDetail as $sd){
 							  <label>Billing Address</label> <span>:</span>
 							  <div class="tu-address"><?php echo nl2br($uinfo->billtoAddress);?></div>
 						  </div>
+	                   </div> <!--end content center -->  
                           </fieldset>
 						  <?php if($uinfo->role_id == 5) { ?>
-						  <div class="buttons">
-								 
+						  <div class="buttons text-center">								 
 								  <a class="modalbox" href="#editTenant" onclick="javascript:editTenant('<?php echo BASEURL.'tenant/edittenantadmin/tuId/'.$uinfo->id;?>')" ><input type="button" class="confirm2" value="Edit Tenant Information" name="tenant_edit"> </a>
 							</div>
 							<?php } ?>
