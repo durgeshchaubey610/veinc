@@ -53,23 +53,23 @@ foreach($sendDetail as $sd){
                   <fieldset class="fieldset_border">
 				        <div class="content-center">
 						  <div class="field_edit_popup">
-							 <label>Tenant Name</label><span>:</span>
+							 <label>Tenant Name</label>
 							 <?php echo stripslashes($uinfo->tenantName);?>
 							 <input type="hidden" name="role_id" id="role_id" value="<?php echo $uinfo->role_id?>"/>
 						   </div>
 							
 						  <div class="field_edit_popup">
-							 <label>Tenant Contact </label> <span>:</span>
+							 <label>Tenant Contact </label>
 							 <?php echo $uinfo->tenantContact;?>
 						  </div>
 
 						  <div class="field_edit_popup">
-							  <label>Phone Number</label> <span>:</span>
+							  <label>Phone Number</label>
 							  <?php echo $uinfo->phoneNumber;?>
 						  </div>	
 						  
 						  <div class="field_edit_popup">
-							  <label>Billing Address</label> <span>:</span>
+							  <label>Billing Address</label>
 							  <div class="tu-address"><?php echo nl2br($uinfo->billtoAddress);?></div>
 						  </div>
 	                   </div> <!--end content center -->  
