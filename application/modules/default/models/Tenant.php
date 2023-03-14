@@ -419,7 +419,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
                   return ($res && sizeof($res)>0)? $res : false ;  
     }
 
-    public function getAllTenantsByBuildingId($buildId, $role_id ){
+    public function getAllTenantsByBuildingId($buildId, $role_id,$tenantId){
         
         $db = Zend_Db_Table::getDefaultAdapter();   
         $select = $db->select()
