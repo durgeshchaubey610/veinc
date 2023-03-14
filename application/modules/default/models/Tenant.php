@@ -421,15 +421,15 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
 
     public function getAllTenantsByBuildingId($buildId, $role_id ){
         
-        $db = Zend_Db_Table::getDefaultAdapter(); 
-    
-       
-            $select = $db->select()
-            ->from(array('t'=>'tenant'))
-            ->joinLeft(array('u'=>'users'),'u.uid = t.userId',array('uid'=>'u.uid','firstName'=>'u.firstName','lastName'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id','note_notification'=>'u.note_notification','status'=>'u.status'))
-            ->joinLeft(array('tu'=>'tenantusers'),'tu.userId = u.uid',array('cc_enable'=>'tu.cc_enable','send_as'=>'tu.send_as','complete_notification'=>'tu.complete_notification'))
-            ->where('t.buildingId=?',$buildId)
-            ->where('u.role_id=?',$role_id);
+        $db = Zend_Db_Table::getDefaultAdapter();   
+        $select = $db->select()
+        ->from(array('u'=>'users'))
+        ->joinLeft(array('tu'=>'tenantusers'),'tu.userId = u.uid',array('uid'=>'u.uid','firstName'=>'u.firstName','lastName'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id','note_notification'=>'u.note_notification','status'=>'u.status'))
+        ->joinLeft(array('t'=>'tenant'),'t.id = tu.tenantId',array('cc_enable'=>'tu.cc_enable','send_as'=>'tu.send_as','complete_notification'=>'tu.complete_notification'))
+        ->where('t.buildingId=?',$buildId)
+        ->where('tu.tenantId=?',$tenantId)
+        ->where('u.role_id=?',$role_id)
+        ->where('t.remove_status=1 OR t.userStatus = 1 OR t.history_remove=0'); 
             //->where('t.remove_status=1 OR t.userStatus = 1 OR t.history_remove=0');    
             $select = $select->order(array('t.tenantName ASC'));
             $matchjobRes=$db->fetchAll($select);

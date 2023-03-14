@@ -2579,13 +2579,14 @@ class TenantController extends Ve_Controller_Base {
     public function currentusersAction(){
       
 		if( isset($this->tenantuser) && !empty($this->tenantuser) ){
+            $tenantId = $this->tenantuser[0]->id;
             $buildingId = $this->tenantuser[0]->buildingId;
             $uinfo = $this->tenantuser[0];
             $tenant = new Model_Tenant();
             $tenantuser = new Model_TenantUser();
             $tenantuser = $tenantuser->getTenantUsers($uinfo->id,$buildingId);          
-            $tenantAdminList =  $tenant->getAllTenantsByBuildingId($buildingId,5); 
-            $tenantUserList = $tenant->getAllTenantsByBuildingId($buildingId,7); 
+            $tenantAdminList =  $tenant->getAllTenantsByBuildingId($buildingId,5,$tenantId); 
+            $tenantUserList = $tenant->getAllTenantsByBuildingId($buildingId,7,$tenantId); 
             $sendMapper = new Model_SendAs();
             $sendDetail = $sendMapper->getSendAs();
             $send_data = array();
