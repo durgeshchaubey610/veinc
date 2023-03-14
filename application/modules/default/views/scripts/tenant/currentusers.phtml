@@ -86,65 +86,97 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
 </style>
 <div class="content no-padding active tenantcoi" id="contents">
     <div class="coi-title">
-        <h3>Current Users</h3>
+        <h3>Cureent Users</h3>
     </div>
     <div class="row coi_table_row">
         <div class="col" style="overflow:auto">
             <div class="report_table_scroll">
-                <table class="table table-bordered">  
-                    
 
-                    <tr>
-                        <td colspan='4'>
-                            <div class="coi-require">
-                                <strong>Tenant Admins</strong>                               
-                            </div>
-                        </td>
+                <p class="tuser-type">Tenant Admin</p>
+                <table class="table table-bordered current-users">
+                    <tr class="grd_Clr">
+                        <th>Name</th>
+                        <th>Email Address</th>
+                        <th>Email Type/Send As</th>
+                        <th>Complete Notification</th>
+                        <th>Note Notification</th>
+                        <th>CC Enabled </th>
+                        <th>Active</th>
+                        <th>Action</th>
                     </tr>
-                    <tr>
-                        <td>
-                            <table>
-                                <tr class="grd_Clr">
-                                    <th>Name</th>
-                                    <th>Email Address</th>
-                                    <th>Email Type/Send As</th>
-                                    <th>Complete Notification</th>
-                                    <th>Note Notification</th>
-                                    <th>CC Enabled </th>
-                                    <th>Active</th>
-                                    <th>Action</th>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-               
-                </table>
-                <table class="table table-bordered">  
-                    
+                    <?php
+                    if (!empty($this->tenantAdminList)) {
+                        foreach ($this->tenantAdminList as $tu) {
+                            $tu = (array)$tu;
+                    ?>
+                            <tr>
+                                <td><?php echo stripslashes($tu['lastName']) . ', ' . stripslashes($tu['firstName']); ?></td>
+                                <td><?php echo $tu['email']; ?></td>
+                                <td><?php echo $this->send_data[$tu['send_as']]; ?></td>
+                                <td><?php echo ($tu['complete_notification'] == 1) ? 'Yes' : 'No' ?></td>
+                                <td><?php echo ($tu['note_notification'] == 1) ? 'Yes' : 'No' ?></td>
+                                <td><?php echo ($tu['cc_enable'] == 1) ? 'Yes' : 'No' ?></td>
+                                <td><?php echo ($tu['status'] == 1) ? 'Yes' : 'No' ?></td>
+                                <td>
+                                    <a title="add" href="javascript:void(0);" onclick="showAddCoiTenant('<?php echo $bs->id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/edit.png"></a>
+                                    <a href="javascript:void(0);" title="When You will add the Expiration date.then Delete functionality is working" onclick="#"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
+                                    <a href="javascript:void(0);" title="Delete" onclick="deleteCoiList('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/send-email.png"></a>
+                                </td>
+                            </tr>
 
-                    <tr>
-                        <td colspan='4'>
-                            <div class="coi-require">
-                                <strong>Tenant Users</strong>                               
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table>
-                                <tr class="grd_Clr">
-                                    <th>Name</th>
-                                    <th>Email Address</th>
-                                    <th>Email Type/Send As</th>
-                                    <th>Complete Notification</th>
-                                    <th>Note Notification</th>                                  
-                                    <th>Active</th>
-                                    <th>Action</th>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+                    <?php }
+                    }
+
+                    ?>
+
+
                 </table>
+                <p class="tuser-type">Tenant Users</p>
+                <table class="table table-bordered current-users">
+                    <tr class="grd_Clr">
+                        <th>Name</th>
+                        <th>Email Address</th>
+                        <th>Email Type/Send As</th>
+                        <th>Complete Notification</th>
+                        <th>Note Notification</th>
+                        <th>Active</th>
+                        <th>Action</th>
+                    </tr>
+
+                    <?php
+
+                    if (!empty($this->tenantUserList)) {
+                        foreach ($this->tenantUserList as $tu) {
+                            $tu = (array)$tu;
+                    ?>
+
+                            <tr>
+                                <td><?php echo stripslashes($tu['lastName']) . ', ' . stripslashes($tu['firstName']); ?></td>
+                                <td><?php echo $tu['email']; ?></td>
+                                <td><?php echo $this->send_data[$tu['send_as']]; ?></td>
+                                <td><?php echo ($tu['complete_notification'] == 1) ? 'Yes' : 'No' ?></td>
+                                <td><?php echo ($tu['note_notification'] == 1) ? 'Yes' : 'No' ?></td>
+                                <td><?php echo ($tu['status'] == 1) ? 'Yes' : 'No' ?></td>
+                                <td>
+                                    <a title="add" href="javascript:void(0);" onclick="showAddCoiTenant('<?php echo $bs->id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/edit.png"></a>
+                                    <a href="javascript:void(0);" title="When You will add the Expiration date.then Delete functionality is working" onclick="#"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
+                                    <a href="javascript:void(0);" title="Delete" onclick="deleteCoiList('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/send-email.png"></a>
+                                </td>
+                            </tr>
+
+                    <?php }
+                    }
+
+                    ?>
+
+
+                </table>
+
+
+                <div class="buttons">
+
+                    <a class="modalbox" href="#editTenant" onclick="javascript:editTenant('http://localhost/voctech/tenant/edittenantadmin/tuId/720')"><input type="button" class="confirm2" value="Add New User" name="tenant_edit"> </a>
+                </div>
 
             </div>
         </div>

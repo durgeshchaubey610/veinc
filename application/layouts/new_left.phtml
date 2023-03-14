@@ -596,8 +596,8 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
         </li>
 
         <li class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active" <?php } ?>>
-            <a href="javascript:void(0)" <?php if (($controller == 'workorder') && ($actionnm == 'index' ||$actionnm == 'createworkorder' )) { ?> class="head_select_nav" <?php } ?>>Work Orders<span class="fa arrow whitefont_color"></span></a>
-            <ul class="nav nav-second-level" <?php if ($controller == 'tenant' || $controller == 'workorder') { ?>style="display:block;" <?php } ?>>
+            <a href="javascript:void(0)" <?php if (($controller == 'workorder') && ($actionnm == 'index' ||$actionnm == 'createworkorder' )) { ?>  class="head_select_nav" <?php } ?>>Work Orders<span class="fa arrow whitefont_color"></span></a>
+            <ul class="nav nav-second-level" <?php if ( $controller == 'workorder') { ?>style="display:block;" <?php } ?>>
                 <li><a href="<?php echo BASEURL . 'workorder/index' ?>" <?php if ($controller == 'workorder' && $actionnm == 'index') { ?>class="menuselected" <?php } ?>>Current Work Orders</a></li>
                 <li><a href="<?php echo BASEURL . 'workorder/createworkorder' ?>" <?php if ($controller == 'workorder' && $actionnm == 'createworkorder') { ?>class="menuselected" <?php } ?>>Create New Work Order</a></li>
             </ul>
@@ -614,8 +614,8 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
         <?php           
         } ?>
         <li class="menuver23" onclick="hideMenu()">
-            <a href="javascript:void(0)" <?php if (($controller == 'account' && $actionnm == 'setting' ) || ($controller == 'tenant' && $actionnm == 'tenantuser' ) ||($controller == 'tenant' && $actionnm == 'tenantuser' ) ) { ?> class="head_select_nav" <?php } ?>>Tenant Administration<span class="fa arrow whitefont_color"></span></a>
-            <ul class="nav nav-second-level" <?php if ($controller == 'tenant' || $controller == 'workorder') { ?>style="display:block;" <?php } ?>>
+            <a href="javascript:void(0)" <?php if ( $controller == 'workorder') { ?> class="head_select_nav" <?php } ?>>Tenant Administration<span class="fa arrow whitefont_color"></span></a>
+            <ul class="nav nav-second-level" <?php if (($controller == 'tenant' && ($actionnm == 'tenantinfo' || $actionnm == 'myaccountsetting' || $actionnm == 'currentusers' ))  )  { ?>style="display:block;" <?php } ?>>
             <?php if ($userRoleID == 5) { ?>
                 <li><a href="<?php echo BASEURL . 'tenant/tenantinfo' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantinfo') { ?>class="menuselected" <?php } ?>>Tenant Information</a></li>
             <?php } ?>
