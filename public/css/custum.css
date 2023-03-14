@@ -5975,6 +5975,12 @@ width:100%;
     text-align:center;
     margin: 20px -1px;
 }
+.tenant-panel .container-right {
+    max-width: 100% !important;
+}
+.tenantcoi .container-right {
+    max-width: 100% !important;
+}
   @media screen and (min-width:250px) and (max-width: 767px){
     .current-users {display: block;overflow-x: auto;white-space: nowrap;}
  }
