@@ -37,7 +37,7 @@ foreach($sendDetail as $sd){
 		?>
 		<section id="first" class="w-48 fr ch-home-form tenant" style="z-index:9999">
    
-		  <div id="contents" class="active">
+		  <div id="contents" class="active tenant-account-setting">
 		        <h3>My Account Info</h3>
 			     <div id="msg">
 					 <span class="message">
@@ -90,25 +90,25 @@ foreach($sendDetail as $sd){
 						  <div class="field_edit_popup">
 							  <label>Complete Notification</label> <span>:</span>
 							  <div class="tu-address">
-							  <input name="complete_notification" type="checkbox" <?php echo ($this->tenantuser->complete_notification==1)?'checked':''; ?> class="read" name="complete_notification" value="<?php echo $this->tenantuser->complete_notification; ?>">	
+							  <input name="complete_notification" id="complete_notification" type="checkbox" <?php echo ($this->tenantuser->complete_notification==1)?'checked':''; ?> class="read" name="complete_notification" value="<?php echo $this->tenantuser->complete_notification; ?>">	
 							 </div>
 						  </div>
 						  <div class="field_edit_popup">
 							  <label>Note Notification</label> <span>:</span>
 							  <div class="tu-address">
-							  <input name="note_notification" type="checkbox" <?php echo ($this->tenantuser->note_notification==1)?'checked':''; ?> class="read" name="complete_notification" value="<?php echo $this->tenantuser->note_notification; ?>">	
+							  <input name="note_notification" id="note_notification" type="checkbox" <?php echo ($this->tenantuser->note_notification==1)?'checked':''; ?> class="read" value="<?php echo $this->tenantuser->note_notification; ?>">	
 						  </div>
 						  <?php if($this->roleId==5){?>	
 						  <div class="field_edit_popup">
 							  <label>Cc Enabled</label> <span>:</span>
 							  <div class="tu-address">
-							  <input name="cc_enable" type="checkbox" <?php echo ($this->tenantuser->cc_enable==1)?'checked':''; ?> class="read" name="cc_enable" value="<?php echo $this->tenantuser->cc_enable; ?>">	
+							  <input name="cc_enable" id="cc_enable" type="checkbox" <?php echo ($this->tenantuser->cc_enable==1)?'checked':''; ?> class="read" value="<?php echo $this->tenantuser->cc_enable; ?>">	
 						  </div>
 						  <?php }?>							
 						  <div class="field_edit_popup">
 							  <label>Active</label> <span>:</span>
 							  <div class="tu-address">
-							  <input name="cc_enable" type="checkbox" <?php echo ($this->tenantuser->status==1)?'checked':''; ?> class="read" name="status" value="<?php echo $this->tenantuser->status; ?>">	
+							  <input name="is_active" id="is_active" type="checkbox" <?php echo ($this->tenantuser->status==1)?'checked':''; ?> class="read"  value="<?php echo $this->tenantuser->status; ?>">	
 						 </div>
 						
 						  </div>
