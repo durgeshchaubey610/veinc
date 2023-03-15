@@ -614,7 +614,7 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
         <?php           
         } ?>
         <li class="menuver23" onclick="hideMenu()">
-            <a href="javascript:void(0)" <?php if ( $controller == 'workorder') { ?> class="head_select_nav" <?php } ?>>Tenant Administration<span class="fa arrow whitefont_color"></span></a>
+            <a href="javascript:void(0)" <?php if (($controller == 'tenant' && ($actionnm == 'tenantinfo' || $actionnm == 'myaccountsetting' || $actionnm == 'currentusers' ))  ) {  ?> class="head_select_nav" <?php } ?>>Tenant Administration<span class="fa arrow whitefont_color"></span></a>
             <ul class="nav nav-second-level" <?php if (($controller == 'tenant' && ($actionnm == 'tenantinfo' || $actionnm == 'myaccountsetting' || $actionnm == 'currentusers' ))  )  { ?>style="display:block;" <?php } ?>>
             <?php if ($userRoleID == 5) { ?>
                 <li><a href="<?php echo BASEURL . 'tenant/tenantinfo' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantinfo') { ?>class="menuselected" <?php } ?>>Tenant Information</a></li>
