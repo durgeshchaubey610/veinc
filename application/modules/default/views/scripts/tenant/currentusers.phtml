@@ -118,9 +118,12 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
                                 <td><?php echo ($tu['cc_enable'] == 1) ? 'Yes' : 'No' ?></td>
                                 <td><?php echo ($tu['status'] == 1) ? 'Yes' : 'No' ?></td>
                                 <td>
-                                    <a title="add" href="javascript:void(0);" onclick="showAddCoiTenant('<?php echo $bs->id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/edit.png"></a>
-                                    <a href="javascript:void(0);" title="When You will add the Expiration date.then Delete functionality is working" onclick="#"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
-                                    <a href="javascript:void(0);" title="Delete" onclick="deleteCoiList('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/send-email.png"></a>
+                                <a title="Edit" class="modalbox" onclick="javascript:editNewUser('<?php echo BASEURL . 'tenant/edittuser/tuId/' . $tu['uid']; ?>');" href="#editNewUser" ><img src="<?php echo BASEURL . 'public/images/edit.png' ?>" /></a>
+
+<?php if($tu['uid'] !== $this->userId){ ?>
+    <a href="javascript:void(0);"  title="Delete" onclick ="deleteTUserByTadmin();" onclick="#"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
+<?php }?>
+<a href="javascript:void(0);" title="Send" onclick="test('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/send-email.png"></a>
                                 </td>
                             </tr>
 
@@ -158,9 +161,12 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
                                 <td><?php echo ($tu['note_notification'] == 1) ? 'Yes' : 'No' ?></td>
                                 <td><?php echo ($tu['status'] == 1) ? 'Yes' : 'No' ?></td>
                                 <td>
-                                    <a title="add" href="javascript:void(0);" onclick="showAddCoiTenant('<?php echo $bs->id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/edit.png"></a>
-                                    <a href="javascript:void(0);" title="When You will add the Expiration date.then Delete functionality is working" onclick="#"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
-                                    <a href="javascript:void(0);" title="Delete" onclick="deleteCoiList('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/send-email.png"></a>
+                                <a title="Edit" class="modalbox" onclick="javascript:editNewUser('<?php echo BASEURL . 'tenant/edittuser/tuId/' . $tu['uid']; ?>');" href="#editNewUser" ><img src="<?php echo BASEURL . 'public/images/edit.png' ?>" /></a>
+
+<?php if($tu['uid'] !== $this->userId){ ?>
+    <a href="javascript:void(0);" onclick ="deleteTUserByTadmin();" title="Delete" onclick="#"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
+<?php }?>
+<a href="javascript:void(0);" title="Send" onclick="test('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/send-email.png"></a>
                                 </td>
                             </tr>
 

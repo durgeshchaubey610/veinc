@@ -1199,7 +1199,7 @@ class TenantController extends Ve_Controller_Base {
                     if ($this->roleId == 5) {
                         //$this->_redirect('/tenant/tenantuser/msg/2');
                         $json_data['msg'] = "Record successfully updated!";
-                        $json_data['url'] = '/tenant/tenantuser/msg/2';
+                        $json_data['url'] = '/tenant/currentusers/msg/2';
                         echo json_encode($json_data);
                         exit;
                     } else
@@ -2581,6 +2581,7 @@ class TenantController extends Ve_Controller_Base {
       
 		if( isset($this->tenantuser) && !empty($this->tenantuser) ){
             $tenantId = $this->tenantuser[0]->id;
+            $userId = $this->tenantuser[0]->userId;
             $buildingId = $this->tenantuser[0]->buildingId;
             $uinfo = $this->tenantuser[0];
             $tenant = new Model_Tenant();
@@ -2598,7 +2599,7 @@ class TenantController extends Ve_Controller_Base {
            $this->view->tenantUserList = $tenantUserList;
            $this->view->send_data = $send_data;
            $this->view->tenantId  = $tenantId;
-
+           $this->view->userId  = $userId;
           
         }else{
             $this->_redirect('/tenant/noaccess');
