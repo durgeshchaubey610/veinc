@@ -1340,7 +1340,8 @@ class TenantController extends Ve_Controller_Base {
                     if ($this->roleId == 5) {
                         //$this->_redirect('/tenant/tenantuser/msg/1');
                         $json_data['msg'] = "New User has been created.";
-                        $json_data['url'] = '/tenant/tenantuser/msg/1';
+                        //tenant admin 
+                        $json_data['url'] = '/tenant/currentusers/msg/1';
                         echo json_encode($json_data);
                         exit;
                     } else
@@ -2596,6 +2597,8 @@ class TenantController extends Ve_Controller_Base {
            $this->view->tenantAdminList = $tenantAdminList;           
            $this->view->tenantUserList = $tenantUserList;
            $this->view->send_data = $send_data;
+           $this->view->tenantId  = $tenantId;
+
           
         }else{
             $this->_redirect('/tenant/noaccess');

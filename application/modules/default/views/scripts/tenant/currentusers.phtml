@@ -172,10 +172,8 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
 
                 </table>
 
-
                 <div class="buttons">
-
-                    <a class="modalbox" href="#editTenant" onclick="javascript:editTenant('http://localhost/voctech/tenant/edittenantadmin/tuId/720')"><input type="button" class="confirm2" value="Add New User" name="tenant_edit"> </a>
+                <a class="modalbox" href="#addNewUser" onclick="javascript:addNewUser('<?php echo BASEURL.'tenant/addtuser/tId/'.$this->tenantId; ?>');" ><input type="button"  class="confirm2" value="Add New User" name="tenant_edit"> </a>
                 </div>
 
             </div>
