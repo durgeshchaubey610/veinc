@@ -127,7 +127,7 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
 <?php if($tu['uid'] !== $this->userId){ ?>
     <a href="javascript:void(0);" onclick ="deleteTUserByTadmin('<?php echo $this->tenantId;?>','<?php echo $tu['uid'];?>');" title="Delete"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
 <?php }?>
-<a href="javascript:void(0);" title="Send" onclick="test('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/send-email.png"></a>
+<a href="javascript:void(0);" title="Send" onclick="test('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/tnt-send-email.png"></a>
                                 </td>
                             </tr>
 
@@ -170,7 +170,7 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
 <?php if($tu['uid'] !== $this->userId){ ?>
     <a href="javascript:void(0);" onclick ="deleteTUserByTadmin('<?php echo $this->tenantId;?>','<?php echo $tu['uid'];?>');" title="Delete"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
 <?php }?>
-<a href="javascript:void(0);" title="Send" onclick="test('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/send-email.png"></a>
+<a href="javascript:void(0);" title="Send" onclick="test('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/tnt-send-email.png"></a>
                                 </td>
                             </tr>
 

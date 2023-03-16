@@ -6003,6 +6003,9 @@ width:100%;
     background: #349941;
     border: 1px solid #000;
 }
+.current-users{
+    font-weight: bold;
+}
 .mg-50{
     margin: 50px 0px !important;
 }
