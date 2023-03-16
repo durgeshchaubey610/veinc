@@ -85,6 +85,10 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
     }
 </style>
 <div class="content no-padding active tenantcoi" id="contents">
+    <div class="message">
+        <span class="success-txt" style="color:green; text-align:center;"></span>
+        <span class="error-txt" style="color:red; text-align:center;"></span>
+    </div>
     <div class="coi-title">
         <h3>Current Users</h3>
     </div>
@@ -121,7 +125,7 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
                                 <a title="Edit" class="modalbox" onclick="javascript:editNewUser('<?php echo BASEURL . 'tenant/edittuser/tuId/' . $tu['uid']; ?>');" href="#editNewUser" ><img src="<?php echo BASEURL . 'public/images/edit.png' ?>" /></a>
 
 <?php if($tu['uid'] !== $this->userId){ ?>
-    <a href="javascript:void(0);"  title="Delete" onclick ="deleteTUserByTadmin();" onclick="#"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
+    <a href="javascript:void(0);" onclick ="deleteTUserByTadmin('<?php echo $this->tenantId;?>','<?php echo $tu['uid'];?>');" title="Delete"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
 <?php }?>
 <a href="javascript:void(0);" title="Send" onclick="test('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/send-email.png"></a>
                                 </td>
@@ -164,7 +168,7 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant.js');
                                 <a title="Edit" class="modalbox" onclick="javascript:editNewUser('<?php echo BASEURL . 'tenant/edittuser/tuId/' . $tu['uid']; ?>');" href="#editNewUser" ><img src="<?php echo BASEURL . 'public/images/edit.png' ?>" /></a>
 
 <?php if($tu['uid'] !== $this->userId){ ?>
-    <a href="javascript:void(0);" onclick ="deleteTUserByTadmin();" title="Delete" onclick="#"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
+    <a href="javascript:void(0);" onclick ="deleteTUserByTadmin('<?php echo $this->tenantId;?>','<?php echo $tu['uid'];?>');" title="Delete"><img src="<?php echo $this->baseUrl() ?>/public/images/delete.png"></a>
 <?php }?>
 <a href="javascript:void(0);" title="Send" onclick="test('<?php echo $bs->coi_au_tenant_id; ?>')"><img src="<?php echo $this->baseUrl() ?>/public/images/send-email.png"></a>
                                 </td>

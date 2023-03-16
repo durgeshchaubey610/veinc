@@ -1510,3 +1510,45 @@ function editTeantUser() {
          });*/
     }
 }
+
+/** delete tenant user by tenant Admin */
+function deleteTUserByTadmin(tId, uId) {
+    var check_delete = 'YES';
+    if (uId) {
+        jPrompt('For Deleting Tenant User, Enter Yes in Capital letters.', '', 'Vision Work Orders', function (r) {
+            if (r != null) {
+                if (check_delete === r) {
+                    $('.loader').show();
+                    $.ajax({
+                        url: baseUrl + "tenant/deletetuser",
+                        type: "post",
+                        datatype: 'json',
+                        data: {
+                            uId: uId, tId: tId
+                        },
+                        success: function (result) {
+                            $('.loader').hide();
+                            var data = $.parseJSON(result);
+                            //alert(data.msg);
+                            if (data.msg == 'true') {
+                                $('.message').html('Tenant user deleted successfully.');
+                            } else {
+                                $('.error-txt').html('Some error occurred.');
+                            }
+                           
+                            window.location.href = baseUrl + 'tenant/currentusers';
+                        
+                        }
+                    });
+                } else {
+                    //$('.error-txt').html('You have entered wrong word.');
+                    jAlert('You have entered wrong word.');
+                }
+            }
+        });
+
+    } else {
+        jAlert('There must be more than one user. Please add one more user to delete the user of tenant.');
+    }
+
+}
