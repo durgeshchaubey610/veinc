@@ -2195,6 +2195,9 @@ class TenantController extends Ve_Controller_Base {
             else{
                 $this->_redirect('/tenant/noaccess');
             }
+        }else{         
+                $this->_redirect('/tenant/noaccess');
+           
         }
         
         $msgId = $this->_getParam('msg', 0);
