@@ -6009,3 +6009,9 @@ width:100%;
 .mg-50{
     margin: 50px 0px !important;
 }
+section.ch-home-form form .row select#send_as {
+    width: 150px !important;
+}
+section.ch-home-form form .row select.status {
+    width: 150px !important;
+}

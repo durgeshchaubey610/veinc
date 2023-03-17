@@ -1221,6 +1221,8 @@ class TenantController extends Ve_Controller_Base {
             $this->view->tenantId = $tuserDetail->tenantId;
             $this->view->tenantData = $tenantData[0];
             $this->view->tuserDetial = $tuserDetail;
+            $this->view->userId = $this->userId;
+
         } else
             $message['msg'] = 'Invalid Data';
         $this->view->message = $message;
