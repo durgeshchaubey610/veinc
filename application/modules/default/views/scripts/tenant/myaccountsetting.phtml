@@ -56,26 +56,26 @@ foreach($sendDetail as $sd){
 				  <div class="content-center">
 						  <div class="field_edit_popup">
 							 <label>User Name</label>
-							 <?php echo stripslashes($this->tenantuser->userName);?>
+							 <span><?php echo stripslashes($this->tenantuser->userName);?></span>
 							 <input type="hidden" name="role_id" id="role_id" value="<?php echo $uinfo->role_id?>"/>
 						   </div>
 							
 						   <div class="field_edit_popup">
 							 <label>Email </label>
-							 <?php echo $this->tenantuser->email;?>
+							 <span><?php echo $this->tenantuser->email;?></span>
 						  </div>
 						  <div class="field_edit_popup">
 							 <label>Name </label>
-							 <?php echo $this->tenantuser->firstName.' '.$this->tenantuser->lastName;?>
+							 <span><?php echo $this->tenantuser->firstName.' '.$this->tenantuser->lastName;?></span>
 						  </div> 
 						 
 						  <div class="field_edit_popup">
 							  <label>Office Phone</label>
-							  <?php echo $this->tenantuser->userPhoneNumber;?>
+							  <span><?php echo $this->tenantuser->userPhoneNumber;?></span>
 						  </div>
 						  <div class="field_edit_popup">
 							  <label>Current Access</label>
-							  <?php echo ($this->tenantuser->role_id==5)?"Tenant Admin":'Tenant user';?>
+							  <span><?php echo ($this->tenantuser->role_id==5)?"Tenant Admin":'Tenant user';?></span>
 						  </div>
 						
 						  <div class="field_edit_popup">

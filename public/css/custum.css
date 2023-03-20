@@ -6015,3 +6015,17 @@ section.ch-home-form form .row select#send_as {
 section.ch-home-form form .row select.status {
     width: 150px !important;
 }
+.content-center .field_edit_popup label{
+    width: 40%;
+ }
+ .content-center .field_edit_popup > span {
+   width: 60%;
+   display: block;
+   word-break: break-all;
+ }
+
+ @media (min-width: 1025px){
+    .navbar-static-side{
+        min-height: 500px;
+    }
+ }
