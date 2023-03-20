@@ -6023,7 +6023,10 @@ section.ch-home-form form .row select.status {
    display: block;
    word-break: break-all;
  }
-
+ ul.my_mid_nav li {
+    min-height: 46px !important;
+  }
+  
  @media (min-width: 1025px){
     .navbar-static-side{
         min-height: 500px;
