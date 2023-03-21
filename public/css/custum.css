@@ -6032,3 +6032,11 @@ section.ch-home-form form .row select.status {
         min-height: 500px;
     }
  }
+ .tenant-panel h3{
+    text-align: center;
+    background:#504f4d;
+    color:#fff;
+    margin:20px -1px;
+    padding:20px 11px;
+    font-size:17px;
+ }
