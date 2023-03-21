@@ -115,8 +115,12 @@ jQuery(document).ready(function() {
 			  </div>
 			  <ul class="nav navbar-top-links navbar-right my_mid_nav">
 			  	<?php if ($rData['title'] == 'VT Admin'){?>
-			  	<li><span aria-hidden="true" class="glyphicon glyphicon-user"></span> <label class="my_nw_lb"><?php echo $rData['title'];?> </label></li><?php }else{ ?>
-                   <li><span aria-hidden="true" class="glyphicon glyphicon-user"></span> <label class="my_nw_lb"><?php echo stripslashes($firstName).' '.stripslashes($lastName);?> </label> <span class="sec_sp"><?php echo $rData['title'];?><?php if($userRoleID!=1 && $userRoleID!=9 ){ ?><div class='open_plus popup-plus'><a href="javascript:void(0);" id='myaccount'></a> </div><?php } ?> </span>  </li>
+			  	<li><span aria-hidden="true" class="glyphicon glyphicon-user"></span> <label class="my_nw_lb"><?php echo $rData['title'];?> </label></li>
+				<?php }else{ ?>
+                   <li><span aria-hidden="true" class="glyphicon glyphicon-user"></span> <label class="my_nw_lb"><?php echo stripslashes($firstName).' '.stripslashes($lastName);?> </label> <span class="sec_sp"><?php echo $rData['title'];?>
+				   <?php if($userRoleID!=1 && $userRoleID!=9 ){					
+					 ?><div class='open_plus popup-plus'><a href="<?php echo ($userRoleID==5 ||$userRoleID==7 )?BASEURL.'tenant/myaccountsetting':'javascript:void(0);'?>" id='myaccount'></a> </div>
+				    <?php } ?> </span>  </li>
                 <?php } ?>
                    <li><a title="Log Out" href="<?php echo BASEURL.'index/logout/redirect/redirect'?>"><span aria-hidden="true" class="glyphicon glyphicon-log-out"></span> Logout</a></li>
               </ul>
