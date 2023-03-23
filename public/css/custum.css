@@ -6032,11 +6032,22 @@ section.ch-home-form form .row select.status {
         min-height: 500px;
     }
  }
- .tenant-panel h3{
-    text-align: center;
-    background:#504f4d;
-    color:#fff;
-    margin:20px -1px;
-    padding:20px 11px;
-    font-size:17px;
- }
+ .tenant-panel h3 {
+    color: #fff;
+    font-size: 15px;
+    margin: 0;
+    padding: 9px 8px;
+    background: #34495e;
+    text-align: left;
+  }
+ .tenantcoi h3 {
+    color: #fff;
+    font-size: 15px;
+    margin: 0;
+    padding: 9px 8px;
+    background: #34495e;
+    text-align: left;
+  }
+  .tenantcoi{
+    border:1px solid #243442 transparent !important;
+  }
