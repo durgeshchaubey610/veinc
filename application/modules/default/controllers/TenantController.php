@@ -2611,6 +2611,13 @@ class TenantController extends Ve_Controller_Base {
            $this->view->send_data = $send_data;
            $this->view->tenantId  = $tenantId;
            $this->view->userId  = $userId;
+            if(Zend_Auth::getInstance()->getStorage()->read()->userName !=$this->tenantuser[0]->userName){
+                $this->_helper->_redirector->gotoUrl('/logout');
+            }
+            if(Zend_Auth::getInstance()->getStorage()->read()->userName !=$this->tenantuser[0]->userName){
+                $this->_helper->_redirector->gotoUrl('/logout');
+            }
+
           
         }else{
             $this->_redirect('/tenant/noaccess');
