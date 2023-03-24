@@ -2190,7 +2190,13 @@ class TenantController extends Ve_Controller_Base {
                 $sendMapper = new Model_SendAs();
                 $sendDetail = $sendMapper->getSendAs();
                 $this->view->sendDetail = $sendDetail;
-
+                 // updated userName and email
+                 if(Zend_Auth::getInstance()->getStorage()->read()->userName !=$this->tenantuser[0]->userName){
+                    $this->_helper->_redirector->gotoUrl('/logout');
+                }
+                if(Zend_Auth::getInstance()->getStorage()->read()->userName !=$this->tenantuser[0]->userName){
+                    $this->_helper->_redirector->gotoUrl('/logout');
+                }
             }
             else{
                 $this->_redirect('/tenant/noaccess');
