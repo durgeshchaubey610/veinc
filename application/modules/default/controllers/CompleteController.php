@@ -1266,9 +1266,6 @@ class CompleteController extends Ve_Controller_Base {
 
     public function wocompleteAction() {
         $message = array();
-        $message['status'] = 'success';
-        $message['msg'] = 'Error';
-        
         $billable_opt = $this->_getParam('billable_opt', 0);
         if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->getMethod() == 'POST') {
             $data = $this->_request->getPost(); 
