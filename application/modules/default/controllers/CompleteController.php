@@ -1396,6 +1396,10 @@ class CompleteController extends Ve_Controller_Base {
                                 $master_internal_work_order = $woData['master_internal_work_order'];
                                 $wpModel = new Model_WoParameter();
                                 $wpData = '';
+                                /*  ***** when status is closed but not Completed ******* */
+                                $message['status'] = 'success';
+                                $message['msg'] = 'Save changes successfully.';
+                                echo json_encode($message);
                                 if ($woData['building'] != '') {
                                     $wpDetails = $wpModel->getWoParameterByBid($woData['building']);
                                     $wpData = ($wpDetails) ? $wpDetails[0] : '';
