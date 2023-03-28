@@ -1388,6 +1388,11 @@ class CompleteController extends Ve_Controller_Base {
                                 } else {
                                     $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
                                 }
+
+                                $message['status'] = 'success';
+                                $message['msg'] = 'Status changes to completed.';
+                                echo json_encode($message);
+
                             } else if ($data['wo_status'] == 7 && $curr_wo_status != 6) {
 
                                 $woModel = new Model_WorkOrder();
@@ -1396,9 +1401,9 @@ class CompleteController extends Ve_Controller_Base {
                                 $master_internal_work_order = $woData['master_internal_work_order'];
                                 $wpModel = new Model_WoParameter();
                                 $wpData = '';
-                                /*  ***** when status is closed but not Completed ******* */
+                                /*  ***** when work order status is closed but not Completed ******* */
                                 $message['status'] = 'success';
-                                $message['msg'] = 'Save changes successfully.';
+                                $message['msg'] = 'Status is closed but not Completed.';
                                 echo json_encode($message);
                                 if ($woData['building'] != '') {
                                     $wpDetails = $wpModel->getWoParameterByBid($woData['building']);
