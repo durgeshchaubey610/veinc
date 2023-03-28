@@ -1356,6 +1356,10 @@ class CompleteController extends Ve_Controller_Base {
                             /** ******work order status complete ****** */
                             if ($data['wo_status'] == '6') {
                                 /** *** description in complete **** */
+                                $message['status'] = 'success';
+                                $message['msg'] = 'Status changes to completed.';
+                                echo json_encode($message);
+                                
                                 $desc = 'Printed out Badge and delivered to Tenant';
                                 $desc_arr = array('description' => $desc, 'woId' => $woId);
                                 $wdModel = new Model_WorkDescription();
@@ -1389,9 +1393,7 @@ class CompleteController extends Ve_Controller_Base {
                                     $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
                                 }
 
-                                $message['status'] = 'success';
-                                $message['msg'] = 'Status changes to completed.';
-                                echo json_encode($message);
+                                
 
                             } else if ($data['wo_status'] == 7 && $curr_wo_status != 6) {
 
