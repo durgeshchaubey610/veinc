@@ -6051,5 +6051,14 @@ section.ch-home-form form .row select.status {
   .tenantcoi{
     border:1px solid #243442 transparent !important;
   }
-.tenantcoi{ border:0px !important;}
+
 .tenant-panel{ border:0px !important;}
+.tenantcoi{
+    border:1px solid #e2e2e2 !important;
+}
+.tenantcoi .message{
+    margin-top: 0px;
+ }
+ .blockActionUI{
+    pointer-events: none;
+  }

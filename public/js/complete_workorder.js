@@ -3163,6 +3163,7 @@ function deleteFilesTemp(index) {
 function saveCompleteChanges(woId) {
     //$('.overlay').show();
     //$('#save_changes').attr('disabled', 'disabled');
+    $('.cwo-buttons').addClass('blockActionUI');
     var date_cp_in = $('#date_cp_in').val();
     var date_cp_out = $('#date_cp_out').val();
     var time_in = $('#time_in').val();
@@ -3386,7 +3387,8 @@ function saveCompleteChanges(woId) {
                                     url: res,                               
                                     success: function (response) {
                                         //alert(response);
-                                        $('.loader').hide();                
+                                        $('.loader').hide(); 
+                                        $('.cwo-buttons').removeClass('blockActionUI');               
                                         $("#reloadworkorder").html(response);
                                         //$('.success_message').slideUp(500);
                                         //$( "#addcss" ).html( '<style>'+html+'</style>' );
@@ -3415,6 +3417,7 @@ function saveCompleteChanges(woId) {
                     } else {
                         $('.overlay').hide();
                         $('.loader').hide();
+                        $('.cwo-buttons').removeClass('blockActionUI');
                         //alert('Error occurred');
                         $('#cw_error').html(content.msg);
                         $('#save_changes').attr('disabled', false);
@@ -3422,12 +3425,14 @@ function saveCompleteChanges(woId) {
                 }else{
                     $('.overlay').hide();
                     $('.loader').hide();
+                    $('.cwo-buttons').removeClass('blockActionUI');
                     $('#cw_error').html("No data found");
                     $('#save_changes').attr('disabled', false);
                 }
             },
             error: function () {
                 $('.loader').hide();
+                $('.cwo-buttons').removeClass('blockActionUI');
                 alert('There was an error');
             }
 
