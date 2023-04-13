@@ -1428,6 +1428,8 @@ class CompleteController extends Ve_Controller_Base {
                                         $whUpdtData = array();
                                         $whUpdtData['current_update'] = 1;
                                         $whUpdtData['updated_at'] = date('Y-m-d H:i:s');
+                                        $whUpdtData['billable_opt'] = $billable_opt;
+
                                         $upId = $validateUpdateWordOrderStatus[0]['upId'];
                                         $wpModel->updateWorkOrderByUpId($whUpdtData, $upId);
                                         /*                             * *******History Log ******** */
