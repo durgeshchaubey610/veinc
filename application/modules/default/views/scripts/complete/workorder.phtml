@@ -242,7 +242,14 @@ if ($this->roleId != '1' && $closewo_access->is_access == 0) {
         <?php if ($work_billable == '1') { ?>
                             $('#billable_opt').prop('checked', true);
         <?php } ?>
-        <?php if ($wpData['email_tenant'] == '1') { ?>
+        <?php if($cwpData[0]['email_tenant']== 1){ ?>   
+            $('#tenant_mail').prop('checked', true);
+        <?php }
+               else if ($cwpData[0]['email_tenant'] == 0) { 
+        ?>
+        $('#tenant_mail').prop('checked', false);        
+        <?php  }
+               else if ($wpData['email_tenant'] == '1') { ?>
                             $('#tenant_mail').prop('checked', true);
         <?php } ?>
                     </script>

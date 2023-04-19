@@ -1269,6 +1269,11 @@ class CompleteController extends Ve_Controller_Base {
         $billable_opt = $this->_getParam('billable_opt', 0);
         if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->getMethod() == 'POST') {
             $data = $this->_request->getPost(); 
+            //email notification to the tenant 
+            $email_tenant = $data['email_tenant'];
+            unset($data['email_tenant']);  
+            //end email notifcation setting
+
             $woId = $data['woId'];
             $woModel = new Model_WorkOrder();
             $workOrder = $woModel->getWorkOrder($woId);
@@ -1389,7 +1394,15 @@ class CompleteController extends Ve_Controller_Base {
                                         $wpData = ($wpDetails) ? $wpDetails[0] : '';
                                     }
                                     /*                                 * ***** sent email to tenant and account user ******* */
-                                    if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
+                                    $woUpModel = new Model_WorkOrderUpdate();                                         
+                                    $currWoUpdate = $woUpModel->getCurrentWoUpdate($woId);
+                                    if($currWoUpdate[0]['email_tenant']==1 && $master_internal_work_order != '1'){
+                                      $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
+                                    }
+                                    else if($currWoUpdate[0]['email_tenant']==0 && $master_internal_work_order != '1'){
+                                        $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
+                                    }
+                                    else if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
                                         $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
                                     } else {
                                         $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
@@ -1407,7 +1420,15 @@ class CompleteController extends Ve_Controller_Base {
                                         $wpData = ($wpDetails) ? $wpDetails[0] : '';
                                     }
                                     /*                                 * ***** sent email to tenant and account user ******* */
-                                    if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
+                                    $woUpModel = new Model_WorkOrderUpdate();                                         
+                                    $currWoUpdate = $woUpModel->getCurrentWoUpdate($woId);
+                                    if($currWoUpdate[0]['email_tenant']==1 && $master_internal_work_order != '1'){
+                                      $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
+                                    }
+                                    else if($currWoUpdate[0]['email_tenant']==0 && $master_internal_work_order != '1'){
+                                        $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
+                                    }
+                                    else if($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
                                         $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
                                     } else {
                                         $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
@@ -1421,6 +1442,9 @@ class CompleteController extends Ve_Controller_Base {
                                 if($data['wo_status'] != $currWo[0]['wo_status']){
                                     $updateStatus = true;
                                 }
+                                if($email_tenant != $currWo[0]['email_tenant']){
+                                    $updateStatus = true;
+                                }
                                 if ($updateStatus == true) {
                                     // update status and set as current
                                     $resetCurrent = $wpModel->updateWorkOrderByWoId(array('current_update' => 0), $woId);
@@ -1429,7 +1453,7 @@ class CompleteController extends Ve_Controller_Base {
                                         $whUpdtData['current_update'] = 1;
                                         $whUpdtData['updated_at'] = date('Y-m-d H:i:s');
                                         $whUpdtData['billable_opt'] = $billable_opt;
-
+                                        $whUpdtData['email_tenant'] = $email_tenant;
                                         $upId = $validateUpdateWordOrderStatus[0]['upId'];
                                         $wpModel->updateWorkOrderByUpId($whUpdtData, $upId);
                                         /*                             * *******History Log ******** */
@@ -1496,7 +1520,15 @@ class CompleteController extends Ve_Controller_Base {
                                                 $wpData = ($wpDetails) ? $wpDetails[0] : '';
                                             }
                                             /*                                 * ***** sent email to tenant and account user ******* */
-                                            if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
+                                            $woUpModel = new Model_WorkOrderUpdate();                                         
+                                            $currWoUpdate = $woUpModel->getCurrentWoUpdate($woId);
+                                            if($currWoUpdate[0]['email_tenant']==1 && $master_internal_work_order != '1'){
+                                              $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
+                                            }
+                                            else if($currWoUpdate[0]['email_tenant']==0 && $master_internal_work_order != '1'){
+                                                $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
+                                            }
+                                            else if($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
                                                 $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
                                             } else {
                                                 $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
@@ -1514,7 +1546,15 @@ class CompleteController extends Ve_Controller_Base {
                                                 $wpData = ($wpDetails) ? $wpDetails[0] : '';
                                             }
                                             /*                                 * ***** sent email to tenant and account user ******* */
-                                            if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
+                                            $woUpModel = new Model_WorkOrderUpdate();                                         
+                                            $currWoUpdate = $woUpModel->getCurrentWoUpdate($woId);
+                                            if($currWoUpdate[0]['email_tenant']==1 && $master_internal_work_order != '1'){
+                                              $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
+                                            }
+                                            else if($currWoUpdate[0]['email_tenant']==0 && $master_internal_work_order != '1'){
+                                                $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
+                                            }
+                                            else if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
                                                 $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
                                             } else {
                                                 $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
