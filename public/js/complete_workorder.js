@@ -3171,18 +3171,10 @@ function saveCompleteChanges(woId) {
     var wo_status = $('#wo_status').val();
     var wcId = $('#wcId').val();
     var billable_opt = "0";
-    var email_tenant = "0";
-
     if ($('#billable_opt').is(":checked"))
     {
       billable_opt = $('#billable_opt').val();
     } 
-    // send email to the tenant 
-    if ($('#tenant_mail').is(":checked"))
-    {
-        email_tenant = $('#tenant_mail').val();
-    } 
-
     var submit_flag = true;
  
     if (wo_status == '1') {
@@ -3374,7 +3366,7 @@ function saveCompleteChanges(woId) {
             datatype: 'json',
             data: {
                 date_cp_in: date_cp_in, date_cp_out: date_cp_out, time_in: time_in,
-                time_out: time_out, wo_status: wo_status, woId: woId, wcId: wcId,email_tenant:email_tenant
+                time_out: time_out, wo_status: wo_status, woId: woId, wcId: wcId
             },
             success: function (data) {
                 console.log(data);
