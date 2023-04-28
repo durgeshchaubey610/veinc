@@ -1414,14 +1414,8 @@ class CompleteController extends Ve_Controller_Base {
                                     }
                                 }
                             } else {
-                                $updateStatus = false;
-                                if($billable_opt != $currWo[0]['billable_opt']){
-                                    $updateStatus = true;
-                                }
-                                if($data['wo_status'] != $currWo[0]['wo_status']){
-                                    $updateStatus = true;
-                                }
-                                if ($updateStatus == true) {
+
+                                if ($data['wo_status'] != $currWo[0]['wo_status']) {
                                     // update status and set as current
                                     $resetCurrent = $wpModel->updateWorkOrderByWoId(array('current_update' => 0), $woId);
                                     if (isset($validateUpdateWordOrderStatus[0]['upId']) && !empty($validateUpdateWordOrderStatus[0]['upId'])) {
