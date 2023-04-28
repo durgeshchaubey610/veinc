@@ -108,38 +108,4 @@ class Model_WorkOrderUpdate extends Zend_Db_Table_Abstract {
 	}	
 		
 	}
-
-	/*  created on 30 March 2023 By dadhi Vallabh
-     *  for preventing duplicate status on work_order_update table
-    **/
-    public function checkWorkOrderStatusIsExists($woId,$status){
-        if (!empty($woId) && !empty($status)) {
-            $select = $this->select()->from(array('work_order_update'), array('upId','wo_id','wo_status','current_update'));
-            $select = $select->where('wo_id = ? ', $woId);
-            $select = $select->where('wo_status = ? ', $status);
-            $res = $this->fetchAll($select);
-			//  echo $select;
-            //  die;
-            return ($res && sizeof($res) > 0) ? $res->toArray() : false;
-        } 
-           
-    }
-/*  created on 31 March 2023 By dadhi Vallabh
-     *  for preventing duplicate status on work_order_update table
-    **/
-	public function updateWorkOrderByUpId($data,$upId) {
-		$this->_errorMessage=""; 			
-	   try{ 
-		   if(isset($upId) && !empty($upId)){ 
-			$where = $this->getAdapter()->quoteInto('upId = ?', $upId);
-			$this->update($data,$where);				   	
-			return true;
-		  }else{
-			return false;		
-		  }
-	   } catch(Exception $e)	{	
-		   echo $e->getMessage();die;
-	   }
-	}
-
 }

@@ -1304,225 +1304,110 @@ class CompleteController extends Ve_Controller_Base {
                         $curr_wo_status = $currWo[0]['wo_status'];
                         if ($curr_wo_status) {
                             $status_changed = true;
-                            $validateUpdateWordOrderStatus = $wpModel->checkWorkOrderStatusIsExists($woId, $data['wo_status']);
                             // reset work order update
-                            //Start Validation for duplicate order status issue by Dadhi On 31 March
-                            if (empty($validateUpdateWordOrderStatus)) {
-                                $resetCurrent = $wpModel->updateWorkOrderByWoId(array('current_update' => 0), $woId);
-                                $wpData = array();
-                                $wpData['wo_id'] = $woId;
-                                $wpData['internal_note'] = '';
-                                $wpData['wo_status'] = $data['wo_status'];
-                                $wpData['current_update'] = 1;
-                                $wpData['user_id'] = $this->userId;
-                                $wpData['created_at'] = date('Y-m-d H:i:s');
-                                //if ($data['wo_status'] == 7) {
-                                $wpData['billable_opt'] = $billable_opt;
-                                // }
-                                $insertWp = $wpModel->insertWorkOrderUpdate($wpData);
-                                //die("sanjay");
-                                /*                             * *******History Log ******** */
-                                $whlModel = new Model_WoHistoryLog();
-                                $whData = array();
-                                $whData['woId'] = $woId;
-                                $whData['log_type'] = 'status';
-                                $whData['current_value'] = $curr_wo_status;
-                                $whData['change_value'] = $data['wo_status'];
-                                $whData['created_at'] = date('Y-m-d H:i:s');
-                                $whData['user_id'] = $this->userId;
-                                $insertWHL = $whlModel->insertHistoryLog($whData);
-                                if ($curr_wo_status == 1) {
-                                    $this->sendOnlyBadge($woId);
-                                }
-                                // update work order schedule
-                                $schModel = new Model_Schedule();
-                                $schData = $schModel->getSchdeuleByCurrWoStatus($woId, $data['wo_status']);
-                                if ($schData) {
-                                    $wstModel = new Model_WoScheduleStatus();
-                                    // fetch current status work order
-                                    $wsDetail = $wstModel->getCurrentWs($woId);
-                                    foreach ($wsDetail as $wsd) {
-                                        $wsUpdate = $wstModel->updateWoSchedule(array('current_status' => 0), $wsd['wssId']);
-                                    }
-                                    $wss_data = array();
-                                    $wss_data['worder_id'] = $woId;
-                                    $wss_data['schedule_id'] = $schData[0]->id;
-                                    $wss_data['priority_id'] = $schData[0]->priority_id;
-                                    $wss_data['status'] = 1;
-                                    //$wss_data['ckey']= md5(time());
-                                    $wss_data['current_status'] = 1;
-                                    $wss_data['created_at'] = date('Y-m-d H:i:s');
-                                    $ws_insert = $wstModel->insertWoSchedule($wss_data);
-                                }
+                            $resetCurrent = $wpModel->updateWorkOrderByWoId(array('current_update' => 0), $woId);
+                            $wpData = array();
+                            $wpData['wo_id'] = $woId;
+                            $wpData['internal_note'] = '';
+                            $wpData['wo_status'] = $data['wo_status'];
+                            $wpData['current_update'] = 1;
+                            $wpData['user_id'] = $this->userId;
+                            $wpData['created_at'] = date('Y-m-d H:i:s');
+                            //if ($data['wo_status'] == 7) {
+                            $wpData['billable_opt'] = $billable_opt;
+                           // }
+                            $insertWp = $wpModel->insertWorkOrderUpdate($wpData);
+                             //die("sanjay");
+                            /*                             * *******History Log ******** */
+                            $whlModel = new Model_WoHistoryLog();
+                            $whData = array();
+                            $whData['woId'] = $woId;
+                            $whData['log_type'] = 'status';
+                            $whData['current_value'] = $curr_wo_status;
+                            $whData['change_value'] = $data['wo_status'];
+                            $whData['created_at'] = date('Y-m-d H:i:s');
+                            $whData['user_id'] = $this->userId;
+                            $insertWHL = $whlModel->insertHistoryLog($whData);
+                            if ($curr_wo_status == 1) {
+                                $this->sendOnlyBadge($woId);
+                            }
 
-                                /** ******work order status complete ****** */
-                                if ($data['wo_status'] == '6') {
-                                    /** *** description in complete **** */
-                                    $desc = 'Printed out Badge and delivered to Tenant';
-                                    $desc_arr = array('description' => $desc, 'woId' => $woId);
-                                    $wdModel = new Model_WorkDescription();
-                                    $wpDetails = $wdModel->getDescByWoId($woId);
-                                    // print_R($wpDetails);
-                                    //die;
-                                    $id = !empty($wpDetails) ? $wpDetails[0]['id'] : '0';
-                                    //echo $id;
-                                    //die;
-                                    if ($id == '0') {
-                                        //$updateData = $wdModel->updateDescription($desc_arr, $id);
-                                        $insertData = $wdModel->insertDescription($desc_arr);
-                                    }
-                                    /*else {
+                            // update work order schedule
+                            $schModel = new Model_Schedule();
+                            $schData = $schModel->getSchdeuleByCurrWoStatus($woId, $data['wo_status']);
+                            if ($schData) {
+                                $wstModel = new Model_WoScheduleStatus();
+                                // fetch current status work order
+                                $wsDetail = $wstModel->getCurrentWs($woId);
+                                foreach ($wsDetail as $wsd) {
+                                    $wsUpdate = $wstModel->updateWoSchedule(array('current_status' => 0), $wsd['wssId']);
+                                }
+                                $wss_data = array();
+                                $wss_data['worder_id'] = $woId;
+                                $wss_data['schedule_id'] = $schData[0]->id;
+                                $wss_data['priority_id'] = $schData[0]->priority_id;
+                                $wss_data['status'] = 1;
+                                //$wss_data['ckey']= md5(time());
+                                $wss_data['current_status'] = 1;
+                                $wss_data['created_at'] = date('Y-m-d H:i:s');
+                                $ws_insert = $wstModel->insertWoSchedule($wss_data);
+                            }
+
+                            /** ******work order status complete ****** */
+                            if ($data['wo_status'] == '6') {
+                                /** *** description in complete **** */
+                                $desc = 'Printed out Badge and delivered to Tenant';
+                                $desc_arr = array('description' => $desc, 'woId' => $woId);
+                                $wdModel = new Model_WorkDescription();
+                                $wpDetails = $wdModel->getDescByWoId($woId);
+                               // print_R($wpDetails);
+                                //die;
+                                $id = !empty($wpDetails) ? $wpDetails[0]['id'] : '0';
+                                //echo $id;
+                                //die;
+                                if ($id == '0') {
+                                    //$updateData = $wdModel->updateDescription($desc_arr, $id);
+                                    $insertData = $wdModel->insertDescription($desc_arr);
+                                }
+                                /*else {
                                      $insertData = $wdModel->insertDescription($desc_arr);                                   
                                 }*/
 
 
-                                    $woData = $workOrder[0];
-                                    $master_internal_work_order = $woData['master_internal_work_order'];
-                                    $wpModel = new Model_WoParameter();
-                                    $wpData = '';
-                                    if ($woData['building'] != '') {
-                                        $wpDetails = $wpModel->getWoParameterByBid($woData['building']);
-                                        $wpData = ($wpDetails) ? $wpDetails[0] : '';
-                                    }
-                                    /*                                 * ***** sent email to tenant and account user ******* */
-                                    if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
-                                        $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
-                                    } else {
-                                        $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
-                                    }
-                                } else if ($data['wo_status'] == 7 && $curr_wo_status != 6) {
-
-                                    $woModel = new Model_WorkOrder();
-                                    $workOrder = $woModel->getWorkOrder($woId);
-                                    $woData = $workOrder[0];
-                                    $master_internal_work_order = $woData['master_internal_work_order'];
-                                    $wpModel = new Model_WoParameter();
-                                    $wpData = '';
-                                    if ($woData['building'] != '') {
-                                        $wpDetails = $wpModel->getWoParameterByBid($woData['building']);
-                                        $wpData = ($wpDetails) ? $wpDetails[0] : '';
-                                    }
-                                    /*                                 * ***** sent email to tenant and account user ******* */
-                                    if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
-                                        $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
-                                    } else {
-                                        $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
-                                    }
+                                $woData = $workOrder[0];
+                                $master_internal_work_order = $woData['master_internal_work_order'];
+                                $wpModel = new Model_WoParameter();
+                                $wpData = '';
+                                if ($woData['building'] != '') {
+                                    $wpDetails = $wpModel->getWoParameterByBid($woData['building']);
+                                    $wpData = ($wpDetails) ? $wpDetails[0] : '';
                                 }
-                            } else {
-
-                                if ($data['wo_status'] != $currWo[0]['wo_status']) {
-                                    // update status and set as current
-                                    $resetCurrent = $wpModel->updateWorkOrderByWoId(array('current_update' => 0), $woId);
-                                    if (isset($validateUpdateWordOrderStatus[0]['upId']) && !empty($validateUpdateWordOrderStatus[0]['upId'])) {
-                                        $whUpdtData = array();
-                                        $whUpdtData['current_update'] = 1;
-                                        $whUpdtData['updated_at'] = date('Y-m-d H:i:s');
-                                        $whUpdtData['billable_opt'] = $billable_opt;
-
-                                        $upId = $validateUpdateWordOrderStatus[0]['upId'];
-                                        $wpModel->updateWorkOrderByUpId($whUpdtData, $upId);
-                                        /*                             * *******History Log ******** */
-                                        $whlModel = new Model_WoHistoryLog();
-                                        $whData = array();
-                                        $whData['woId'] = $woId;
-                                        $whData['log_type'] = 'status';
-                                        $whData['current_value'] = $curr_wo_status;
-                                        $whData['change_value'] = $data['wo_status'];
-                                        $whData['created_at'] = date('Y-m-d H:i:s');
-                                        $whData['user_id'] = $this->userId;
-                                        $insertWHL = $whlModel->insertHistoryLog($whData);
-                                        if ($curr_wo_status == 1) {
-                                            $this->sendOnlyBadge($woId);
-                                        }
-                                        // update work order schedule
-                                        $schModel = new Model_Schedule();
-                                        $schData = $schModel->getSchdeuleByCurrWoStatus($woId, $data['wo_status']);
-                                        if ($schData) {
-                                            $wstModel = new Model_WoScheduleStatus();
-                                            // fetch current status work order
-                                            $wsDetail = $wstModel->getCurrentWs($woId);
-                                            foreach ($wsDetail as $wsd) {
-                                                $wsUpdate = $wstModel->updateWoSchedule(array('current_status' => 0), $wsd['wssId']);
-                                            }
-                                            $wss_data = array();
-                                            $wss_data['worder_id'] = $woId;
-                                            $wss_data['schedule_id'] = $schData[0]->id;
-                                            $wss_data['priority_id'] = $schData[0]->priority_id;
-                                            $wss_data['status'] = 1;
-                                            //$wss_data['ckey']= md5(time());
-                                            $wss_data['current_status'] = 1;
-                                            $wss_data['created_at'] = date('Y-m-d H:i:s');
-                                            $ws_insert = $wstModel->insertWoSchedule($wss_data);
-                                        }
-
-                                        /** ******work order status complete ****** */
-                                        if ($data['wo_status'] == '6') {
-                                            /** *** description in complete **** */
-                                            $desc = 'Printed out Badge and delivered to Tenant';
-                                            $desc_arr = array('description' => $desc, 'woId' => $woId);
-                                            $wdModel = new Model_WorkDescription();
-                                            $wpDetails = $wdModel->getDescByWoId($woId);
-                                            // print_R($wpDetails);
-                                            //die;
-                                            $id = !empty($wpDetails) ? $wpDetails[0]['id'] : '0';
-                                            //echo $id;
-                                            //die;
-                                            if ($id == '0') {
-                                                //$updateData = $wdModel->updateDescription($desc_arr, $id);
-                                                $insertData = $wdModel->insertDescription($desc_arr);
-                                            }
-                                            /*else {
-                                         $insertData = $wdModel->insertDescription($desc_arr);                                   
-                                    }*/
-
-
-                                            $woData = $workOrder[0];
-                                            $master_internal_work_order = $woData['master_internal_work_order'];
-                                            $wpModel = new Model_WoParameter();
-                                            $wpData = '';
-                                            if ($woData['building'] != '') {
-                                                $wpDetails = $wpModel->getWoParameterByBid($woData['building']);
-                                                $wpData = ($wpDetails) ? $wpDetails[0] : '';
-                                            }
-                                            /*                                 * ***** sent email to tenant and account user ******* */
-                                            if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
-                                                $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
-                                            } else {
-                                                $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
-                                            }
-                                        } else if ($data['wo_status'] == 7 && $curr_wo_status != 6) {
-
-                                            $woModel = new Model_WorkOrder();
-                                            $workOrder = $woModel->getWorkOrder($woId);
-                                            $woData = $workOrder[0];
-                                            $master_internal_work_order = $woData['master_internal_work_order'];
-                                            $wpModel = new Model_WoParameter();
-                                            $wpData = '';
-                                            if ($woData['building'] != '') {
-                                                $wpDetails = $wpModel->getWoParameterByBid($woData['building']);
-                                                $wpData = ($wpDetails) ? $wpDetails[0] : '';
-                                            }
-                                            /*                                 * ***** sent email to tenant and account user ******* */
-                                            if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
-                                                $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
-                                            } else {
-                                                $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
-                                            }
-                                        }
-                                        $message['status'] = 'success';
-                                        $message['msg'] = 'Save changes successfully.';
-                                    }
+                                /*                                 * ***** sent email to tenant and account user ******* */
+                                if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
+                                    $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
+                                } else {
+                                    $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
                                 }
+                            } else if ($data['wo_status'] == 7 && $curr_wo_status != 6) {
 
-                                // if order status is already exit or go to reverse cases like closed to open
-                                // case one when same order status are updated
-
+                                $woModel = new Model_WorkOrder();
+                                $workOrder = $woModel->getWorkOrder($woId);
+                                $woData = $workOrder[0];
+                                $master_internal_work_order = $woData['master_internal_work_order'];
+                                $wpModel = new Model_WoParameter();
+                                $wpData = '';
+                                if ($woData['building'] != '') {
+                                    $wpDetails = $wpModel->getWoParameterByBid($woData['building']);
+                                    $wpData = ($wpDetails) ? $wpDetails[0] : '';
+                                }
+                                /*                                 * ***** sent email to tenant and account user ******* */
+                                if ($wpData['email_tenant'] == '1' && $master_internal_work_order != '1') {
+                                    $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users');
+                                } else {
+                                    $sendTenantMail = $woModel->sendClosedNotification($woId, $this->userId, 'users', 1);
+                                }
                             }
-                            $message['status'] = 'success';
-                            $message['msg'] = 'Save changes successfully.';
-                            //validate order status is not exist
-                        } //current order 
+                        }
                     }
                     $message['status'] = 'success';
                     $message['msg'] = 'Save changes successfully.';
