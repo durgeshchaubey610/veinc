@@ -1304,13 +1304,9 @@ class CompleteController extends Ve_Controller_Base {
                         $curr_wo_status = $currWo[0]['wo_status'];
                         if ($curr_wo_status) {
                             $status_changed = true;
-
-                            // checked and removed duplicate but keep lastest one.
-                            $wpModel->removeDuplicate($woId);
-
                             $validateUpdateWordOrderStatus = $wpModel->checkWorkOrderStatusIsExists($woId, $data['wo_status']);
                             // reset work order update
-                            //Start Validation for duplicate order status issue created by Dadhi On 31 March
+                            //Start Validation for duplicate order status issue by Dadhi On 31 March
                             if (empty($validateUpdateWordOrderStatus)) {
                                 $resetCurrent = $wpModel->updateWorkOrderByWoId(array('current_update' => 0), $woId);
                                 $wpData = array();

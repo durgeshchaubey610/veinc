@@ -142,28 +142,4 @@ class Model_WorkOrderUpdate extends Zend_Db_Table_Abstract {
 	   }
 	}
 
-	/*  removed duplicate work order status and keep latest one
-     *  @Created by Dadhi Vallabh on 4 April 2023
-    **/
-	public function removeDuplicate($woId){
-     
-		$db = Zend_Db_Table::getDefaultAdapter();      
-		if (!empty($woId)) {
-			try {
-				$db->query("DELETE  from  work_order_update
-				WHERE  wo_id= '".$woId."' and upId NOT IN (
-				SELECT * FROM (
-					SELECT MAX(upId) FROM work_order_update  where wo_id='".$woId."'
-					GROUP BY wo_status
-				)  AS s_alias 
-				)  
-				");          
-				return true;
-			} catch (Exception $e) {
-				echo $e->getMessage();
-				return false;
-			}
-		}
-	}
-
 }
