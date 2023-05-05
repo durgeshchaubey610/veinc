@@ -3373,6 +3373,7 @@ function saveCompleteChanges(woId) {
                 //$('.loader').hide();
                 $('.overlay').show();
                 var content = $.parseJSON(data);
+                console.log(content);
                 if(content !== null){
                     if (content.status == 'success') {
                         
@@ -3417,16 +3418,20 @@ function saveCompleteChanges(woId) {
                     } else {
                         $('.overlay').hide();
                         $('.loader').hide();
-                        $('.cwo-buttons').removeClass('blockActionUI');
+                        showErrorBox();
+                        //$('.cwo-buttons').removeClass('blockActionUI');
                         //alert('Error occurred');
                         $('#cw_error').html(content.msg);
                         $('#save_changes').attr('disabled', false);
                     }
                 }else{
+                   
                     $('.overlay').hide();
                     $('.loader').hide();
-                    $('.cwo-buttons').removeClass('blockActionUI');
-                    $('#cw_error').html("No data found");
+                    showErrorBox();
+                   // $('.cwo-buttons').removeClass('blockActionUI');
+                   
+                   // $('#cw_error').html("No data found");
                     $('#save_changes').attr('disabled', false);
                 }
             },
@@ -3480,6 +3485,15 @@ function checkTimeStatus(stime, etime) {
 
 function showAlertBox() {
     $('#alert_wo_edit_href').trigger('click');
+    $('.showmodel').hide();
+    $('.hidemodel').show();
+    //$('#fd_dft_div').show();
+    //$("#alert_wo_edit").show();
+}
+/*Created By Dadhi On 4th May 2023
+*/
+function showErrorBox() {
+    $('#alert_wo_edit_error_href').trigger('click');
     $('.showmodel').hide();
     $('.hidemodel').show();
     //$('#fd_dft_div').show();

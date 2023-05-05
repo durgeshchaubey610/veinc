@@ -1153,6 +1153,16 @@ if ($this->roleId != '1' && $closewo_access->is_access == 0) {
                     <button name="at_yes" class="yes_btn" id="at_yes" onclick="showWoEdit();">Yes</button>
                 </div>
             </div>
+
+            <a href="#alert_wo_edit_error" id="alert_wo_edit_error_href" class="modalbox">&nbsp;</a>	
+            <div id="alert_wo_edit_error" class="cwo_alert_wo" style="display:none">
+                <div class="txt-alert">
+                    <span>It will take some time to send email and save. Are you want to continue? </span>
+                </div>
+                <div class="alert_button">
+                    <button name="at_ok" class="yes_btn" id="at_ok" onclick="showWoEdit();">OK</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="loader" style="display:none;" > <img src="<?php echo BASEURL . 'public/images/loader.gif'; ?>"></div>
@@ -1201,6 +1211,19 @@ if ($this->roleId != '1' && $closewo_access->is_access == 0) {
 
 
 <script>
+   
+    $('#save_changes').click(function(){
+        $('.cwo-buttons').addClass('blockActionUI');
+    });
+
+    $('#at_ok').click(function(){
+        $('.cwo-buttons').removeClass('blockActionUI');
+        str = window.location.href;
+        var res = str.replace("/workorder/", "/reloadworkorder/");
+        location.reload();         
+
+    });
+  
     function showHistoryDescription(whId) {
 
         var current_value_description = $('#current_value_' + whId).val();
