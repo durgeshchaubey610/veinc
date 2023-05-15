@@ -14,6 +14,9 @@ class TenantController extends Ve_Controller_Base {
         $this->accessHelper = $this->_helper->access;
         $this->tenant_location = 12;
         $this->trecovery_location = 19;
+
+         //called when object intiatate
+         $this->tenantModel = new Model_Tenant();
     }
 
     // Call befor any action and check is user login or not
@@ -26,6 +29,10 @@ class TenantController extends Ve_Controller_Base {
         $this->userId = Zend_Auth::getInstance()->getStorage()->read()->uid;
         $this->roleId = Zend_Auth::getInstance()->getStorage()->read()->role_id;
         $this->cust_id = Zend_Auth::getInstance()->getStorage()->read()->cust_id;
+
+        if(isset($this->userId) && !empty($this->userId)){
+            $this->tenantuser = $this->tenantModel->getTenantByUser($this->userId); 
+        }
     }
 
     public function indexAction() {
@@ -1192,7 +1199,7 @@ class TenantController extends Ve_Controller_Base {
                     if ($this->roleId == 5) {
                         //$this->_redirect('/tenant/tenantuser/msg/2');
                         $json_data['msg'] = "Record successfully updated!";
-                        $json_data['url'] = '/tenant/tenantuser/msg/2';
+                        $json_data['url'] = '/tenant/currentusers/msg/2';
                         echo json_encode($json_data);
                         exit;
                     } else
@@ -1214,6 +1221,8 @@ class TenantController extends Ve_Controller_Base {
             $this->view->tenantId = $tuserDetail->tenantId;
             $this->view->tenantData = $tenantData[0];
             $this->view->tuserDetial = $tuserDetail;
+            $this->view->userId = $this->userId;
+
         } else
             $message['msg'] = 'Invalid Data';
         $this->view->message = $message;
@@ -1333,7 +1342,8 @@ class TenantController extends Ve_Controller_Base {
                     if ($this->roleId == 5) {
                         //$this->_redirect('/tenant/tenantuser/msg/1');
                         $json_data['msg'] = "New User has been created.";
-                        $json_data['url'] = '/tenant/tenantuser/msg/1';
+                        //tenant admin 
+                        $json_data['url'] = '/tenant/currentusers/msg/1';
                         echo json_encode($json_data);
                         exit;
                     } else
@@ -1915,6 +1925,8 @@ class TenantController extends Ve_Controller_Base {
         $tenantUserModel = new Model_TenantUser();
         $tenantData = $tenant->getTenantById($tuId);
         $tenantuser = $tenantUserModel->getTenantUsers($tenantData[0]->id);
+        $tenantadmin = $tenant->getTenantByUser($this->userId); 
+        $this->view->tenantadmin = $tenantadmin;
         $this->view->tenantData = $tenantData[0];
         $this->view->tenantuser = $tenantuser;
     }
@@ -1924,10 +1936,15 @@ class TenantController extends Ve_Controller_Base {
         if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->getMethod() == 'POST') {
             $data = $this->getRequest()->getPost();
             $updatedata = array();
-            $updatedata['tenantName'] = $data['tenantName'];
-            $updatedata['suite'] = $data['suite_location'];
+            $updatedata['tenantName'] = $data['tenantName'];           
             $updatedata['billtoAddress'] = $data['billtoAddress'];
 
+            if($this->roleId==5){
+                $updatedata['tenantContact'] = $data['tenantContact'];
+                $updatedata['tenantName'] = $data['tenantName']; 
+            }else{
+                $updatedata['suite'] = $data['suite_location'];
+            }
             try {
                 $tenantModel = new Model_Tenant();
                 $res = $tenantModel->updateTenant($updatedata, $data['tId']);
@@ -2074,6 +2091,542 @@ class TenantController extends Ve_Controller_Base {
         
     }
 
+
+      /*     * *
+     * Show tenant coi's detail
+     */
+
+    public function coidetailAction() {
+      
+        $tenant = new Model_Tenant();
+        $tenantuser = $tenant->getTenantByUser($this->userId);               
+         
+        //Restriced others user can noly Tenant Admin can Access it
+         if(isset($tenantuser[0]->role_id) && !empty($tenantuser[0]->role_id)){
+            if($tenantuser[0]->role_id !=5){
+              $this->_redirect('/tenant/noaccess');
+            }
+        } 
+
+        if(isset($tenantuser[0]->buildingId) && !empty($tenantuser[0]->buildingId)){
+            $buildingId = $tenantuser[0]->buildingId;
+            $buildingMapper = new Model_Building();
+            $getcostcenter = $buildingMapper->getcostcenterByBuildingId($buildingId);   
+            $cdModel = new Model_CoiDetails();		
+            $coiDetails = $cdModel->getCoidetails($buildingId);
+            $data['Building_ID'] = $buildingId;
+            $data['uniqueCostCenter'] = $getcostcenter[0]->uniqueCostCenter;				 
+        }
+        $template = new Model_CioRequirement(); 
+        $tempdata= $template->GetAllGeneralRequirment($buildingId);
+       //echo '<pre>';
+        $tempdatasecond= $template->GetAllAutomobileRequirment($buildingId);
+        $templatteumbrella=$template->GetAllUmbrellaRequirment($buildingId);
+        $templatteWorkers=$template->GetAllWorkersRequirment($buildingId);      
+        // where id = $tenantId 
+        $tModel = new Model_Tenant();
+        $bs = $tModel->getTenantCoiByBId($buildingId, $this->userId);	
+      
+        //if(!empty($bs->coi_au_date_to)
+       // echo '<pre>';
+       // print_r($tenantuser);
+        //print_r($bsList);
+       // tenantId == 721
+        $woCOI = new Model_CioRequirement(); 
+        $coilist = $woCOI->getReportByBId($this->select_build_id);								
+        
+        $this->view->templatedetails = $tempdata;   
+        $this->view->templatedetailsseconnd =$tempdatasecond;
+        $this->view->templatedetailsthird=$templatteumbrella; 
+        $this->view->templatteWorkers=$templatteWorkers;
+        $this->view->coiDetails = $coiDetails;
+        $this->view->bsCOI = $bs;
+
+
+    }
+    
+    public function tenantinfoAction() {
+        $tenant = new Model_Tenant();
+        $tenantuser = $tenant->getTenantByUser($this->userId); 
+        //Restriced others user can noly Tenant Admin can Access it
+        if(isset($tenantuser[0]->role_id) && !empty($tenantuser[0]->role_id)){
+            if($tenantuser[0]->role_id !=5){
+              $this->_redirect('/tenant/noaccess');
+            }
+        }
+        $msgId = $this->_getParam('msg', 0);
+        $msg = '';
+        if ($msgId == 1) {
+            $msg = 'Tenant user has been created successfully.';
+        }
+
+        if ($msgId == 2) {
+            $msg = 'Tenant user has been updated successfully.';
+        }
+        if ($msgId == 3) {
+            $msg = 'Tenant has been deleted successfully.';
+        }
+        $tm = new Zend_Session_Namespace('tenant_message');
+        if (!isset($tm->msg) && $msgId != 0) {
+            $tm->msg = $msg;
+            $this->_redirect('/tenant/tenantinfo');
+        }
+        $tenant = new Model_Tenant();
+        $tenantuser = $tenant->getTenantByUser($this->userId);
+        //var_dump($tenantuser);
+
+        $this->view->roleId = $this->roleId;
+        $this->view->tenantuser = $tenantuser[0];
+    }
+
+    /** Tenant admin and Tenant user account setting  */
+    public function myaccountsettingAction() {
+       
+        //Restriced others user can noly Tenant Admin can Access it
+        if(isset($this->tenantuser[0]->role_id) && !empty($this->tenantuser[0]->role_id)){
+            if($this->tenantuser[0]->role_id ==5 || $this->tenantuser[0]->role_id ==7){               
+                $this->view->roleId = $this->roleId;
+                $this->view->tenantuser = $this->tenantuser[0];
+                $sendMapper = new Model_SendAs();
+                $sendDetail = $sendMapper->getSendAs();
+                $this->view->sendDetail = $sendDetail;
+                 // updated userName and email
+                 if(Zend_Auth::getInstance()->getStorage()->read()->userName !=$this->tenantuser[0]->userName){
+                    $this->_helper->_redirector->gotoUrl('/logout');
+                }
+                if(Zend_Auth::getInstance()->getStorage()->read()->userName !=$this->tenantuser[0]->userName){
+                    $this->_helper->_redirector->gotoUrl('/logout');
+                }
+            }
+            else{
+                $this->_redirect('/tenant/noaccess');
+            }
+        }else{         
+                $this->_redirect('/tenant/noaccess');
+           
+        }
+        
+        $msgId = $this->_getParam('msg', 0);
+        $msg = '';
+        if ($msgId == 1) {
+            $msg = 'Tenant user has been created successfully.';
+        }
+
+        if ($msgId == 2) {
+            $msg = 'Tenant user has been updated successfully.';
+        }
+        if ($msgId == 3) {
+            $msg = 'Tenant has been deleted successfully.';
+        }
+        $tm = new Zend_Session_Namespace('tenant_message');
+        if (!isset($tm->msg) && $msgId != 0) {
+            $tm->msg = $msg;
+            $this->_redirect('/tenant/tenantinfo');
+        }     
+        
+    }
+
+    public function noaccessAction() {
+    }
+ 
+    // update coi by Tenant Admin
+    public function editttenantserviceAction(){
+
+		$this->_helper->layout()->disableLayout();
+		$data = $this->getRequest()->getPost();
+		//$this->view->bsid= $data['bsid'];
+		$this->view->bId= $data['cid'];
+		$cModel = new Model_CoiList();
+        $serviceData = $cModel->geteditcoiList($data['cid']);
+		$this->view->serviceData = $serviceData;
+		
+	}// close edit service
+
+
+    // add update coi by Tenant Admin
+    public function updateserviceAction(){
+		if($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->getMethod() == 'POST') 
+		 {
+			 $data = $this->_request->getPost();         
+
+			 $message = array();		 
+			 
+			 if($data['coi_au_tenant_id']== '' || $data['coi_au_date_to']==''){
+				 $message['status'] = 'error';
+				 $message['msg']='Fill the Form Properly';				 
+			 }else{
+				    $cModel = new Model_CoiList();
+                    $fileData = $cModel->getcoiList($data['coi_au_tenant_id']);	
+            				
+                     //	PDF upload Code Here				
+                    $filename = basename($_FILES['file']['name']['equipmentmenual']);
+					if(!empty($filename)){
+					$uploaddir = IMAGE_UPLOAD_DIR . '/public/coi/';
+					
+					//delete PDF from the folder Code Here
+					$file_name = $fileData[0]['coi_au_pdf_upload'];
+                    $uploadfile = $uploaddir . '' . $file_name;						
+                    if (file_exists($uploadfile)) {
+                        unlink($uploadfile);
+                    }					
+					$fileNewName = $data['tenant_Id'].".".pathinfo($filename, PATHINFO_EXTENSION);							
+					$da = move_uploaded_file($_FILES['file']['tmp_name']['equipmentmenual'], $uploaddir . '' . $fileNewName);
+                    $data['coi_au_pdf_upload'] = $fileNewName;
+				    }else{
+						$data['coi_au_pdf_upload'] = $fileData[0]['coi_au_pdf_upload'];
+					}			
+				    $data['coi_au_date_to'] = date("Y-m-d", strtotime($data['coi_au_date_to']));
+				                    
+					 try{						
+						 $submitBuildingService = $cModel->updateBuildService($data,$data['coi_au_tenant_id']);
+                         //send email to account manager
+						 $this->sendcoiAccountManagerMail($data,$uploadfile);
+						 $message['status'] = 'success';
+				         $message['msg']='Coi List Updated successfully.';
+					 }catch(Exception $e){
+					    $message['status'] = 'error';
+				        $message['msg']='Error Occurred during the update Coi List';
+					 }
+				 
+			 }
+			 
+			echo json_encode($message);
+		 }
+		 exit(0);
+	}// close update service
+
+    //When add edit coid by Tenant's Admin after that send Email to building Contact Manager
+
+    public function sendcoiAccountManagerMail($data,$uploadfile){
+        $message = array();
+        $tenantUserModel = new Model_TenantUser();
+        $tModel = new Model_Tenant();
+        $tenantuser = $tModel->getTenantByUser($this->userId);
+        $tenantData = array();
+        //required tenant info 
+       
+        $tenantData['tenantName'] = $tenantuser[0]->tenantName;
+        $tenantData['firstName'] = $tenantuser[0]->firstName;
+        $tenantData['lastName'] = $tenantuser[0]->lastName;
+        $tenantData['userName'] = $tenantuser[0]->userName;
+        $tenantData['email'] = $tenantuser[0]->email;
+        $tenantData['buildingId'] = $tenantuser[0]->buildingId;
+        $tenantData['tenantId'] = $tenantuser[0]->tenantId;
+        $tenantData['firstnamelastname'] = $tenantuser[0]->firstname." ".$tenantuser[0]->lastname;
+        $tenantData['email'] = $tenantData[0]->email;					
+        $tenantData['address1'] = $tenantuser[0]->address1;
+        $tenantData['address2'] = $tenantuser[0]->address2;
+        $tenantData['suite'] = $tenantuser[0]->suite;
+        $tenantData['city'] = $tenantuser[0]->city;
+        $tenantData['state'] = $tenantuser[0]->state;
+        $tenantData['postalCode'] = $tenantuser[0]->postalCode; 
+
+        
+        $companyModel = new Model_Company();
+        //Building info
+        $buildingId = $tenantuser[0]->buildingId;
+        $buildingMapper=new  Model_Building();
+        $buildDataArr = array();
+		$buildData = $buildingMapper->getbuildingbyid($buildingId);
+        $buildDataArr['build_id']= $buildData[0]['build_id'];
+        $buildDataArr['cust_id']= $buildData[0]['cust_id'];
+        $buildDataArr['buildingName']= $buildData[0]['buildingName'];       
+
+        // Tenant's coi detail 
+        $bscoiArr = $tModel->getTenantCoiByBId($buildingId, $this->userId);	
+        $tenantData['coi_au_pdf_upload'] = $bscoiArr[0]->coi_au_pdf_upload;
+
+        //Property Manager list Role = 4 
+        $propetyMangerList = $companyModel->getUserBuildingUserByRoleId($buildingId, $nottenant=true,$role_id=4);   
+        // Email subject Building Name | Tenant Name | updated COI
+        if(!empty($propetyMangerList)){
+        foreach($propetyMangerList as $propertymanger){
+           $this->sentCoiUpdatedEmail($buildDataArr,$tenantData,$propertymanger);
+          
+        }
+        }
+              
+    }
+
+    public function sentCoiUpdatedEmail($buildData,$tenantData,$propertymanger,$htmlDocId=''){
+       
+        $message = array();      
+        if(isset($tenantData['buildingId']) && !empty($tenantData['buildingId'])){
+            $buildingId = $tenantData['buildingId'];
+            $buildingMapper = new Model_Building();
+            $userModel = new Model_User();
+            $nottenant = 1;
+            $companyModel = new Model_Company();
+            $getcostcenter = $buildingMapper->getcostcenterByBuildingId($buildingId);   
+            $cdModel = new Model_CoiDetails();		
+            $coiDetails = $cdModel->getCoidetails($buildingId);
+            $data['Building_ID'] = $buildingId;
+            $data['uniqueCostCenter'] = $getcostcenter[0]->uniqueCostCenter;
+            $emailMapper = new Model_Email();
+            if($htmlDocId == '') {
+                  $htmlDocId = 67; // email template id
+            }
+            $loadTemplate = $emailMapper->loadEmailTemplate($htmlDocId);
+             if($loadTemplate){  
+                 
+              /******get Company Name ******/
+            $currDate = date('F d, Y');
+
+			$accoutMapper = new Model_Account();
+			$company = $accoutMapper->getcompany($this->cust_id);
+			$companyName = $company[0]['companyName'];
+
+            $header_data = $this->getHeaderData($company);
+            $footer_data = $this->getFooterData();
+            // $footer_data	=	$this->getFooterData();
+            $emailContent = $loadTemplate[0];
+            $emailSubject = $emailContent['email_subject'];
+            $emailSubject = str_replace('[[++buildingName]]', $buildData['buildingName'], $emailSubject);
+            $emailSubject = str_replace('[[++tenantname]', $tenantData['tenantName'], $emailSubject);
+            //$emailSubject = str_replace('[[++updatecoi]]', $header_data['building_logo_src'], $emailBody);
+            // End Email subject
+            $content = $emailContent['email_content'];
+            
+            
+            ///// header 
+            $content = str_replace('[[++companyLogo]]', $header_data['building_logo_src'], $content);
+            $content = str_replace('[[++voctechLogo]]', $header_data['voctech_logo_src'], $content);
+            $content = str_replace('[[++currDate]]', $header_data['date'], $content);
+            $content = str_replace('[[++costNumber]]', $header_data['corp_account_number'], $content);
+            ///// end header
+			
+            $content = str_replace('[[++currDate]]', $currDate, $content);
+			$content = str_replace('[[++companyName]]', $companyName, $content);
+			
+			 $content = str_replace('[[++currDate]]', $currDate, $content);
+			$content = str_replace('[[++companyName]]', $companyName, $content);
+            $content = str_replace('[[++buildingName]]', $buildData['buildingName'], $content);
+            $content = str_replace('[[++tenantName]]', $tenantData['tenantName'], $content);
+            $content = str_replace('[[++firstnamelastname]]', $tenantData['firstName'].' '. $tenantData['lastName'], $content);
+           
+			
+
+			
+		//	$content = str_replace('[[++Status]]', $detail['status'], $content);
+		//	$content = str_replace('[[++ExpDate]]', $detail['expirationDate'], $content);
+            ///// Footer 
+            $content = str_replace('[[++footerInfo]]', $footer_data['footer_info'], $content);
+           
+            ///// End Footer
+            // ///// End Footer
+			// Email subject start
+            $mail = new Zend_Mail('utf-8');							
+			$mail->addTo($propertymanger->email);
+			$mail->addTo('dadhikuriyal@teckvalley.com');
+			$mail->setSubject($emailSubject);
+            $setModel = new Model_Setting();
+            $setData = $setModel->getSetting();
+            if($setData){
+            	$setting = $setData[0];
+            	$mail->setFrom($setting['from_email'],$setting['from_name']);
+            	$return_path = new Zend_Mail_Transport_Sendmail('-f'.$setting['from_email']);
+            // 	if($setting['bcc_email'])
+            // 	$mail->addBcc($setting['bcc_email'], $setting['bcc_name']);
+            }else{
+            //	$mail->setFrom('support@visionworkorders.com','Vision Work Orders');
+            //	$return_path = new Zend_Mail_Transport_Sendmail('-fsupport@visionworkorders.com');
+            }
+
+
+               // $mail->setFrom($setting['from_email'],$setting['from_name']);
+				//Zend_Mail::setDefaultTransport($return_path);
+                $mail->setBodyHtml($content);
+                $filename = $tenantData['coi_au_pdf_upload'];           
+ 
+                // // pdf attachement
+                $uploaddir = IMAGE_UPLOAD_DIR . '/public/coi/';    
+                
+                $content = file_get_contents($uploaddir . '' . $filename); // e.g. ("attachment/abc.pdf")
+                $attachment = new Zend_Mime_Part($content);
+                $attachment->type = 'application/pdf';
+                $attachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+                $attachment->encoding = Zend_Mime::ENCODING_BASE64;
+                $attachment->filename = $filename; // name of file
+                $mail->addAttachment($attachment);
+                $res = $mail->send();	
+                return $res;
+
+			
+            }				 
+        }
+    }
+
+    public function edittenantmyaccountinfoAction() {
+        $this->_helper->layout()->setLayout('popuplayout');
+        $tuId = $this->_getParam('tuId');
+        $tenant = new Model_Tenant();
+        $tenantUserModel = new Model_TenantUser();
+        $tenantData = $tenant->getTenantById($tuId);
+        $tenantuser = $tenantUserModel->getTenantUsers($tenantData[0]->id);
+        $tenantadmin = $tenant->getTenantByUser($this->userId); 
+        $this->view->tenantadmin = $tenantadmin;
+        $this->view->tenantData = $tenantData[0];
+        $this->view->tenantuser = $tenantuser;
+    }
+
+    public function edittenantadminaccountinfoAction() {
+        $this->_helper->layout()->setLayout('popuplayout');
+        $tuId = $this->_getParam('tuId');
+        $message = array();
+        $tenantUserModel = new Model_TenantUser();
+        $tenant = new Model_Tenant();
+        $tenantData = $tenantUserModel->getTenantUserById($tuId);
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $data = $this->getRequest()->getPost();
+            //print_r($data); die;
+            $uid = $data['uid'];
+            $userData = array();
+            $userData['userName'] = html_entity_decode($data['userName']);
+            $userData['email'] = html_entity_decode($data['email']);
+            $userData['firstName'] = addslashes($data['firstname']);
+            $userData['lastName'] = addslashes($data['lastname']);
+          //  $userData['suite_location'] = $data['suite_location'];
+            $userData['phoneNumber'] = $data['phone'];
+            //$userData['role_id'] = $data['access'];
+            $userData['regDate'] = date('Y-m-d H:i:s');           
+            $userData['note_notification'] = addslashes($data['note_notification']);
+            $send_email = 0;
+            if (isset($data['auto']) && $data['auto'] == 1) {
+                $gpass = $this->generateRandomString();
+                $userData['password'] = md5($gpass);
+                $data['password'] = $gpass;
+                $send_email = 1;
+            } else if (!empty($data['password'])) {
+                $userData['password'] = md5($data['password']);
+                $send_email = 1;
+            } else {
+                $data['password'] = '';
+            }
+
+            if ($tenantData[0]->userName != $data['userName'])
+                $send_email = 1;
+
+            if ($tenantData[0]->email != $data['email'])
+                $send_email = 1;
+
+            $userModel = new Model_User();
+            $userNameDetail = $userModel->checkUserName($data['userName'], $uid);
+            $userEmailDetail = $userModel->checkUserEmail($data['email'], $uid);
+            if (!$userNameDetail && !$userEmailDetail) {
+                try {
+                  
+                    $userData['uid'] = $userModel->updateUser($userData, $uid);
+
+                  
+                    if (isset($_FILES['file']['name'])) {
+                        $uploaddir = BASE_PATH . 'public/user_img/';
+                        $uploadfile_name = 'WO-' . time() . '-' . basename($_FILES['file']['name']);
+                        $uploadfile = $uploaddir . '' . $uploadfile_name;
+                        if (!file_exists($uploaddir)) {
+                            mkdir($uploaddir, 0777, true);
+                        }
+                        move_uploaded_file($_FILES["file"]["tmp_name"], $uploadfile);
+                        $file_name = $uploadfile_name;
+                        try {
+                            $userModel->updateUser(array('user_img' => $uploadfile_name), $data['uid']);
+                            $message['status'] = 'success';
+                            $message['msg'] = 'User edit successfully.';
+                        } catch (Exception $e) {
+                            $message['status'] = 'error';
+                            $message['msg'] = 'Error occurred during user edit.';
+                        }
+                    }
+
+
+                    $id = $data['id'];
+                    $tenantUserData['suite_location'] = $data['suite_location'];
+                    if ($this->roleId == 5) {
+                     $tenantUserData['cc_enable'] = $data['cc_enable'];
+                    }
+                    $tenantUserData['send_as'] = $data['send_as'];
+                    $tenantUserData['complete_notification'] = $data['complete_notification'];
+
+
+                    if ($data['welcome_letter'] == 1) {
+                        $this->sendemailAction(true, $data['uid'], $data['tenantId'], $data['password']);
+                    } elseif ($send_email == 1) {
+                        $this->sendemailAction(true, $data['uid'], $data['tenantId'], $data['password']);
+                    }
+
+                    $tenantUserModel->updateTenantUser($tenantUserData, $id);
+                    $build_ID = $data['building'];
+                    $tId = $data['tenantId'];
+                    if ($this->roleId == 5 || $this->roleId == 7) {
+                        //$this->_redirect('/tenant/tenantuser/msg/2');
+                        $json_data['msg'] = "Record successfully updated!";
+                        $json_data['url'] = '/tenant/myaccountsetting/msg/2';
+                        echo json_encode($json_data);
+                        exit;
+                    } else
+                    //$this->_redirect('/tenant/users/bid/'.$build_ID.'/tId/'.$tId.'/msg/2');
+                        $json_data['msg'] = "Record successfully updated!";
+                    $json_data['url'] = '/tenant/users/myaccountsetting/' . $build_ID . '/tId/' . $tId . '/msg/2';
+                    echo json_encode($json_data);
+                    exit;
+                } catch (Exception $e) {
+                    $message['msg'] = 'Error occured';
+                }
+            } else
+                $message['msg'] = 'Error occured';
+        }
+        if ($tenantData) {
+            $tuserDetail = $tenantData[0];
+            $tenantData = $tenant->getTenantById($tuserDetail->tenantId);
+            $this->view->roleId = $this->roleId;
+            $this->view->tenantId = $tuserDetail->tenantId;
+            $this->view->tenantData = $tenantData[0];
+            $this->view->tuserDetial = $tuserDetail;
+            $this->view->tenantuser = $this->tenantuser[0];
+        } else
+            $message['msg'] = 'Invalid Data';
+        $this->view->message = $message;
+        
+    }
+
+    public function currentusersAction(){
+      
+		if( isset($this->tenantuser) && !empty($this->tenantuser) ){
+            $tenantId = $this->tenantuser[0]->id;
+            $userId = $this->tenantuser[0]->userId;
+            $buildingId = $this->tenantuser[0]->buildingId;
+            $uinfo = $this->tenantuser[0];
+            $tenant = new Model_Tenant();
+            $tenantuser = new Model_TenantUser();
+            $tenantuser = $tenantuser->getTenantUsers($uinfo->id,$buildingId);          
+            $tenantAdminList =  $tenant->getAllTenantsByBuildingId($buildingId,5,$tenantId); 
+            $tenantUserList = $tenant->getAllTenantsByBuildingId($buildingId,7,$tenantId); 
+            $sendMapper = new Model_SendAs();
+            $sendDetail = $sendMapper->getSendAs();
+            $send_data = array();
+            foreach ($sendDetail as $sd) {
+                $send_data[$sd['sid']] = $sd['title'];
+            }
+           $this->view->tenantAdminList = $tenantAdminList;           
+           $this->view->tenantUserList = $tenantUserList;
+           $this->view->send_data = $send_data;
+           $this->view->tenantId  = $tenantId;
+           $this->view->userId  = $userId;
+            if(Zend_Auth::getInstance()->getStorage()->read()->userName !=$this->tenantuser[0]->userName){
+                $this->_helper->_redirector->gotoUrl('/logout');
+            }
+            if(Zend_Auth::getInstance()->getStorage()->read()->userName !=$this->tenantuser[0]->userName){
+                $this->_helper->_redirector->gotoUrl('/logout');
+            }
+
+          
+        }else{
+            $this->_redirect('/tenant/noaccess');
+        }
+      
+    }
 }
+
+
+
 
 ?>

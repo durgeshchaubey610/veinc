@@ -5226,6 +5226,21 @@ span#autoGenerate-error {
     padding: 10px 15px;
 }
 
+/*Tenant Version Menu */
+.tentVesionWrap {
+    color: #fff;
+    padding: 10px 17px;
+    position: fixed;   
+    bottom: 10px;   
+    background :#243342!important;
+    width:250px;
+}
+.menuver22 .nav>li{
+    overflow:hidden;
+}
+.menuver23 .nav>li{
+    overflow:hidden;
+}
 /* popup issue*/
 
 .modal-backdrop {
@@ -5875,3 +5890,175 @@ width:100%;
 .page-heading-detail-wrap .page-heading-detail-wrap-btn { text-align: center; padding: 0px; }
     
 }
+@media screen and (min-width:1025px) {
+    .tenantcoi{ margin: 0px -15px;}
+    .tenant-panel{ margin: 0px -15px;}
+}
+@media (min-width:767px){
+    .nav>li{
+        overflow:hidden;
+    }
+    .tenantpanel-right{margin: 0px -15px;}
+    .tenant-panel h3{
+        font-size: 17px;
+        background: #504f4d;
+        padding: 20px 11px;
+        color: #fff;
+        text-align:center;
+        margin: 20px -1px;
+    }
+    .tenantcoi_table_row {
+        margin-left: -15px!important;
+        margin-right: -15px!important;
+      }
+      .coi_thead th {
+        border: 1px solid #333!important;
+        text-align: center;
+      }
+      .coi_thead{
+        background: -webkit-linear-gradient(top, #e4e4e4 0%,#a7a7a7 37%,#909090 100%);
+      }
+      .tenantpanel h3{
+        font-size: 17px;
+        background: #504f4d;
+        padding: 15px 11px;
+        margin:15px -1px;
+        color: #fff;
+        text-align:center;
+     }
+    .tenantpanel .tuser-list .building_table_grid tr th {
+        background: #504f4d;
+        border: 1px solid #e2e2e2;
+        color: #ffffff;
+        font-size: 14px;
+        padding: 10px 8px;
+      }
+      .inner-rec td {
+        padding: 5px 10px;
+      }
+      .inner-rec td table td{
+        padding: 3px 5px;
+      }
+      .tenantpanel td.add_record{
+        background: #504f4d;
+      }
+     .tenantpanel-right{
+        border:3px solid #243442;
+     }
+} 
+.tenantadmin .row textarea {height: auto !important;}
+.tenant-panel-form .tte-input-div { width:158px;}
+.content.no-padding{padding: 0 !important;}
+.tenant-account-setting input[type="checkbox"].read{
+    pointer-events: none;
+}
+.current-users .no-padding{
+    padding: 0px;
+}
+.current-users tbody tr td {
+    border: 1px solid #000 !important; text-align: center;
+  }
+  .current-users tbody tr td:last-child{border-right: 0 !important}
+  .current-users tbody tr td:first-child{border-left: 0 !important }
+  .current-users td a img {
+    width: 15px;
+  }
+  .tuser-type {
+    padding: 10px;
+  font-weight: 900;
+  }
+  .tenantcoi h3{
+    font-size: 17px;
+    background: #504f4d;
+    padding: 20px 11px;
+    color: #fff;
+    text-align:center;
+    margin: 20px -1px;
+}
+.tenant-panel .container-right {
+    max-width: 100% !important;
+}
+.tenantcoi .container-right {
+    max-width: 100% !important;
+}
+.content-center {
+    width: 390px;
+    overflow: hidden;
+    margin: auto;
+}
+.content-center  .field_edit_popup label{    
+    font-weight: bold;
+}
+  @media screen and (min-width:250px) and (max-width: 767px){
+    .current-users {display: block;overflow-x: auto;white-space: nowrap;}
+ }
+ .tnt-btn{
+    font-style: italic;
+    color:#fff;
+}
+.tnt-btn input{
+    font-style: italic;
+    color:#fff;
+    padding: 5px 60px;
+    background: #349941;
+    border: 1px solid #000;
+}
+.current-users{
+    font-weight: bold;
+}
+.mg-50{
+    margin: 50px 0px !important;
+}
+section.ch-home-form form .row select#send_as {
+    width: 150px !important;
+}
+section.ch-home-form form .row select.status {
+    width: 150px !important;
+}
+.content-center .field_edit_popup label{
+    width: 40%;
+ }
+ .content-center .field_edit_popup > span {
+   width: 60%;
+   display: block;
+   word-break: break-all;
+ }
+ ul.my_mid_nav li {
+    min-height: 46px !important;
+  }
+  
+ @media (min-width: 1025px){
+    .navbar-static-side{
+        min-height: 500px;
+    }
+ }
+ .tenant-panel h3 {
+    color: #fff;
+    font-size: 15px;
+    margin: 0;
+    padding: 9px 8px;
+    background: #34495e;
+    text-align: left;
+  }
+ .tenantcoi h3 {
+    color: #fff;
+    font-size: 15px;
+    margin: 0;
+    padding: 9px 8px;
+    background: #34495e;
+    text-align: left;
+  }
+  .tenantcoi{
+    border:1px solid #243442 transparent !important;
+  }
+
+.tenant-panel{ border:0px !important;}
+.tenantcoi{
+    border:1px solid #e2e2e2 !important;
+}
+.tenantcoi .message{
+    margin-top: 0px;
+ }
+ .blockActionUI{
+    pointer-events: none;
+  }

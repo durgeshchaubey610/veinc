@@ -64,7 +64,7 @@ $sendDetail = $sendMapper->getSendAs();
 							<div class='col-lg-6 '>
 							<label>Suite/Location :<span class="required">*</span></label><span class="usuiteErr" id="suite-error"></span> 
                             <div class="tte-input-div">	
-							<input type="text" required="" id="suite_location" class="" name="suite_location" value="<?php echo $this->tuserDetial->suite_location;?>">
+							<input type="text" required="" id="suite_location" class="" name="suite_location" value="<?php echo $this->tuserDetial->suite_location;?>" <?php echo (isset($this->roleId) && $this->roleId ==5)?'readonly':'';?> >
                             </div></div>
 							<div class='col-lg-6 '>
 							<label class='ttmar'>Office Phone :<span class="required">*</span></label>
@@ -81,11 +81,17 @@ $sendDetail = $sendMapper->getSendAs();
                                 <div class="tte-input-div">
 								<select required id="access" class="status" name="access">
 									<?php 
+									  $access_disable = false; 
+									  if((isset($this->roleId) && isset($this->userId) && isset($this->tuserDetial->uid) && $this->roleId == 5)
+									   && ($this->userId==$this->tuserDetial->uid)){
+										$access_disable  = true;
+									  }
 									   $selectedRole = array(5, 7);
 										foreach ($roleDetail as $ker => $role) {
 											if(in_array($role['roleID'], $selectedRole)){
 											  echo '<option value="'.$role['roleID'].'"';
 											  echo  ($role['roleID']==$this->tuserDetial->role_id)?'selected':'';
+											  echo  (isset($this->roleId) && ($this->roleId == 5 && $access_disable==true))?' disabled="disabled"':'';
 											  echo '>'.$role['title'].'</option>';
 										   }
 										}
