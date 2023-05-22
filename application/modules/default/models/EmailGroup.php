@@ -166,7 +166,8 @@ class Model_EmailGroup extends Zend_Db_Table_Abstract {
 	public function getCompeleteNotficationUsers($bId) {
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$emailUsers = new Model_EmailGroupUsers();
-			$usersArray='';
+			//replaced data type string to array by Dadhi Vallabh.
+			$usersArray=array();
 			// (UnComment this from privious status. durgesh Chaubey)
 			$select = $db->select()
 			->from(array('wog' => 'email_group'),array('id'))

@@ -949,6 +949,7 @@ function editTenantAdmin() {
     var phone = $.trim($('#phone').val());
     var billtoAddress = $.trim($('#billtoAddress').val());
     var tId = $.trim($('#tId').val());
+    var tenantContact = $.trim($('#tenantContact').val());
     var submit_flag = true;
     var focus_flag = false;
     if (tenantName == '') {
@@ -959,26 +960,26 @@ function editTenantAdmin() {
     } else {
         $('#taname-error').html("");
     }
-    if (main_contact == '') {
-        $('#maincontact-error').html("Main contact can't be blank");
-        if (!focus_flag) {
-            $('#main_contact').focus();
-            focus_flag = true;
-        }
-        submit_flag = false;
-    } else {
-        $('#maincontact-error').html("");
-    }
-    if (suite_location == '') {
-        $('#suite-error').html("Suite/Location can't be blank");
-        if (!focus_flag) {
-            $('#suite_location').focus();
-            focus_flag = true;
-        }
-        submit_flag = false;
-    } else {
-        $('#suite-error').html("");
-    }
+    // if (main_contact == '') {
+    //     $('#maincontact-error').html("Main contact can't be blank");
+    //     if (!focus_flag) {
+    //         $('#main_contact').focus();
+    //         focus_flag = true;
+    //     }
+    //     submit_flag = false;
+    // } else {
+    //     $('#maincontact-error').html("");
+    // }
+    // if (suite_location == '') {
+    //     $('#suite-error').html("Suite/Location can't be blank");
+    //     if (!focus_flag) {
+    //         $('#suite_location').focus();
+    //         focus_flag = true;
+    //     }
+    //     submit_flag = false;
+    // } else {
+    //     $('#suite-error').html("");
+    // }
     if (phone == '') {
         $('#office-phone-error').html("Main Contact Phone Number can't be blank");
         if (!focus_flag) {
@@ -1016,7 +1017,7 @@ function editTenantAdmin() {
             url: baseUrl + 'tenant/updatetenantinfo',
             type: 'post',
             datatype: 'json',
-            data: {tenantName: tenantName, main_contact: main_contact, suite_location: suite_location, phone_number: phone, billtoAddress: billtoAddress, tId: tId},
+            data: {tenantName: tenantName, main_contact: main_contact,tenantContact:tenantContact, suite_location: suite_location, phone_number: phone, billtoAddress: billtoAddress, tId: tId},
             success: function (data) {
                 $('.loader').hide();
                 var content = $.parseJSON(data);
@@ -1072,6 +1073,482 @@ function hidepassword() {
     }
 }
 
+function showTenantEditCoi(cid){
+	if(cid!=''){
+		$('.loader').show();
+		$.ajax({
+				url         : baseUrl+"tenant/editttenantservice",
+				type        : "post",
+				datatype    : 'json',
+				data        : {cid:cid},
+				success     : function( data ) {
+					$('.loader').hide(); 
+					//$('#edit_wo_form').show();
+					$('#edit_service_form').html(data);
+					//$('#edit_service_form').show();
+					//$('.service_popup_form').show();
+					$('#edit_service_form_href').trigger('click');
+				},
+				error       : function(){
+					$('.loader').hide();
+					alert('There was an error');
+				}  
+				
+			 });
+	 }
+} 
+
+
+function showAddCoiTenant(tId){
+	if(tId!=''){
+		$('.loader').show();
+		$.ajax({
+				url         : baseUrl+"coilist/addservice",
+				type        : "post",
+				datatype    : 'json',
+				data        : {tId:tId},
+				success     : function( data ) {
+					$('.loader').hide(); 
+					//$('#edit_wo_form').show();
+					$('#add_service_form').html(data);
+					//$('#add_service_form').show();
+					//$('.service_popup_form').show();
+					$('#add_service_form_href').trigger('click');
+				},
+				error       : function(){
+					$('.loader').hide();
+					alert('There was an error');
+				}  
+				
+			 });
+	 }
+}
+
+
+/** Tenant Add/Edit popup */
+
+function updateCoi(cid){
+	parent.CheckForSessionpop(baseUrl);
+	if(cid!=''){
+		
+		var submit_flag=true;
+		$('#save_service').attr('disabled','disabled');
+		var userData = new FormData();	
+		var buliding_id = $('#buliding_id').val();
+		var unique_cost = $('#unique_cost').val();				
+		var tenant_number = $('#tenant_number').val();
+		var tenant_id = $('#tenant_id').val();		
+		var coi_date_from = $('#coi_date_from').val();
+		var coi_type = $('#coi_type').val();
+		var edit_expiration_date = $('#edit_expiration_date').val();
+		var equipmentmenual = $("#equipmentmenual").val().trim();
+      
+        if(edit_expiration_date==''){			
+			$('#cerror_expiration').html('Please enter Expiration Date.');
+			submit_flag = false;
+		}else{
+			$('#cerror_expiration').html('');
+		}
+        
+        var manual = $("#equipmentmenual").prop('files')[0];
+		var flag_val = escape($("#equipmentmenual").attr('name'));
+		
+        if (typeof manual !== 'undefined') {
+        var ext = manual.name.split(".");
+        var type_ext = ext[ext.length - 1];
+        //console.log(type_ext);
+        if (type_ext !== 'pdf' && type_ext !== 'PDF') {
+            $("#equipmentmenual").focus();
+            $("#equipmentmenual").addClass('error-border');
+            $("#equipmentmenual_error").html("Please upload Only a PDF File");
+            submit_flag = false;
+        } else {
+            $("#equipmentmenual_error").html("");
+            $("#equipmentmenual").removeClass('error-border');
+        }
+    }
+   
+         if(submit_flag==false){			 
+			$('#save_service').attr('disabled',false);
+			return false; 
+		 }else{			 
+			   
+			   if (typeof manual !== 'undefined') {
+			    userData.append('file[' + flag_val + ']', manual);  
+			   }
+                userData.append('building_id', buliding_id);
+				userData.append('uniquecostcenter', unique_cost);
+				userData.append('tenant_number', tenant_number);
+				userData.append('tenant_Id', tenant_id);
+				userData.append('coi_au_date_from', coi_date_from);
+				userData.append('coi_au_date_to', edit_expiration_date);
+				userData.append('coi_au_Ten_or_Vendor', coi_type);
+				userData.append('coi_au_tenant_id', cid);
+			 
+			    $('.loader').show();
+				$.ajax({
+						url         : baseUrl+"tenant/updateservice",
+						type        : "post",
+						datatype    : 'json',
+						cache       : false,
+                        contentType : false,
+                        processData : false,
+                        data        : userData,
+						success     : function( data ) {
+							$('.loader').hide(); 
+							var content = $.parseJSON(data);
+							if(content.status=='success'){
+								$('#error_msg').html('');
+								$('#success_msg').html(content.msg);
+								location.reload();
+							}else{
+								//alert('Error occurred');
+								$('#success_msg').html('');
+								$('#error_msg').html(content.msg);
+								$('#save_service').attr('disabled',false);
+							}
+						},
+						error       : function(){
+							$('.loader').hide();
+							setInterval(function(){ jAlert('There was an error', 'Vision Work Orders'); }, 1000);
+						}  
+						
+					 });
+		 }
+        
+        
+	}else{
+		alert('Error Occurred');
+		return false;
+	}
+}
+
+/** Cancel or close Add/Edit popup */
+function cancelEditService(){
+	$('#edit_service_form').html('');
+	$('#edit_service_form').hide();
+	$('.service_popup_form').hide();
+    $('.fancybox-wrap').hide();
+    $('#fancybox-overlay').hide();
+}
+
+
+function editTenantAdminSetting(url) {
+    CheckForSessionpop(baseUrl);
+    $('a[href="#editTenantAdminSetting"]').fancybox({
+        type: 'iframe',
+        href: url,
+        width: 750,
+        height: 600,
+        'beforeClose': function () {
+            $('.loader').hide();
+        },
+        'afterLoad': function () {
+            $.fancybox.hideLoading();
+            $('.loader').show();
+            setInterval(function () {
+                $('.loader').hide();
+            }, 5000);
+        }
+    });
+}
+
+/**
+ * check user name of tenant user
+ */
+
+ function checkTenantUserName() {
+    parent.CheckForSessionpop(baseUrl);
+    var userName = $('#userName').val();
+    var uid = $('#uid').val();
+    var panel_role_id = $('#panel_role_id').val();
+    if (userName != '') {
+        if (userName.length < 3) {
+            $('.unameErr').html("User name should be at least 3 character.");
+            $('#userName').addClass('inputErr');
+            $('#userName').focus();
+        } else {
+            $.ajax({
+                type: "POST",
+                url: baseUrl + 'tenant/checkusername',
+                data: {userName: userName, uid: uid, panel_role_id:panel_role_id},
+                success: function (msg) {
+                    //alert(msg);
+                    $('.loader').hide();
+                    if (msg != true) {
+                        $('.unameErr').html("");
+                        $('#userName').removeClass('inputErr');
+                        checkTenantUserEmail();
+                    } else {
+                        //alert('Company is not existed');
+                        $('.unameErr').html("User name already in use.");
+                        $('#userName').addClass('inputErr');
+                        $('#userName').focus();
+                        return false;
+                    }
+                }
+            });
+        }
+
+    } else {
+        $('.loader').hide();
+        $('.unameErr').html("Enter the user name");
+        $('#userName').addClass('inputErr');
+        $('#userName').focus();
+        return false;
+    }
+}
+
+
+/**
+ * check email-id of tenant user
+ */
+
+ function checkTenantUserEmail() {
+    $('.loader').show();
+    var checkComp = false;
+    var email = $.trim($('#email').val());
+    var uid = $('#uid').val();
+    //alert('cname'+cname);
+    if (email != '') {
+        if (!validateEmail(email)) {
+            $('.uemailErr').html("E-Mail Address Invalid");
+            $('#email').addClass('inputErr');
+            $('#email').focus();
+        } else {
+            $.ajax({
+                type: "POST",
+                url: baseUrl + 'tenant/checkuseremail',
+                data: {email: email, uid: uid},
+                success: function (msg) {
+                    $('.loader').hide();
+                    if (msg != true) {
+                        $('#email-error').html("");
+                        $('#email').removeClass('inputErr');
+                        editTeantUser();
+                    } else {
+                        //alert('Company is not existed');
+                        $('#email-error').html("Email already in use.");
+                        $('#email').addClass('inputErr');
+                        $('#email').focus();
+                        return false;
+                    }
+                }
+            });
+        }
+
+    } else {
+        $('.loader').hide();
+        $('#email-error').html("Enter the email-id");
+        $('#email').addClass('inputErr');
+        $('#email').focus();
+        return false;
+    }
+
+}
+
+
+function editTeantUser() {   
+    var submit_flag = 0;
+    var userName = $('#userName').val();
+    var email = $('#email').val();
+    var firstname = $('#firstname').val();
+    var lastname = $('#lastname').val();
+    var phone = $('#phone').val();
+    var send_as = $('#send_as').val();
+    var access = $('#access').val();
+    var userId = $('#user_id').val();
+    var password = $('#password').val();
+    var tenantId = $('#tenantId').val();
+    var building = $('#building').val();
+    var uid = $('#uid').val();
+    var id = $('#id').val();
+    var role_id = $('#role_id').val();
+    var panel_role_id = $('#panel_role_id').val();
+    var suite_location = $('#suite_location').val();
+    var confirm_password = $('#confirm_password').val();
+    var auto = 0;
+    var complete_notification = 0;
+    var note_notification = 0;
+    var cc_enable = 0;
+    var status = 0;
+    var welcome_letter = 0;
+    if (firstname == '') {
+        $('.ufirstErr').html("First Name Required");
+        $('#firstname').addClass('inputErr');
+        submit_flag = 1;
+    } else {
+        $('.ufirstErr').html('');
+        $('#firstname').removeClass('inputErr');
+    }
+
+    if (lastname == '') {
+        $('.ulastErr').html("Last Name Required");
+        $('#lastname').addClass('inputErr');
+        submit_flag = 1;
+    } else {
+        $('.ulastErr').html('');
+        $('#lastname').removeClass('inputErr');
+    }
+    
+    
+    if (phone == '') {
+        $('.uofficeErr').html("Phone Number Required");
+        $('#phone').addClass('inputErr');
+        submit_flag = 1;
+    } else if (phone.length < 12) {
+        $('.uofficeErr').html("Please enter 10 digits Office Phone number");
+        $('#phone').addClass('inputErr');
+        submit_flag = 1;
+    } else {
+        $('.uofficeErr').html('');
+        $('#phone').removeClass('inputErr');
+    }
+    
+    if ($('#complete_notification').is(":checked")) {
+        complete_notification = 1;
+    }
+    if ($('#note_notification').is(":checked")) {
+        note_notification = 1;
+    }
+
+    if ($('#cc_enable').is(":checked")) {
+        cc_enable = 1;
+    }
+     
+    if ($('#auto').is(":checked")) {
+        auto = 1;
+    }
+
+
+    if (submit_flag == 1) {
+        $('.loader').hide();
+        return false;
+    } else {
+
+        var userData = new FormData();       
+        userData.append('userName', userName);
+        userData.append('email', email);
+        userData.append('firstname', firstname);
+        userData.append('lastname', lastname);
+        userData.append('phone', phone);
+        userData.append('send_as', send_as);
+        userData.append('suite_location', suite_location);
+        userData.append('complete_notification', complete_notification);
+        userData.append('note_notification', note_notification);
+
+        if(panel_role_id==5){
+         userData.append('cc_enable', cc_enable);
+        // userData.append('welcome_letter', welcome_letter);
+        // userData.append('welcome_letter', welcome_letter);
+         userData.append('status', status);
+         userData.append('auto', auto);
+        }    
+       
+        userData.append('tenantId', tenantId);
+        userData.append('building', building);
+        userData.append('uid', uid);
+        userData.append('id', id);
+        userData.append('role_id', role_id);
 
 
 
+        var action = $("form#editUser").attr('action');
+        $.ajax({
+            url: action,
+            type: "post",
+            datatype: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: userData,
+            success: function (data) {
+                data = $.parseJSON(data);
+                $('.loader').hide();
+                $('div.success_message').html(data.msg);
+                var main_url = baseUrl + 'tenant/myaccountsetting';
+                setInterval(function () {
+                    window.parent.location.href = main_url;
+                }, 1000);
+            },
+            error: function () {
+                $('.loader').hide();
+                alert('There was an error');
+            }
+        });
+
+
+
+        /*var buildId = $('#building_id').val();
+         $.ajax({
+         url         : baseUrl+"tenant/edittuser",
+         type        : "post",
+         datatype    : 'json',                
+         data        : {
+         firstName:firstname,
+         lastName:lastname,					           
+         phone:phone,
+         userId:userId
+         },
+         success : function( result ) {
+         var data = $.parseJSON(result);
+         $('.loader').hide();					
+         if(data.status == 'success'){                                              
+         loadTenantUser(tId);
+         $('.message').html(data.msg);                       
+         }
+         else{                     
+         //alert('There was an error');
+         $('.message').html(data.msg);
+         }
+         },
+         error : function(){
+         $('.loader').hide();
+         alert('There was an error');
+         }  
+         
+         });*/
+    }
+}
+
+/** delete tenant user by tenant Admin */
+function deleteTUserByTadmin(tId, uId) {
+    var check_delete = 'YES';
+    if (uId) {
+        jPrompt('For Deleting Tenant User, Enter Yes in Capital letters.', '', 'Vision Work Orders', function (r) {
+            if (r != null) {
+                if (check_delete === r) {
+                    $('.loader').show();
+                    $.ajax({
+                        url: baseUrl + "tenant/deletetuser",
+                        type: "post",
+                        datatype: 'json',
+                        data: {
+                            uId: uId, tId: tId
+                        },
+                        success: function (result) {
+                            $('.loader').hide();
+                            var data = $.parseJSON(result);
+                            //alert(data.msg);
+                            if (data.msg == 'true') {
+                                $('.message').html('Tenant user deleted successfully.');
+                            } else {
+                                $('.error-txt').html('Some error occurred.');
+                            }
+                           
+                            window.location.href = baseUrl + 'tenant/currentusers';
+                        
+                        }
+                    });
+                } else {
+                    //$('.error-txt').html('You have entered wrong word.');
+                    jAlert('You have entered wrong word.');
+                }
+            }
+        });
+
+    } else {
+        jAlert('There must be more than one user. Please add one more user to delete the user of tenant.');
+    }
+
+}

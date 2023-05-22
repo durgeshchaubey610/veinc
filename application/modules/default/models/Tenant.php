@@ -402,6 +402,40 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
 
         return ($res && sizeof($res)>0)? $res : false ;               
 	}
+    
+    function getTenantCoiByBId($uid,$tenantId){
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+		 $select = $db->select()
+                         ->from(array('tn'=>'tenant'), array('tenantName','id', 'tenant_number','buildingId'))
+                         ->joinLeft(array('cat' => 'coi_au_tenant'),'cat.tenant_Id = tn.id',array('cat.*'))
+                         ->joinLeft(array('u' => 'users'),'u.uid = tn.userId',array('email'))
+                         ->where('tn.buildingId=?',$uid)
+                         ->where('tn.userId=?',$tenantId)
+                         ->where('tn.remove_status=0');	                  
+			 
+                    $res=$db->fetchAll($select);
+
+                  return ($res && sizeof($res)>0)? $res : false ;  
+    }
+
+    public function getAllTenantsByBuildingId($buildId, $role_id,$tenantId){
+        
+        $db = Zend_Db_Table::getDefaultAdapter();   
+        $select = $db->select()
+        ->from(array('u'=>'users'))
+        ->joinLeft(array('tu'=>'tenantusers'),'tu.userId = u.uid',array('uid'=>'u.uid','firstName'=>'u.firstName','lastName'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id','note_notification'=>'u.note_notification','status'=>'u.status'))
+        ->joinLeft(array('t'=>'tenant'),'t.id = tu.tenantId',array('cc_enable'=>'tu.cc_enable','send_as'=>'tu.send_as','complete_notification'=>'tu.complete_notification'))
+        ->where('t.buildingId=?',$buildId)
+        ->where('tu.tenantId=?',$tenantId)
+        ->where('u.role_id=?',$role_id)
+        ->where('u.remove_status=0'); 
+            //->where('t.remove_status=1 OR t.userStatus = 1 OR t.history_remove=0');    
+            $select = $select->order(array('t.tenantName ASC'));
+            $matchjobRes=$db->fetchAll($select);
+    
+        return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;  
+    }
    
 }	
 
