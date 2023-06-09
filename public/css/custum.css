@@ -4899,23 +4899,25 @@ section.ch-home-form-edit form .row label{width:145px !important;}
 .conference_search_field input,select { color:#000 !important;}
 
 
-table.calendar		{ border:1px solid #999; font-family: sans-serif;}
+table.calendar		{ border:1px solid #e0e0e0; font-family: sans-serif;}
 tr.calendar-row	{  }
 td.calendar-day	{ min-height:80px; font-size:11px; position:relative; } * html div.calendar-day { height:80px; }
-td.calendar-day:hover	{ background:#eceff5; }
+td.calendar-day:hover,td.calendar-day:hover div.day-number	{ background:#eceff5 !important; }
+.calendar-row .today:hover .day-number { background-color:#eceff5 !important; }
+
 td.calendar-day-np	{ background:#eee; min-height:80px; } * html div.calendar-day-np { height:80px; }
 td.calendar-day-head {  /* background: #ccc; */
+    background: #fff;
     color: #424242;
-    font-weight: bold;
     text-align: center;
     width: 120px;
-    padding: 5px;
-    border-bottom: 1px solid #999;
-    border-top: 1px solid #999;
-    border-right: 1px solid #999;
-    font-size: 10px;
+    padding: 15px 5px 5px 5px;
+    border-bottom: 1px solid #e0e0e0;
+    border-top: 1px solid #e0e0e0;
+    font-size: 12px;
     font-weight: 400;
-    font-family: sans-serif;}
+    font-family: sans-serif;
+    letter-spacing: -.1px;}
 /*div.day-number		{ background:#999; padding:5px; color:#fff; font-weight:bold; float:right; margin:-5px -5px 0 0; width:20px; text-align:center; }*/
 div.day-number		{     
 	background: white;
@@ -4924,17 +4926,23 @@ div.day-number		{
     /*border-bottom: 1px solid #cbc8c8;*/
  }
  .calendar-row .today{
-    background-color:#cfe4fa;
+    background-color: #cfe4fa!important;
  }
  .calendar-row .today .day-number{
-    background-color:#115EA3;
-    color:#fff;
+    color: #3c0aa8;
+    border-top: solid 6px #430bba;
+    font-weight: 600;
+    font-size: 14px;
+    background: #cfe4fa;
  }
 /* shared */
-td.calendar-day, td.calendar-day-np { width:120px; height:126px;  border-bottom:1px solid #cbc8c8; border-right:1px solid #cbc8c8; }
+td.calendar-day, td.calendar-day-np { width:120px; height:126px;  border-bottom:1px solid #e0e0e0; border-right:1px solid #e0e0e0; }
 .weekday{
-	background-color:#f7f7f7;
+	background-color:#efefef;
 }
+.today .conbooking{
+   top:10px; 
+} 
 .conbooking{
   /* float: right; */
   /* border: 1px solid #4bacc6; */
@@ -4973,12 +4981,12 @@ td.calendar-day-pre {
 td.calendar-day-next {
     width: 120px;
     height: 150px;
-    border-bottom: 1px solid #999;
-    border-right: 1px solid #999;
+    border-bottom: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
 	min-height: 80px;
     font-size: 11px;
     /* position: relative; */
-	background-color:#ededed;
+	background-color:#f7f7f7;
 }
 
 
@@ -4986,9 +4994,10 @@ td.calendar-day-next {
     background: white;
     padding: 1px;
     text-align: left;
-    border-bottom: 1px solid #e7e7e7;
-	background-color:#e7e7e7;	
+    border-bottom: 1px solid #f7f7f7;
+	background-color:#f7f7f7;	
 }
+.weekday div.day-number {background:#efefef;}
 
 a:hover, a:focus {
     color: #2a6496;
@@ -4999,9 +5008,9 @@ a:hover, a:focus {
 }
 .day-number-next{
 	padding: 1px;
-	text-align: left;
-	border-bottom: 1px solid #e7e7e7;
-	background-color: #e7e7e7;
+  text-align: left;
+  border-bottom: 1px solid #f7f7f7;
+  background-color: #f7f7f7;
 }
 #calender_change h2 {
     font-size: 17px;
