@@ -84,6 +84,53 @@ class ConferenceController extends Ve_Controller_Base {
         $this->view->lastdate = date('d', strtotime('last Sunday'));
         
     }
+
+    public function conavailabilitydemoAction() {
+        $companyListing = '';
+        $buildingMapper = new Model_Building();
+        if ($this->roleId == '9') {
+            $companyListing = $buildingMapper->getCompanyBuilding($this->cust_id);
+        } else {
+            $user_build_mod = new Model_UserBuildingModule();
+
+            $buildinglists = $user_build_mod->getUserBuildingIds($this->userId);
+            if ($buildinglists) {
+                $build_id_array = array();
+                foreach ($buildinglists as $buildlist)
+                    $build_id_array[] = $buildlist['building_id'];
+                $companyListing = $buildingMapper->getBuildingList($build_id_array);
+            }
+        }
+        foreach ($companyListing as $cl) {
+            $buildIds[] = $cl['build_id'];
+        }
+
+        $build_ID = $this->_getParam('bid', '');
+        if (empty($build_ID) && (isset($_COOKIE['build_cookie']) && in_array($_COOKIE['build_cookie'], $buildIds)))
+            $build_ID = $_COOKIE['build_cookie'];
+        else
+            $set_cookie = setcookie('build_cookie', $build_ID, time() + (86400 / 24), "/");
+
+        if ($companyListing != '') {
+            if ($build_ID != '')
+                $select_build_id = $build_ID;
+            else
+                $select_build_id = $companyListing[0]['build_id'];
+        }
+        $user_id=$_SESSION['Zend_Auth']['storage']->uid;
+        $final=$this->getViewAccess($select_build_id);
+        $this->view->userId=$user_id;
+        $this->view->viewacess=$final;
+        $this->view->companyListing = $companyListing;
+        $this->view->custID = $this->cust_id;
+        $this->view->select_build_id = $select_build_id;
+        $this->view->roleId = $this->roleId;
+        $this->view->acessHelper = $this->accessHelper;
+        $this->view->croom_location = 24;
+        $this->view->month = date('m', strtotime('last Sunday'));
+        $this->view->lastdate = date('d', strtotime('last Sunday'));
+        
+    }
     public function getViewAccess($bid){
         
         $checkscheduler = new Model_ConferenceSchedule();
