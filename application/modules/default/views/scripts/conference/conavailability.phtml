@@ -18,6 +18,7 @@
     $cscheduleDetails = $this->cscheduleDetails;
     $crDetails = $this->crDetails;
     $not_permit = array(2, 3, 6);
+    $today_day = date('j');
     // echo $this->roleId;
     // echo $this->croom_location;
 	
@@ -299,7 +300,8 @@
 					}else if($running_day==0 || $running_day==6 ){
 						$calendar.= '<td class="calendar-day weekday">';
 					}else{
-						$calendar.= '<td class="calendar-day">';
+                        $today_class = ( $list_day==$today_day)?"today":'';
+						$calendar.= '<td class="calendar-day '.$today_class.'">';
 					}
 					
                     
@@ -349,7 +351,7 @@
 								$rname= md5($bookingDetailsVal->room_name);
 								$calendar.= '<div  class="tooltip-vcm  book_week book_det_container  '.$rname.' ">';
 								$roomname[$rname]=$rname;
-								$calendar.='<div>'. $bookingDetailsVal->start_time . ' - ' . $bookingDetailsVal->end_time ;
+								$calendar.='<div class="mtime">'. $bookingDetailsVal->start_time . ' - ' . $bookingDetailsVal->end_time ;
 								$calendar.= "&nbsp;&nbsp;".$bookingDetailsVal->room_name.'&nbsp;&nbsp;'.$icon.' </div>';
 								$calendar.= '<span><div class="t_name">'.$tndetail[0]->tenantName.'</div>';
 								$calendar.= '<div class="r_name">'.$bookingDetailsVal->room_name.'</div>';

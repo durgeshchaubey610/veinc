@@ -18,6 +18,7 @@
     $cscheduleDetails = $this->cscheduleDetails;
     $crDetails = $this->crDetails;
     $not_permit = array(2, 3, 6);
+    $today_day = date('j');
     // echo $this->roleId;
     // echo $this->croom_location;
 	
@@ -319,8 +320,7 @@
 						$num_padded = sprintf("%02d", $l_days);
 						$index2 = $year . '-' . $month . '-' . $num_padded;
 					}else{
-                        $today_day = date('j');
-                        
+                                               
 						$calendar.= '<div class="day-number">' . $list_day . '</div>';
 						$url = "'" . $this->baseUrl() . '/conference/createbooking/month/' . $month . '/year/' . $year . '/bid/' . $this->select_build_id . '/day/' . $list_day . "'";
                                                	$num_padded = sprintf("%02d", $list_day);
@@ -354,7 +354,7 @@
 								$rname= md5($bookingDetailsVal->room_name);
 								$calendar.= '<div  class="tooltip-vcm  book_week book_det_container  '.$rname.' ">';
 								$roomname[$rname]=$rname;
-								$calendar.='<div>'. $bookingDetailsVal->start_time . ' - ' . $bookingDetailsVal->end_time ;
+								$calendar.='<div class="mtime">'. $bookingDetailsVal->start_time . ' - ' . $bookingDetailsVal->end_time ;
 								$calendar.= "&nbsp;&nbsp;".$bookingDetailsVal->room_name.'&nbsp;&nbsp;'.$icon.' </div>';
 								$calendar.= '<span><div class="t_name">'.$tndetail[0]->tenantName.'</div>';
 								$calendar.= '<div class="r_name">'.$bookingDetailsVal->room_name.'</div>';
