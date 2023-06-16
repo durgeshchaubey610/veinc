@@ -484,19 +484,19 @@ foreach($roomname as $val){
      $(this).hide();
 });
 
-$(".calendar-day").each(function() {
+$(".calendar-row .calendar-day").each(function(index,val) {
     var meetingCount = $(this).find('.tooltip-vcm').length;
     if(meetingCount>3){
         var i = 0;
-        $(".calendar-day .tooltip-vcm").each(function(index,val) {
-            if(index==1){
-                $(this).show();
-            }
-            if(index>3){
-                $(this).hide();
-            }
-             i++;
-        });
+        $('.calendar-day .tooltip-vcm').not(':eq(0)').hide();
+        // $(".calendar-day .tooltip-vcm").each(function(index1,val1) {
+        //      if(index1==1){
+        //         $(this).addClass("show");
+        //     }else{
+        //         $(this).addClass("hide");
+        //     }
+        //      i++;
+        // });
         $(this).find('.readmore').show();
         $(this).find('.readmore').css("display", "block")
 
