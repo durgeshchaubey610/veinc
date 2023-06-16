@@ -487,9 +487,12 @@ foreach($roomname as $val){
 $(".calendar-day").each(function() {
     var meetingCount = $(this).find('.tooltip-vcm').length;
     if(meetingCount>3){
-        var i =0;
-        $(".calendar-day .tooltip-vcm").each(function() {
-            if(i>3){
+        var i = 0;
+        $(".calendar-day .tooltip-vcm").each(function(index,val) {
+            if(index==1){
+                $(this).show();
+            }
+            if(index>3){
                 $(this).hide();
             }
              i++;
