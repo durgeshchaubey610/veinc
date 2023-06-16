@@ -5087,7 +5087,9 @@ line-height: 22px;
     height: auto;
   
 }
-
+.date-bg .hide{
+    display: none;
+}
   
 
 .book_det_container .edit_del_room .edit_broom, .book_det_container .edit_del_room .delete_broom {display:inline-block;}

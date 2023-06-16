@@ -477,37 +477,25 @@ foreach($roomname as $val){
 }
 </style>
 <script type="text/javascript">
-
-    $(".calendar-day .readmore").click(function(){
-     $(this).parent().parent().addClass("moreinfo");
-     $(this).parent().find('.tooltip-vcm').show();
-     $(this).hide();
+$(".calendar-day .readmore").click(function(){
+    $(this).parent().parent().addClass("moreinfo");
+    $(this).parent().find('.tooltip-vcm').removeClass('hide').show();
+    $(this).parent().find('.tooltip-vcm').show();
+    $(this).hide();
 });
-
-$(".calendar-day").each(function() {
-    var meetingCount = $(this).find('.tooltip-vcm').length;
-    if(meetingCount>3){
-        var i =0;
-        $(".calendar-day .tooltip-vcm").each(function() {
-            if(i>3){
-                $(this).hide();
+$('.calendar-day').each(function () {
+    var meetingCount = $(this).find('.tooltip-vcm').length;       
+     if (meetingCount >3 ) {
+        jQuery(this).find('.readmore').show();
+        $(this).find('.readmore').css("display", "block");
+        $(this).find('.tooltip-vcm').each(function (index) {
+            if(index>2){
+               $meetingDiv =  $(this);
+               $meetingDiv.addClass("hide");
             }
-             i++;
         });
-        $(this).find('.readmore').show();
-        $(this).find('.readmore').css("display", "block")
-
-    }else{
-        $(this).find('.readmore').hide();
-    }
-    //console.log(meetingCount);
-
-
-    
-    
-    // ...
+     }   
 });
-
 </script>
 
 
