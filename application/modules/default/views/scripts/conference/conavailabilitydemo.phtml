@@ -19,6 +19,8 @@
     $crDetails = $this->crDetails;
     $not_permit = array(2, 3, 6);
     $today_day = date('j');
+    $current_month = date('n');
+
     // echo $this->roleId;
     // echo $this->croom_location;
 	
@@ -375,6 +377,8 @@
 							}
 							
 					}
+                    $calendar.= '<span class="readmore" alt="show more">...</span>';
+                    
 					$calendar.= '</div>';
                                             
 					}else{
@@ -473,7 +477,30 @@ foreach($roomname as $val){
 }
 </style>
 
+<script type="text/javascript">
 
+    $(".calendar-day .readmore").click(function(){
+     $(this).parent().parent().addClass("moreinfo")
+});
+
+$(".calendar-day").each(function() {
+    var meetingCount = $(this).find('.tooltip-vcm').length;
+    if(meetingCount>2){
+        $(this).find('.readmore').show();
+        $(this).find('.readmore').css("display", "block")
+
+    }else{
+        $(this).find('.readmore').hide();
+    }
+    //console.log(meetingCount);
+
+
+    
+    
+    // ...
+});
+
+</script>
 
 
 

@@ -22,7 +22,7 @@ if($role=='tuser'){
   $isvId='auser'; 
   echo '<input type="hidden" name="t_type" id="t_type" value="">';
 }
-
+    $today_day = date('j');
     $month = sprintf("%02d", $this->month);
     $year = $this->year;
     $m = $month;
@@ -69,7 +69,7 @@ if($role=='tuser'){
         //print_r($booking_arr);
 ?>
     <div id="calender_change">
-        <div style='text-align:center;'>
+        <div style='text-align:left;'>
             <h2>
                 <a  id="pre" href="#" onclick="changeMonth('<?php echo $mp; ?>', '<?php echo $yp; ?>', '<?php echo $this->page; ?>')">< </a> 
                     <?php echo $monthName[$m-1]." ".$year; ?>
@@ -130,7 +130,8 @@ if($role=='tuser'){
             }else if($running_day==0 || $running_day==6 ){
                     $calendar.= '<td class="calendar-day weekday">';
             }else{
-                    $calendar.= '<td class="calendar-day">';
+                    $today_class = ( $list_day==$today_day)?"today":'';
+                    $calendar.= '<td class="calendar-day '.$today_class.'">';
             }
             
             if($list_day > $days ){
