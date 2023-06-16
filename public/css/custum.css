@@ -5083,44 +5083,11 @@ line-height: 22px;
 }
 .readmore:hover { cursor: pointer; }
 .moreinfo .date-bg{
-    overflow: scroll;
-    height: 150px;
-    overflow-x: hidden;
+   
+    height: auto;
+  
 }
-.calendar-day .readmore{
 
-}
-.moreinfo .date-bg .tooltip-vcm span::after {
-    content: "";
-    position: absolute;
-    top: 3% !important;
-    right: 5% !important;
-    margin-top: -12px !important;
-    border-width: 5px !important;
-    border-style: solid;
-    border-color: transparent #fff0 #fff transparent !important;
-  }
-
-  .moreinfo .date-bg .tooltip-vcm span {
-    display: none;
-    /* visibility: hidden; */
-    max-width: 180px;
-    width: 100%;
-    background-color: #fff;
-    color: #000;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 10px;
-    position: absolute;
-    z-index: 1;
-    top: 24px;
-    left: 0px !important;
-    display: none;
-    opacity: 0;
-    transition: opacity 1s;
-    box-shadow: 0px 0px 10px rgb(0 0 0 / 20%);
-    border-radius: 0px;
-  }
   
 
 .book_det_container .edit_del_room .edit_broom, .book_det_container .edit_del_room .delete_broom {display:inline-block;}
