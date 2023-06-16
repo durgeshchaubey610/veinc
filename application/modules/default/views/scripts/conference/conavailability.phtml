@@ -481,6 +481,7 @@ foreach($roomname as $val){
     $(".calendar-day .readmore").click(function(){
      $(this).parent().parent().addClass("moreinfo");
      $(this).parent().find('.tooltip-vcm').show();
+     $(this).hide();
 });
 
 $(".calendar-day").each(function() {
