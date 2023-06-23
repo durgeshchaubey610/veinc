@@ -42,10 +42,10 @@ if($tenantInfo->role_id==7){
 		$yn = date("Y") + 1;
 	}
 	
-	
+	$today_day = date('j');
 	$tdate = date('t', mktime(0, 0, 0, $month, 1, $year));
 	$add_date= 06 - date("w",strtotime("$tdate-$month-$year"));
-        $add_date=sprintf("%02d",$add_date);
+    $add_date=sprintf("%02d",$add_date);
 	$from_date = $y . '-' . $m . '-' . '01';
 	$to_date = $y . '-' . $mn . '-' .$add_date;
 	$cscheduleMapper = new Model_ConferenceSchedule();
@@ -120,7 +120,8 @@ if($tenantInfo->role_id==7){
 		}else if($running_day==0 || $running_day==6 ){
 			$calendar.= '<td class="calendar-day weekday">';
 		}else{
-			$calendar.= '<td class="calendar-day">';
+			$today_class = ( $list_day==$today_day)?"today":'';
+			$calendar.= '<td class="calendar-day '.$today_class.'">';
 		}
 		
 		if($list_day > $days ){
@@ -174,7 +175,7 @@ if($tenantInfo->role_id==7){
 										$rname= md5($bookingDetailsVal->room_name);
                                         $calendar.= '<div  class="tooltip-vcm  book_week book_det_container  '.$rname.' ">';
                                         $roomname[$rname]=$rname;
-                                        $calendar.='<div>'. $bookingDetailsVal->start_time . ' - ' . $bookingDetailsVal->end_time ;
+                                        $calendar.='<div class="mtime">'. $bookingDetailsVal->start_time . ' - ' . $bookingDetailsVal->end_time ;
                                         $calendar.= "&nbsp;&nbsp;".$bookingDetailsVal->room_name.'</div>';
                                         $calendar.= '<span><div class="t_name">'.$tndetail[0]->tenantName.'</div>';
                                         $calendar.= '<div class="r_name">'.$bookingDetailsVal->room_name.'</div>';
@@ -260,4 +261,24 @@ foreach($roomname as $val){
 }
 	/* sample usages */
 	?>
-
+<script type="text/javascript">
+$(".calendar-day .readmore").click(function(){
+    $(this).parent().parent().addClass("moreinfo");
+    $(this).parent().find('.tooltip-vcm').removeClass('hide').show();
+    $(this).parent().find('.tooltip-vcm').show();
+    $(this).hide();
+});
+$('.calendar-day').each(function () {
+    var meetingCount = $(this).find('.tooltip-vcm').length;       
+     if (meetingCount >3 ) {
+        jQuery(this).find('.readmore').show();
+        $(this).find('.readmore').css("display", "block");
+        $(this).find('.tooltip-vcm').each(function (index) {
+            if(index>2){
+               $meetingDiv =  $(this);
+               $meetingDiv.addClass("hide");
+            }
+        });
+     }   
+});
+</script>
