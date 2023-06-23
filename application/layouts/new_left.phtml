@@ -595,7 +595,7 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
             </ul> -->
         </li>
         <?php if (!empty($conf_acc)) : ?>
-                    <li onclick="hideMenu()" <?php if (($controller == 'tenant' && $actionnm == 'conavailability')) { ?> class="active" <?php } ?>>
+                    <li onclick="hideMenu()" <?php if (($controller == 'tenant' && $actionnm == 'conavailability')) { ?> class="active conavailability" <?php } ?>>
                         <a href="<?php echo BASEURL . 'tenant/conavailability/' ?>" <?php if ($controller == 'tenant' && $actionnm == 'conavailability') { ?>class="menuselected" <?php } ?>>Conference Availability</a></li>
         <?php endif; ?>
 
@@ -607,7 +607,7 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
                 <li><a href="<?php echo BASEURL . 'workorder/createworkorder' ?>" <?php if ($controller == 'workorder' && $actionnm == 'createworkorder') { ?>class="menuselected" <?php } ?>>Create New Work Order</a></li>
             </ul>
         </li>
-        <li class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active" <?php } ?>>
+        <li class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active conavailability" <?php } ?>>
             <a href="<?php echo BASEURL . 'tenant/conavailability/' ?>" <?php if ($controller == 'tenant' && $actionnm == 'conavailability') { ?>class="head_select_nav" <?php } ?>>Conference Availability</a>
         </li>
         <?php

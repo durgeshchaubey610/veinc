@@ -268,6 +268,14 @@ $(".calendar-day .readmore").click(function(){
     $(this).parent().find('.tooltip-vcm').show();
     $(this).hide();
 });
+
+if($(".calendar-day .conbooking").length>0){
+	$(".nav .conavailability").show();
+}else{
+	$(".nav .conavailability").hide();
+}
+
+
 $('.calendar-day').each(function () {
     var meetingCount = $(this).find('.tooltip-vcm').length;       
      if (meetingCount >3 ) {
