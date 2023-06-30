@@ -93,6 +93,7 @@ if($tenantInfo->role_id==7){
 	$running_day1  = $running_day-1;
 	$running_day = 0;
 
+	$tenent_calender_access = false;
 	/* print "blank" days until the first of the current week */
 
 	/* print "blank" days until the first of the current week */
@@ -113,6 +114,7 @@ if($tenantInfo->role_id==7){
 	
 	/* keep going with days.... */
         $roomname=array();
+
 	for ($list_day = 1; $list_day <= $days_in_month; $list_day++):
 		
 		if($list_day > $days ){
@@ -172,6 +174,7 @@ if($tenantInfo->role_id==7){
                                       // print_r($bookingDetailsVal); 
                                     
                                         //getcrDetailsuseraccess
+										$tenent_calender_access = true;
 										$rname= md5($bookingDetailsVal->room_name);
                                         $calendar.= '<div  class="tooltip-vcm  book_week book_det_container  '.$rname.' ">';
                                         $roomname[$rname]=$rname;
@@ -188,6 +191,7 @@ if($tenantInfo->role_id==7){
                                                         . '<a href="javascript:void(0);" onclick="deleteCrRoom('.$bookingDetailsVal->crid.')" class="delCat" data-id="" title="Delete">'
                                                 . '<img src="'.BASEURL . 'public/images/delete.png'.'"></a></div>';                                                       
                                     else:
+										
                                         $calendar.= '<div  class="book_week book_det_container book-details-'.$i.' book_hot_schedule'.$i.'">';
                                         $calendar.='<div>'. $bookingDetailsVal->start_time . ' - ' . $bookingDetailsVal->end_time ;
                                         $calendar.= "&nbsp;&nbsp;".$bookingDetailsVal->room_name.'</div>';
@@ -261,6 +265,12 @@ foreach($roomname as $val){
 }
 	/* sample usages */
 	?>
+	<?php
+	if($tenent_calender_access==false){?>
+		<script type="text/javascript">			
+	       window.location.href = baseUrl+'/tenant/noaccess';
+	  </script>
+	<?php }	?>
 <script type="text/javascript">
 $(".calendar-day .readmore").click(function(){
     $(this).parent().parent().addClass("moreinfo");
