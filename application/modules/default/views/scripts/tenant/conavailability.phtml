@@ -2,6 +2,34 @@
 echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/conference.js'); 
 $tenantInfo = $this->tenantuser;
 $isvId="";
+$userId = Zend_Auth::getInstance()->getStorage()->read()->uid;
+
+$userRoleID = Zend_Auth::getInstance()->getStorage()->read()->role_id;
+
+$tenantcountcrRoom = 0;
+if ($userRoleID == 5 || $userRoleID == 7) {
+    $tenant = new Model_Tenant();
+    $tenantuser = $tenant->getTenantByUser($userId); 
+    if(isset($tenantuser[0]->buildingId) && !empty($tenantuser[0]->buildingId)){
+        $buildingId = $tenantuser[0]->buildingId;
+        $cscheduleMapper = new Model_ConferenceSchedule();
+          //Tenant Admin
+        if($userRoleID == 5){          
+            $tenantcountcrRoom = $cscheduleMapper->checkTenantConfRoomByBuidingId($buildingId,5);
+		}
+        //Tenant User
+        if($userRoleID == 7){
+          $tenantcountcrRoom = $cscheduleMapper->checkTenantConfRoomByBuidingId($buildingId,7);
+         
+          
+        }
+       
+   
+    }
+}
+
+
+
 //echo $tenantInfo->role_id;
 if($tenantInfo->role_id==7){
     $isvId=$tenantInfo->uid;
@@ -266,7 +294,7 @@ foreach($roomname as $val){
 	/* sample usages */
 	?>
 	<?php
-	if($tenent_calender_access==false){?>
+	if(empty($tenantcountcrRoom)){?>
 		<script type="text/javascript">			
 	       window.location.href = baseUrl+'/tenant/noaccess';
 	  </script>
