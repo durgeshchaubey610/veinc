@@ -5,7 +5,35 @@
 	echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/dashworkorder.js');
 
 
-
+    $order = $this->order;
+        $dir = $this->dir;
+        $wdir = 'ASC';
+        $bdir = 'ASC';
+        $tdir = 'ASC';
+        $sdir = 'ASC';
+        $cdir = 'ASC';
+        $pdir = 'ASC';
+        $stdir = 'ASC';
+        $ddir = 'ASC';
+        $tudir = 'ASC';
+        if ($order == 'wo_number')
+            $wdir = ($dir == 'ASC') ? 'DESC' : 'ASC';
+        else if ($order == 'buildingName')
+            $bdir = ($dir == 'ASC') ? 'DESC' : 'ASC';
+        else if ($order == 'tenantName')
+            $tdir = ($dir == 'ASC') ? 'DESC' : 'ASC';
+        else if ($order == 'suite_location')
+            $sdir = ($dir == 'ASC') ? 'DESC' : 'ASC';
+        else if ($order == 'categoryName')
+            $cdir = ($dir == 'ASC') ? 'DESC' : 'ASC';
+        else if ($order == 'priorityName')
+            $pdir = ($dir == 'ASC') ? 'DESC' : 'ASC';
+        else if ($order == 'wo_status')
+            $stdir = ($dir == 'ASC') ? 'DESC' : 'ASC';
+        else if ($order == 'firstName')
+            $tudir = ($dir == 'ASC') ? 'DESC' : 'ASC';
+        else
+            $ddir = ($dir == 'ASC') ? 'DESC' : 'ASC';
     $ssModel = new Model_ScheduleStatus();
     $status_list = $ssModel->getScheduleStatus();
     $status_array = array();
@@ -356,9 +384,10 @@
             <div id="parentHorizontalTab" class="datatabed">
                 <?php
                 if ($veiw_type == 'line') {
-                    $url = BASEURL . 'dashboard/workorder';
+                    $url = BASEURL . 'workorder/index';
                 } else {
-                    $url = BASEURL . 'dashboard/workorder/view_type/detail';
+                   // $url = BASEURL . 'workorder/view_type/detail';
+                   $url = BASEURL . 'workorder/index';
                 }
                 ?>
                 <div class="resp-tabs-container hor_1">
