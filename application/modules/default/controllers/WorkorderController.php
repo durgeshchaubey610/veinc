@@ -44,7 +44,6 @@ class WorkorderController extends Ve_Controller_Base {
 
 
 
-
 		$companyListing = '';
         $buildingMapper = new Model_Building();
         if ($this->roleId == '9') {
@@ -245,21 +244,33 @@ class WorkorderController extends Ve_Controller_Base {
         $adminNamespace = new Zend_Session_Namespace('Admin_User');
         $this->view->admin_role_id = $adminNamespace->role_id;
 
-
+ 
 
 
 		 if($this->roleId=='5' || $this->roleId=='7'){
+           
 		 $tenant = new Model_Tenant();
 		 //$tenantuser = $tenant->getTenantById($this->userId);
+		// echo $this->userId;
 		 $tenantData = $tenant->getTenantByUser($this->userId);
 		 $tenantInfo = $tenantData[0];
 		 $page=$this->_getParam('page',1);
 		 $order=$this->_getParam('order','woId');
 		 $dir=$this->_getParam('dir','DESC');
-		 if($this->roleId=='7')		 
-		 $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir,$this->userId);
-		 else
-		 $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir);
+		 
+		 //for tanant Admin
+		 if($this->roleId=='5'){		
+			$wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array,$page, $show);
+			$wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
+		 }else if($this->roleId=='7'){
+			//for tanant User
+			$userId =  $this->userId;
+		    $wolist = $this->woMapper->getTenantUserWorkOrder($tenantInfo->tenantId,$order,$dir,$userId);
+
+		 }		//  if($this->roleId=='7')		 
+		//  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir,$this->userId);
+		//  else
+		//  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir);
 		 $pageObj=new Ve_Paginator();
 		 $paginator=$pageObj->fetchPageDataResult($wolist,$page,10);		 
 		 $this->view->page = $page;

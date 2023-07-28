@@ -69,6 +69,7 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
        
     public function getTenantWorkOrder($tenantId,$order,$dir,$userId=''){
 		if($tenantId){
+			
 			//$select = $this->select()->where('status=?','1') ;
 			$orderBy = $order.' '.$dir;
 			$db = Zend_Db_Table::getDefaultAdapter();
@@ -84,12 +85,44 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
             if($userId!=''){
 				$select = $select->where('wo.create_user=?',$userId);
 			}          
-             $select = $select->order(array($orderBy));                      
+             $select = $select->order(array($orderBy)); 
+			 
+			 echo $select;
             $res = $db->fetchAll( $select );        
             return ($res && sizeof($res)>0)? $res : false ;
 		}else
 		 return false;
 	}
+
+
+	public function getTenantUserWorkOrder($tenantId,$order,$dir,$userId=''){
+		if($tenantId){
+			
+			//$select = $this->select()->where('status=?','1') ;
+			$orderBy = $order.' '.$dir;
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$select = $db->select()
+                      ->from(array('wo' => 'work_order'))
+                      ->joinInner(array('t' => 'tenant'),'t.id = wo.tenant',array('tenantName','tenantContact'))
+                      ->joinLeft(array('bu'=>'buildings'),'bu.build_id = wo.building',array('buildingName'))
+                      ->joinLeft(array('cat'=>'category'),'cat.cat_id = wo.category',array('categoryName'))
+                      ->joinLeft(array('wop'=>'work_order_update'),'wop.wo_id = wo.woId AND wop.current_update=1',array('wop.wo_status','wop.internal_note'))                                                          
+                      ->joinLeft(array('u'=>'users'),'wo.create_user = u.uid',array('firstName','lastName','email'))                      
+                      ->where('wo.tenant=?',$tenantId);
+					 // ->where('wo.master_internal_work_order!=?',1);
+            if($userId!=''){
+				$select = $select->where('wo.create_user=?',$userId);
+			}          
+             $select = $select->order(array($orderBy)); 
+			 
+			/// echo $select;
+            $res = $db->fetchAll( $select );        
+            return ($res && sizeof($res)>0)? $res : false ;
+		}else
+		 return false;
+	}
+
+	
 	
 	public function getBuildingWorkOrder($buildID,$order,$dir,$search_array=array(),$page, $show){
             $offset = ($page-1) * $show; 
