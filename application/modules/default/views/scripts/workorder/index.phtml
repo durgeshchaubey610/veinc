@@ -5,7 +5,7 @@
 	echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/dashworkorder.js');
 
 
-    $order = $this->order;
+        $order = $this->order;
         $dir = $this->dir;
         $wdir = 'ASC';
         $bdir = 'ASC';
@@ -13,9 +13,9 @@
         $sdir = 'ASC';
         $cdir = 'ASC';
         $pdir = 'ASC';
-        $stdir = 'ASC';
-        $ddir = 'ASC';
-        $tudir = 'ASC';
+        $stdir = 'DESC';
+        $ddir = 'DESC';
+        $tudir = 'DESC';
         if ($order == 'wo_number')
             $wdir = ($dir == 'ASC') ? 'DESC' : 'ASC';
         else if ($order == 'buildingName')
@@ -403,28 +403,28 @@
 
                                                         <th><a href="<?php echo $url . '/order/created_at/dir/' . $ddir ?>" 
                                                                class="<?php
-                                                               if ($order == 'created_at')
+                                                               if ($ddir == 'created_at')
                                                                    echo $ddir;
                                                                else
                                                                    echo 'sorting';
                                                                ?>">Date Received</a></th>
                                                         <th>Time Received</th>
                                                         <th><a href="<?php echo $url . '/order/wo_number/dir/' . $wdir ?>" class="<?php
-                                                            if ($order == 'wo_number')
+                                                            if ($wdir == 'wo_number')
                                                                 echo $wdir;
                                                             else
                                                                 echo 'sorting';
                                                             ?>">Work Order#</a></th>
                                                         <th><a href="<?php echo $url . '/order/wo_status/dir/' . $stdir ?>"
                                                                class="<?php
-                                                               if ($order == 'wo_status')
+                                                               if ($stdir == 'wo_status')
                                                                    echo $stdir;
                                                                else
                                                                    echo 'sorting';
                                                                ?>">Current Status</a></th>
                                                                 <th><a href="<?php echo $url . '/order/categoryName/dir/' . $cdir ?>"
                                                                class="<?php
-                                                               if ($order == 'categoryName')
+                                                               if ($cdir == 'categoryName')
                                                                    echo $cdir;
                                                                else
                                                                    echo 'sorting';
@@ -1256,33 +1256,9 @@
                 </div>
             </div>
         </div>
-        <div class="loader" style="display:none;" > <img src="<?php echo BASEURL . 'public/images/loader.gif'; ?>"></div>
         <!-- /#page-wrapper -->
-        <div id="add_new_description_div" style="display:none; width:410px;" >
-
-            <h1>Description Of Work</h1>
-            <div class="desc_row">
-                <div id="work_current_description" >  </div>
-                <div style="text-align:center"><span style="font-size:20px; font-weight:bold;"><i class="fa fa-arrow-circle-down big-arrow"></i>
-                    </span> </div>
-                <div id="work_change_description" >  </div>
-            </div>
-            <div class="buttons">
-                <button type="button" name="cancel" id="cancel" value="Cancel" onclick="cancelWoDesc()">Cancel</button>
-            </div> 
-        </div>
-        <a href="#edit_labor_form" id="edit_labor_form_href" class="modalbox">&nbsp;</a>
-        <div id="add_new_labor_div" style="display:none" > </div> 
-        <div id="add_history_building_div" style="display:none" > </div> 
-        <div id="add_history_material_div" style="display:none" > </div>
-        <div id="add_history_outside_div" style="display:none" > </div>
-        <div id="add_history_notes_div" style="display:none" > </div>
-        <div id="add_histroy_workorder_div" style="display:none" class="bd-dft-cls-history">  </div>
-        <a href="#note_form" id="note_form_href" class="modalbox">&nbsp;</a>	
-        <div id="note_form" class="bd-dft-cls" style="display:none"></div>
-        <a href="#edit_note_form" id="edit_note_form_href" class="modalbox">&nbsp;</a>	
-        <div id="edit_note_form" class="bd-dft-cls" style="display:none"></div>
-
+        
+       
    
 
 <?php } else { ?>
@@ -1322,34 +1298,7 @@
         return str;
     }
 
-    setInterval(function () {
-        $.ajax({
-            type: "POST",
-            url: baseUrl + 'dashboard/checkstatus/',
-            data: {},
-            success: function (data) {
-                var content = $.parseJSON(data);
-                console.log("total1-" + content.count);
-                var tworkorder = $("#count").val();
-                console.log("total3-" + tworkorder);
-                if (parseInt(tworkorder) < parseInt(content.count)) {
-                    $.ajax({
-                        type: "POST",
-                        url: baseUrl + 'dashboard/reloadworkorder/',
-                        data: {},
-                        success: function (response) {
-                            //alert(response);
-                            $("#reloadworkorder").html(response);
-                            $('.loader').hide();
-
-                        }
-                    });
-                }
-            }
-        });
-    }, 30000);
-
-
+   
     function showlimit() {
         var veiw_type = '<?php echo $veiw_type; ?>';
         var limit = $("#show_limit").val();
