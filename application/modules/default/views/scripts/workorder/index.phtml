@@ -498,7 +498,7 @@
                                                                         $wo_schedule_status = new Model_WoScheduleStatus();
                                                                         $wo_scheduledetails = $wo_schedule_status->getCurrentWorkSchedule($wl->woId);
                                                                         ?> <?php if ($wo_scheduledetails[0]->ckey != '') { ?> 
-                                                                            <button type="button" class="btn btn-danger btn-xs" style="margin-left:10px;" onclick="acknowledgeWorkorder('<?php echo BASEURL . '/workstatus/change/woId/' . $wo_scheduledetails[0]->worder_id . '/sId/' . $wo_scheduledetails[0]->schedule_id . '/ckey/' . $wo_scheduledetails[0]->ckey . '/statusChange/acknowledge/userId/' . $this->userId; ?>')" >Acknowledge</button>
+                                                                            <!-- <button type="button" class="btn btn-danger btn-xs" style="margin-left:10px;" onclick="acknowledgeWorkorder('<?php echo BASEURL . '/workstatus/change/woId/' . $wo_scheduledetails[0]->worder_id . '/sId/' . $wo_scheduledetails[0]->schedule_id . '/ckey/' . $wo_scheduledetails[0]->ckey . '/statusChange/acknowledge/userId/' . $this->userId; ?>')" >Acknowledge</button> -->
 
                                                                             <?php
                                                                         }
