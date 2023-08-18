@@ -6154,3 +6154,6 @@ section.ch-home-form form .row select.status {
  .blockActionUI{
     pointer-events: none;
   }
+  div#calender_change {
+    overflow: scroll;
+  }
