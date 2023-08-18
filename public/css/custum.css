@@ -5980,7 +5980,10 @@ width:100%;
 .page-heading-detail-wrap-content { text-align:center; }
 .page-heading-detail-wrap { margin-bottom: 0px; padding: 10px 0px; }
 .page-heading-detail-wrap .page-heading-detail-wrap-btn { text-align: center; padding: 0px; }
-    
+ div#calender_change {
+    overflow: scroll;
+  }
+
 }
 @media screen and (min-width:1025px) {
     .tenantcoi{ margin: 0px -15px;}
@@ -6154,6 +6157,4 @@ section.ch-home-form form .row select.status {
  .blockActionUI{
     pointer-events: none;
   }
-  div#calender_change {
-    overflow: scroll;
-  }
+ 
