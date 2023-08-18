@@ -5323,9 +5323,10 @@ span#autoGenerate-error {
     color: #fff;
     padding: 10px 17px;
     position: fixed;   
-    bottom: 10px;   
+    bottom: 0px;   
     background :#243342!important;
     width:250px;
+    cursor: pointer;
 }
 .menuver22 .nav>li{
     overflow:hidden;
