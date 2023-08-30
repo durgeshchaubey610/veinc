@@ -486,10 +486,14 @@
         var veiw_type = '<?php echo $veiw_type; ?>';
         var limit = $("#show_limit").val();
         if (veiw_type == 'detail') {
-            window.location = baseUrl + 'dashboard/workorder/view_type/detail/show/' + limit;
+            window.location = baseUrl + 'workorder/index/show/view_type/detail/show/' + limit;
         } else {
             //console.log(document.URL);
             window.location = baseUrl + 'workorder/index/show/' + limit;
         }
     }
+    //Fixed the responsive design issue with Tenant Admin - By Dadhi Vallabh
+    setTimeout(function(){ $('.container-right').css('max-width','100%'); }, 600);
+
+    
 </script>
