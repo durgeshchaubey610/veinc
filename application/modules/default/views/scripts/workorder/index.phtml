@@ -258,15 +258,22 @@
                                                                     ?> </td>
                                                                 <td><?php echo stripslashes($wl->categoryName); ?></td>
                                                                 <td style='max-width:120px;'>	 
-
-                                                                    <?php
-                                                                    $descText = strip_tags($wl->work_order_request);
-                                                                    $descText = str_replace("&nbsp;", ' ', $descText);
-                                                                   /// echo substr($descText, 0, 40);
-                                                                    echo (substr($descText, 50)) ? '...' : '';
-
-                                                                    ?>
-                                                                    <span class="full-desc"><?php echo $descText;?></span>
+                                                                
+                                                                <div class="center">
+<div class="text">
+<?php
+ $descText = strip_tags($wl->work_order_request);
+ $descText = str_replace("&nbsp;", ' ', $descText);
+ echo substr($descText, 0, 40);
+ echo (substr($descText, 50)) ? '...' : '';
+?></div>
+<?php 
+if(strlen($descText)>=40){ ?>
+<div class="text-tooltip " ><?php echo $descText;?></div>
+<?php } ?>
+</div>
+                                                             
+                                                              
                                                                 </td>
 
                                                                 <?php /* <td><?php echo $wl->tenantContact?></td> */ ?>
