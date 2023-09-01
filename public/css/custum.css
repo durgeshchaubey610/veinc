@@ -6176,14 +6176,12 @@ section.ch-home-form form .row select.status {
     white-space: nowrap;
   }
 
-  .center {
-    position: relative;
-  
-  }
+ .center { position: relative;  }
+
   .center .text {
     white-space: nowrap;
     overflow: hidden;
-    width: 200px;
+    width: 150px;
     text-overflow: ellipsis;
   }
   .center .text-tooltip {
@@ -6202,10 +6200,7 @@ section.ch-home-form form .row select.status {
     visibility: visible;
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
-  }
-  
-   
-  
+  } 
   .center .text-tooltip:after {
       position: absolute;
       top: -10px;
