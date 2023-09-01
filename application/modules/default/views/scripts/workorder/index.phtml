@@ -264,11 +264,11 @@
 <?php
  $descText = strip_tags($wl->work_order_request);
  $descText = str_replace("&nbsp;", ' ', $descText);
- echo substr($descText, 0, 40);
- echo (substr($descText, 50)) ? '...' : '';
+ echo substr($descText, 0, 25);
+ echo (substr($descText, 30)) ? '...' : '';
 ?></div>
 <?php 
-if(strlen($descText)>=40){ ?>
+if(strlen($descText)>=30){ ?>
 <div class="text-tooltip " ><?php echo $descText;?></div>
 <?php } ?>
 </div>
