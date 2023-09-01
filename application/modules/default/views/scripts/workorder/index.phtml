@@ -244,9 +244,8 @@
                                                                     <?php } else { ?>
                                                                         <?php echo $wl->wo_number ?>
                                                                     <?php } ?>	     
-                                                                    <?php if ($reminderStatus && ($wl->wo_status != '6' || $wl->wo_status != '7')) echo '&nbsp;&nbsp;<a class="alert tooltip">&nbsp;<span>
-                        Time Over
-                        </span></a>'; ?>
+                                                                    <?php if ($reminderStatus && ($wl->wo_status != '6' || $wl->wo_status != '7')) echo '&nbsp;&nbsp;
+                        '; ?>
                                                                 </td>
                                                                 <td><?php echo $status_array[$wl->wo_status]; ?> <?php
                                                                     if ($wl->wo_status == 1) {
@@ -263,9 +262,11 @@
                                                                     <?php
                                                                     $descText = strip_tags($wl->work_order_request);
                                                                     $descText = str_replace("&nbsp;", ' ', $descText);
-                                                                    echo substr($descText, 0, 40);
+                                                                   /// echo substr($descText, 0, 40);
                                                                     echo (substr($descText, 50)) ? '...' : '';
+
                                                                     ?>
+                                                                    <span class="full-desc"><?php echo $descText;?></span>
                                                                 </td>
 
                                                                 <?php /* <td><?php echo $wl->tenantContact?></td> */ ?>

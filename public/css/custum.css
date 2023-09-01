@@ -6158,4 +6158,20 @@ section.ch-home-form form .row select.status {
  .blockActionUI{
     pointer-events: none;
   }
- 
+  span.full-desc:hover {
+    width: 100% !important;
+    overflow: auto;
+    display: block;
+    height: -webkit-fill-available;
+    white-space: normal;
+  }
+  
+  span.full-desc {
+    width: 176px !important;
+    overflow: hidden;
+    height: auto;
+    float: left;
+    /* display: block; */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
