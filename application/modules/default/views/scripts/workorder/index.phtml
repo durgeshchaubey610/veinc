@@ -47,6 +47,19 @@
             $workorderstatus = $workorderstatus . $stvalue . ',';
         }
     }
+
+
+    $reportModel = new Model_Report();
+    $reportDetailLinks = '';
+    $dashBoardViewsdetails = '';
+if ($this->view_type != 'detail') {
+    $reportDetailLinks = $reportModel->getReport($this->custID, 2);
+    $dashBoardViewsdetails = $reportModel->getReport($this->custID, 27);
+} else {
+    $reportDetailLinks = $reportModel->getReport($this->custID, 3);
+}
+
+
 	?>
 	 <!--Body middle Part button start-->
      <div class="row">
@@ -289,7 +302,35 @@ if(strlen($descText)>=30){ ?>
                                                                 }
                                                             }
                                                                 ?>
-                                                                <td><img src="<?php echo BASEURL . 'public/images/printer.png'; ?>" style="width:20px;"></a></td>                                                                                                                                    
+                                                                <td><a <?php if ($dashBoardViewsdetails[0]->report_target == 1) { ?> target="_blank"  <?php } ?> href="<?php echo BASEURL; ?><?php echo $report_type; ?>report_key=<?php echo $dashBoardViewsdetails[0]->report_mrt; ?><?php
+                                                                        if (in_array('[[++user_id]]', $dashBoardViewsdetailsoption)) {
+                                                                            echo '&User=' . $this->userId;
+                                                                        }
+                                                                        ?><?php
+                                                                        if ((in_array('[[++CostCenterNumber]]', $dashBoardViewsdetailsoption))) {
+                                                                            echo '&Cost_Center_Number=' . $wl->uniqueCostCenter;
+                                                                        }
+                                                                        ?><?php
+                                                                        if ((in_array('[[++KeyBuildingNumber]]', $dashBoardViewsdetailsoption))) {
+                                                                            echo '&buildkey=' . $wl->building;
+                                                                        }
+                                                                        ?><?php
+                                                                        if (in_array('[[++BatchNumber]]', $dashBoardViewsdetailsoption) && $wl->wo_batch != 0) {
+                                                                            echo '&Batch_Number=' . $wl->wo_batch;
+                                                                        }
+                                                                        ?><?php
+                                                                        if ((in_array('[[++WONumber]]', $dashBoardViewsdetailsoption))) {
+                                                                            echo '&WO_Number=' . $wl->wo_number;
+                                                                        }
+                                                                        ?><?php
+                                                                        if ((in_array('[[++InvoiceNumber]]', $dashBoardViewsdetailsoption)) && $wl->billable_opt == 1) {
+                                                                            echo '&Invoice_Number=' . $wl->wo_number;
+                                                                        }
+                                                                        ?><?php
+                                                                        if ((in_array('[[++Status_id]]', $dashBoardViewsdetailsoption))) {
+                                                                            echo '&Status=' . $wl->wo_status;
+                                                                        }
+                                                                        ?>" ><img src="<?php echo BASEURL . 'public/images/printer.png'; ?>" style="width:20px;"></a></td>                                                                                                                                    
                                                                 
                                                             </tr> 
                                                             <?php if ($veiw_type == 'line') { ?>
