@@ -6212,3 +6212,6 @@ section.ch-home-form form .row select.status {
       border-right: 10px solid transparent;
       border-bottom: 10px solid #000;
   }
+  .tenant-account-setting .content-center{
+    width: 480px !important;
+}
