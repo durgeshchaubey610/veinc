@@ -5343,6 +5343,7 @@ $show = $this->_getParam('show', '');
         $templateName = "";
         $designationName = "";
         $data = $this->_request->getPost();
+        
         $equipment = new Model_PmTemplate();
         $templatedata = array();
         $AllEquipment = $equipment->getallEquipmentNameByBuildId($select_build_id);
@@ -5553,8 +5554,10 @@ $show = $this->_getParam('show', '');
         $this->_helper->layout()->disableLayout();
         $data = $this->_request->getParams();
         $user_id = $_SESSION['Zend_Auth']['storage']->uid;
-        $cust_id = $_SESSION['Zend_Auth']['storage']->cust_id;
-        $role_id = $_SESSION['Zend_Auth']['storage']->role_id;
+        $cust_id = $_SESSION['Zend_Auth']['storage']->cust_id;      
+     
+        setcookie('eqname', $data['eqname'], time() + (86400 / 24), "/");
+        setcookie('eqparts', $data['eqparts'], time() + (86400 / 24), "/");
         $companyListing = '';
         $buildingMapper = new Model_Building();
         if ($role_id == '9') {
@@ -5606,6 +5609,7 @@ $show = $this->_getParam('show', '');
             }
         }
 
+       
         $equipmentList = $equipment->searchEquipment($select_build_id, $data);
 
         $this->view->totalEquipment = $totalEquipment; //$templatedata;
@@ -5659,6 +5663,14 @@ $show = $this->_getParam('show', '');
         $this->view->companyListing = $companyListing;
         $this->view->select_build_id = $select_build_id;
 
+        if(isset($_COOKIE['eqname'])){
+
+            $data['eqname'] = $_COOKIE['eqname'];
+        }
+        if(isset($_COOKIE['eqparts'])){
+            
+            $data['eqparts'] = $_COOKIE['eqparts'];
+        }
         $equipment = new Model_PmTemplate();
         $AllEquipment = $equipment->searchEquipment($select_build_id, $data);
         echo json_encode($AllEquipment);
