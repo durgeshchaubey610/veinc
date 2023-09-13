@@ -625,14 +625,14 @@ function unique_multidim_array($array, $key) {
                                         <select class="form-control input-csttm input-csttm-padd-0" name="eqname" id="eqname" onchange="searchfor();">
                                             <?php $getEquipmentNameList1 = $this->getEquipmentNameList;
 											foreach ($getEquipmentNameList1 as $equip): ?>
-                                                <option  id="<?php echo $equip['equipmentnameid']; ?>" value="<?php echo $equip['AU_Equipment_Name']; ?>"><?php echo $equip['AU_Equipment_Name']; ?></option>
+                                                <option  id="<?php echo $equip['equipmentnameid']; ?>" <?php echo (isset($_COOKIE['eqname']) && $_COOKIE['eqname']==$equip['AU_Equipment_Name'])?"selected=selected":'';?> value="<?php echo $equip['AU_Equipment_Name']; ?>"><?php echo $equip['AU_Equipment_Name']; ?></option>
                                             <?php endforeach; ?>
 
 
                                         </select>
                                     </td>
                                     <td class="common-wrap" >
-                                        <input type="text" name="eqparts" list="typehintvalue" id="eqparts" class="form-control input-csttm input-csttm-padd-0" autocomplete="off" />
+                                        <input type="text" name="eqparts" list="typehintvalue" id="eqparts" class="form-control input-csttm input-csttm-padd-0" autocomplete="off"  />
                                         <datalist id="typehintvalue"></datalist>
                                     </td>
                                     <td class="common-btn" >       
@@ -1014,6 +1014,10 @@ if (isset($this->equipmentList) && !empty($this->equipmentList)) {
         var limit = $("#show_limit").val();
         window.location = baseUrl + 'pm/equipment/show/' + limit;
     }
+    setTimeout(function () {
+        var eqparts = '<?php echo (isset($_COOKIE['eqparts']) && !empty($_COOKIE['eqparts']))?$_COOKIE['eqparts']:'';?>';
+        $('#eqparts').val(eqparts);
+    }, 600);
     </script>
 
 
