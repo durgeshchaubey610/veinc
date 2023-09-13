@@ -5398,11 +5398,12 @@ $show = $this->_getParam('show', '');
 
         if(isset($_COOKIE['eqname']) && !empty($_COOKIE['eqname'])){
             $data['eqname'] = $_COOKIE['eqname'];
+            if(isset($_COOKIE['eqparts'])&& !empty($_COOKIE['eqparts'])){
+                $data['eqparts'] = $_COOKIE['eqparts'];
+            }
             $equipmentList = $equipment->searchEquipment($select_build_id, $data);
-
         }else{
             $equipmentList = $equipment->getEquipmentList($select_build_id, $data = 0);
-
         }
         // if(isset($_COOKIE['eqparts']) && !empty($_COOKIE['eqparts'])){
         //     $data['eqparts'] = $_COOKIE['eqparts'];
