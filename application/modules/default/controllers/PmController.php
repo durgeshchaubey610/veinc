@@ -5343,6 +5343,9 @@ $show = $this->_getParam('show', '');
         $templateName = "";
         $designationName = "";
         $data = $this->_request->getPost();
+        
+        // print_r($data);
+        // die;
         $equipment = new Model_PmTemplate();
         $templatedata = array();
         $AllEquipment = $equipment->getallEquipmentNameByBuildId($select_build_id);
@@ -5392,7 +5395,18 @@ $show = $this->_getParam('show', '');
             $show = 5;
         }
         $getEquipmentNameList = $equipment->getEquipmentNameList($select_build_id);
-        $equipmentList = $equipment->getEquipmentList($select_build_id, $data = 0);
+
+        if(isset($_COOKIE['eqname']) && !empty($_COOKIE['eqname'])){
+            $data['eqname'] = $_COOKIE['eqname'];
+            $equipmentList = $equipment->searchEquipment($select_build_id, $data);
+
+        }else{
+            $equipmentList = $equipment->getEquipmentList($select_build_id, $data = 0);
+
+        }
+        // if(isset($_COOKIE['eqparts']) && !empty($_COOKIE['eqparts'])){
+        //     $data['eqparts'] = $_COOKIE['eqparts'];
+        // }
         $this->view->equipmentList = $equipmentList;
         $this->view->getEquipmentNameList = $getEquipmentNameList;
         $this->view->custID = $cust_id;
@@ -5593,6 +5607,13 @@ $show = $this->_getParam('show', '');
         $templateName = "";
         $designationName = "";
         $data = $this->_request->getPost();
+        if(isset($data['eqname'])){
+            setcookie('eqname', $data['eqname'], time() + (86400 / 24), "/");
+        }
+        if(isset($data['eqparts'])){
+             setcookie('eqparts', $data['eqparts'], time() + (86400 / 24), "/");
+        }
+
         $equipment = new Model_PmTemplate();
         $templatedata = array();
         $AllEquipment = $equipment->getallEquipmentNameByBuildId($select_build_id);
