@@ -2199,7 +2199,9 @@ class Model_PmTemplate extends Zend_Db_Table_Abstract {
                     ->from(array('patn' => 'pm_au_template_name'))
                     ->joinInner(array('patt' => 'pm_au_template_typedesignation'), 'patn.AU_Template_Name_ID = patt.AU_Template_Name_ID')
                     ->where("BuildingID =?", $build_ID)
-                    ->order('patn.AU_Template_Name');
+                    ->order(array('patn.AU_Template_Name ASC', 'patt.AU_TypeDesignation ASC'));
+                    //ordering changed and commented old By Dadhi 
+                    //->order('patn.AU_Template_Name DESC, patt.AU_TypeDesignation DESC');
         }
 
         $res = $db->fetchAll($select);
@@ -3010,10 +3012,10 @@ Where t1.AU_Template_Designation_ID='" . $desig_id . "'");
                 ->group(array('t2.AU_Equipment_Detail_ID'))
                 ->where('t2.BuildingID  = ?', $buildingId)
                 ->where('t1.AU_Equipment_Name  = ?', $sortingData['eqname']);
-        if (!empty($sortingData['eqparts'])) {
-            //$select->where('t2.Equipment_Location LIKE ?', $sortingData['eqparts'].'%');
-            $select->where("t2.Equipment_Floor LIKE '" . $a1 . "%' or t2.Equipment_Unit LIKE '" . $a1 . "%' or t2.Equipment_Location LIKE '" . $a1 . "%' or t2.Equipment_Make_Model LIKE '" . $a1 . "%' or t5.AU_TypeDesignation LIKE '" . $a1 . "%'");
-        }
+            if (!empty($sortingData['eqparts'])) {
+                //$select->where('t2.Equipment_Location LIKE ?', $sortingData['eqparts'].'%');
+                $select->where("t2.Equipment_Floor LIKE '" . $a1 . "%' or t2.Equipment_Unit LIKE '" . $a1 . "%' or t2.Equipment_Location LIKE '" . $a1 . "%' or t2.Equipment_Make_Model LIKE '" . $a1 . "%' or t5.AU_TypeDesignation LIKE '" . $a1 . "%'");
+            }
 
         //$select->ORwhere('t2.Equipment_Make_Model LIKE ?', $sortingData['eqparts'].'%');
         //$sql = $select->__toString();
