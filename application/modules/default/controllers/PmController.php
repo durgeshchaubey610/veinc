@@ -5429,6 +5429,22 @@ $show = $this->_getParam('show', '');
     }
 
     /**
+     * rest filter By Dadhi
+     * 
+     */
+
+    public function resetfilterAction() {
+        if (isset($_COOKIE['eqname'])) {
+            unset($_COOKIE['eqname']); 
+            setcookie('eqname', '', -1, '/');           
+        }         
+        if (isset($_COOKIE['eqparts'])) {
+            unset($_COOKIE['eqparts']); 
+            setcookie('eqparts', '', -1, '/');           
+        }        
+        $this->_redirect('/pm/equipment');
+    }
+    /**
      * This is the sorting purpose
      */
     public function sortequipmentnameAction() {
