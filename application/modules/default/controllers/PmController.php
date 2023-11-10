@@ -2365,7 +2365,7 @@ $show = $this->_getParam('show', '');
         $template = new Model_PmTemplate();
         $user_id = $_SESSION['Zend_Auth']['storage']->uid;
         $build_id = $_SESSION['current_building'];
-        $tempdata = $template->GetAllEquipmentTemplateName("", $build_id, $user_id);
+        $tempdata = $template->GetAllEquipmentTemplateName("", $build_id, null);
         // send data to view pages
         $this->view->templats = $tempdata;
     }
