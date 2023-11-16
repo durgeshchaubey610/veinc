@@ -9,7 +9,34 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/tenant_Info.
 echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/bootstrap.js');
 echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/bootstrap-editable.js');
 
+
 ?>
+<div id="fdw">
+            <div class="tabmenu my_tabmenu">
+				<?php
+				$tenantCompanyList = $this->tenantGroupListArr;
+				$tId = $this->tId;
+				if(!$tId){
+					$tId = $tenantCompanyList[0]->tenantId;
+				}							
+				if($tenantCompanyList){?>
+                <ul>
+
+                 <?php foreach($tenantCompanyList as $tenantCompany){?>
+					<li style="background-color:#800000" class="<?php echo ($tenantCompany->tenantId==$tId)?'resp-tab-active':'';?>"><a class="" href="<?php echo $this->baseUrl();?>/tenant/tenantuser/company/<?php echo $tenantCompany->tenantId;?>"><?php echo $tenantCompany->tenantName;?></a>
+
+                  <?php } ?>
+
+
+
+
+                </ul>
+				<?php } ?>
+            <!-- Report Link -->
+
+
+
+        </div>
 <?php
 $roleMapper = new Model_Role();
 $roleDetail = $roleMapper->getRole();
@@ -32,8 +59,9 @@ foreach($sendDetail as $sd){
 		$uinfo = $this->tenantuser;
 		$tenant = new Model_TenantUser();
 		$tenantuser = $tenant->getTenantUsers($uinfo->id);	
-		
-		//var_dump($uinfo);
+		// echo '<pre>';
+		// print_r($tenantuser);
+		// die;
 		?>
 		<section id="first" class="w-48 fr ch-home-form" style="z-index:9999">
     <section class="ch-form-header ">
@@ -149,30 +177,34 @@ foreach($sendDetail as $sd){
 						  						  
 					 </fieldset> <?php */ ?>
 					 <?php if($uinfo->role_id==5){
-						    
+						
+
 						 ?>
 						 <div class="tuser-list" style="overflow:auto">
 								<table width="100%" class="building_table_grid" style="width:99.9%">
 									<tr>
-										<th width="11%">Last Name</th>
-										<th width="11%">First Name</th>			
-										<th width="24%">E-mail Address</th>
-										<th width="8%">Cc Enabled</th>
-										<th width="8%">Send As</th>
+										<th width="10%">Last Name</th>
+										<th width="10%">First Name</th>			
+										<th width="20%">E-mail Address</th>
+										<th width="4%">Suite</th>
+										<th width="4%">Cc Enabled</th>
+										<th width="4%">Send As</th>
 										<th width="8%">Access</th>
 										<th width="10%">Complete Notification</th>
 										<th width="10%">Note Notification</th>
 										<th width="10%" style="border:none;">Action</th>
 									</tr>
 									<?php if($tenantuser){
+
+										print_r();
 											 foreach($tenantuser as $tuser){
-												 //var_dump($tuser);
-												
+																							
 										 ?>
 										 <tr>
 											 <td><?php echo stripslashes($tuser->lastName);?></td>
 											 <td><?php echo stripslashes($tuser->firstName);?></td>				 
 											 <td><?php echo $tuser->email;?></td>
+											 <td><?php echo $tuser->suite_location;?></td>
 											 <td><?php echo ($tuser->cc_enable)?'Yes':'No';?></td>
 											 <td><?php echo $send_data[$tuser->send_as];?></td>
 											 <td><?php echo $role_data[$tuser->role_id]?></td>
@@ -278,3 +310,19 @@ $(document).ready(function(){
 	});
 });
 </script>
+
+<style>
+	.my_resp-tab-active {
+  background: none!important;
+}
+.resp-tab-active {
+  padding: 5px 10px !important;
+}
+#fdw .my_tabmenu ul li{
+	padding: 5px 10px !important;
+	margin-right:5px;
+}
+.my_tabmenu > ul {
+	padding: 5px 0px !important;
+}
+</style>

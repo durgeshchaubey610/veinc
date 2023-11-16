@@ -6,6 +6,9 @@ $roleDetail = $roleMapper->getRole();
 $sendMapper = new Model_SendAs();
 $sendDetail = $sendMapper->getSendAs();
 //var_dump($this->tuserDetial);
+
+
+
 ?>
 <div class="container-right" id="add-tenant-data">
 	<span id="page_heading" class="tu-heading"><h3>Tenant User (EDIT)</h3></span>
@@ -154,9 +157,31 @@ $sendDetail = $sendMapper->getSendAs();
                                 </div>
 							</div>	
 							
-							</div>							
+							</div>	
+						
 								
 						</div>
+						<!-- <div class="row">
+						<div class='col-lg-6 ' >
+						<label>Tenant's Group :</label>
+									</div>
+						</div>			 -->
+						<?php	
+						$uid = $this->tuserDetial->uid;
+						$tenant = new Model_Tenant();
+						$tenantCompanyList = $tenant->getTenantCompanies($uid);
+						foreach($tenantCompanyList as $tenantCompany){?>
+						<!-- <div class="row">
+						   <div>                            
+							<label><?php echo $tenantCompany->tenantName;?></label>
+							<input type='checkbox' name="tentgroup[]" id="tentgroup[]" value='<?php echo $tenantCompany->id;?>' >
+							
+						</div> -->
+						<?php	
+						} 
+
+						?>
+						
 						<div class="row">
 						<div class='col-lg-12'> 
 						Reset Password

@@ -42,8 +42,6 @@ class WorkorderController extends Ve_Controller_Base {
      */ 
     public function indexAction(){
 
-
-
 		$companyListing = '';
         $buildingMapper = new Model_Building();
         if ($this->roleId == '9') {
@@ -52,20 +50,22 @@ class WorkorderController extends Ve_Controller_Base {
             $user_build_mod = new Model_UserBuildingModule();
             $buildinglists = $user_build_mod->getUserBuildingIds($this->userId);
             if ($buildinglists) {
-                $build_id_array = array();
-                foreach ($buildinglists as $buildlist)
-                    $build_id_array[] = $buildlist['building_id'];
+				$build_ID = $buildinglists[0]['building_id'];
+                // $build_id_array = array();
+                foreach ($buildinglists as $buildlist){
+                        $build_id_array[] = $buildlist['building_id'];
+				 }
                 $companyListing = $buildingMapper->getBuildingList($build_id_array);
-				//print_r($companyListing);
             }
-        }
 
+        }	
         $page = $this->_getParam('page', 1);
         $order = $this->_getParam('order', 'woId');
         $dir = $this->_getParam('dir', 'DESC');
-        
         $wolist = '';
-        $build_ID = $this->_getParam('bid', '');
+        $show =  $_COOKIE['show_limit'];
+        $build_ID = $this->_getParam('bid', '');  
+          
         $select_build_id = $build_ID;
         /*         * *******set building in cookie ********* */
         $buildIds = array();
@@ -110,18 +110,14 @@ class WorkorderController extends Ve_Controller_Base {
             setcookie('show_limit', $show, 2147483647, '/');
         }else{
            $show =  $_COOKIE['show_limit'];
-        }
-        
-//        if($show == 'all'){
-//            $show = 1000;
-//        }
-        //echo $show;
+        }       
+
         if(unserialize($show)){
             $show =  unserialize($show);
         }
         //if(!is_int($show) || $show==""){
         if($show==""){
-            $show = 10;
+            $show = 25;
         }
 
         $category_name = $this->_getParam('category_name', '');
@@ -160,6 +156,7 @@ class WorkorderController extends Ve_Controller_Base {
 
             /* if($this->roleId=='9'){ */
             if ($build_ID == '') {
+				
                 $buildIds = array();
                 foreach ($companyListing as $cl) {
                     $buildIds[] = $cl['build_id'];
@@ -167,7 +164,6 @@ class WorkorderController extends Ve_Controller_Base {
                $wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array,$page, $show);
               $wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
             } else {
-
                 $wolist = $woModel->getBuildingWorkOrder($build_ID, $order, $dir, $search_array,$page, $show);
              $wolistcount = $woModel->getBuildingWorkOrderNew($build_ID, $order, $dir, $search_array);
             }
@@ -267,7 +263,8 @@ class WorkorderController extends Ve_Controller_Base {
 			$userId =  $this->userId;
 		    $wolist = $this->woMapper->getTenantUserWorkOrder($tenantInfo->tenantId,$order,$dir,$userId);
 
-		 }		//  if($this->roleId=='7')		 
+		 }		
+		//  if($this->roleId=='7')		 
 		//  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir,$this->userId);
 		//  else
 		//  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir);

@@ -58,6 +58,88 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
         return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;  
    }
     
+
+   public function checkTenantUserEmail($email){
+    $db = Zend_Db_Table::getDefaultAdapter(); 
+    $select = $db->select()
+            ->from(array('b'=>'buildings'))
+            ->joinRight(array('c'=>'company'),'c.cust_id = b.cust_id',array('Building_Name'=>'b.buildingName','Management_Company'=>'c.companyName','BuildingId'=>'b.build_id'))
+            ->joinRight(array('t'=>'tenant'),'b.build_id = t.buildingId',array('Tenant_Name'=>'t.tenantName','Tenant_Suite'=>'t.suite'))
+            ->joinLeft(array('tu'=>'tenantusers'),'t.id = tu.tenantId',array('User_Suit_Location'=>'tu.suite_location','TenantId'=>'t.id'))
+            ->joinLeft(array('u'=>'users'),'tu.userId = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
+            ->where('u.email=?',$email);
+            //echo $select->__toString()."\n";
+            $matchjobRes=$db->fetchAll($select);
+            return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;  
+                   
+ }
+
+ public function filterTenentMultiUserList($email){
+   
+    $db = Zend_Db_Table::getDefaultAdapter(); 
+    $select = $db->select()
+            ->from(array('u'=>'users'))
+            ->joinRight(array('to'=>'au_tenant_options'),'to.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
+            ->joinInner(array('t'=>'tenant'),'t.id = to.TenantID')
+             ->joinInner(array('b'=>'buildings'),'b.build_id = to.BuidlingID');
+           // ->joinInner(array('c'=>'company'),'c.cust_id = b.cust_id',array('Building_Name'=>'b.buildingName','Management_Company'=>'c.companyName','BuildingId'=>'b.build_id'))
+           // ->joinInner(array('u'=>'users'),'tu.userId = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'));
+           // ->joinInner(array('to'=>'au_tenant_options'),'to.TenantID = t.id');
+           if($email){
+                $select->where('u.email=?',$email);
+           }
+            //echo $select->__toString()."\n";
+            $matchjobRes=$db->fetchAll($select);
+            return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;  
+                   
+ }
+
+
+ public function checktenantAllowOption($email){
+   
+    $db = Zend_Db_Table::getDefaultAdapter(); 
+    $select = $db->select()
+            ->from(array('u'=>'users'))
+            ->joinRight(array('to'=>'au_tenant_options'),'to.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
+            ->joinInner(array('t'=>'tenant'),'t.id = to.TenantID')
+             ->joinInner(array('b'=>'buildings'),'b.build_id = to.BuidlingID');
+           // ->joinInner(array('c'=>'company'),'c.cust_id = b.cust_id',array('Building_Name'=>'b.buildingName','Management_Company'=>'c.companyName','BuildingId'=>'b.build_id'))
+           // ->joinInner(array('u'=>'users'),'tu.userId = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'));
+           // ->joinInner(array('to'=>'au_tenant_options'),'to.TenantID = t.id');
+           if($email){
+                $select->where('u.email=?',$email);
+           }
+            //echo $select->__toString()."\n";
+            $matchjobRes=$db->fetchAll($select);
+            return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;  
+                   
+ }
+
+
+
+ public function getTenatUserByUserid($tenantid){
+
+    $db = Zend_Db_Table::getDefaultAdapter(); 
+    $select = $db->select()
+            ->from(array('u'=>'users'))
+            ->joinRight(array('to'=>'au_tenant_options'),'to.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
+
+            ->joinLeft(array('tu'=>'tenantusers'),'tu.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
+             
+            ->joinLeft(array('t'=>'tenant'),'tu.tenantId = t.id')
+          
+            
+
+            ->joinLeft(array('b'=>'buildings'),'b.build_id = to.BuidlingID');
+             //$select->where('tu.tenantId=?',$tenantid);
+             $select->where('tu.userId=?',$tenantid);
+            $matchjobRes=$db->fetchAll($select);
+            return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ; 
+            
+ }
+ 
+
+
    public function getTenantByBuildingId($buildId, $recoverFlag=false, $search=array() ){
         
         $db = Zend_Db_Table::getDefaultAdapter(); 
@@ -211,7 +293,34 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
 
         return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;                
 	}
-	
+
+    public function getTenanyUserByTenantGroup($tid){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		 $select = $db->select()
+                         ->from(array('t'=>'tenant'))
+                         ->join(array('tuser'=>'tenantusers'),'tuser.tenantId = t.id',array('tuId'=>'tuser.id','tuserId'=>'tuser.id','tenantId'=>'tuser.tenantId','tenantuserId'=>'tuser.userId','suite_location'=>'tuser.suite_location','cc_enable'=>'tuser.cc_enable','send_as'=>'tuser.send_as','complete_notification'=>'tuser.complete_notification'))
+                         ->joinLeft(array('u'=>'users'),'u.uid = tuser.userId',array('uid'=>'u.uid','firstName'=>'u.firstName','lastName'=>'u.lastName','userpNumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id','userName'=>'u.userName','note_notification'=>'u.note_notification', 'userPhoneNumber'=>'u.phoneNumber'))
+						 ->joinLeft(array('st' => 'states'),'st.state_code = t.state_code',array('st.state as statename'))
+                        // ->where('tuser.userId=?',$uid)
+                         ->where('tuser.tenantId=?',$tid);
+         $matchjobRes=$db->fetchAll($select);
+
+        return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;                
+	}
+	public function getTenantCompanies($uid){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		 $select = $db->select()
+                         ->from(array('t'=>'tenant'))
+                         ->join(array('tuser'=>'tenantusers'),'tuser.tenantId = t.id',array('tuId'=>'tuser.id','tuserId'=>'tuser.id','tenantId'=>'tuser.tenantId','tenantuserId'=>'tuser.userId','suite_location'=>'tuser.suite_location','cc_enable'=>'tuser.cc_enable','send_as'=>'tuser.send_as','complete_notification'=>'tuser.complete_notification'))
+                         ->joinLeft(array('u'=>'users'),'u.uid = tuser.userId',array('uid'=>'u.uid','firstName'=>'u.firstName','lastName'=>'u.lastName','userpNumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id','userName'=>'u.userName','note_notification'=>'u.note_notification', 'userPhoneNumber'=>'u.phoneNumber'))
+						// ->joinLeft(array('st' => 'states'),'st.state_code = t.state_code',array('st.state as statename'))
+                         ->where('tuser.userId=?',$uid);
+                         $select = $select->order(array('t.tenantName ASC'));
+
+         $matchjobRes=$db->fetchAll($select);
+
+        return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;                
+	}
 	public function getTenantByUid($uid){
 		$db = Zend_Db_Table::getDefaultAdapter();
 		 $select = $db->select()

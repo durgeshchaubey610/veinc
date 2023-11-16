@@ -36,14 +36,14 @@ class Model_TenantUser extends Zend_Db_Table_Abstract {
 		if($recoverFlag){
 			$select = $db->select()
 				 ->from(array('u' => 'users'), array('uid','userName','firstName','lastName','email','role_id','phoneNumber','phoneExt','Title','status','note_notification'))
-				 ->joinInner(array('tu' => 'tenantusers'), 'u.uid = tu.userId', array('id','tenantId','cc_enable','send_as','complete_notification','main_contact'))
+				 ->joinInner(array('tu' => 'tenantusers'), 'u.uid = tu.userId', array('id','tenantId','cc_enable','send_as','complete_notification','main_contact','suite_location'  ))
 				 ->where('u.remove_status = ?', '1')				 
 				 ->where('tu.tenantId = ?', $tenantId);
 		}
 		else{
 			$select = $db->select()
 				 ->from(array('u' => 'users'), array('uid','userName','firstName','lastName','email','role_id','phoneNumber','phoneExt','Title','status','note_notification'))
-				 ->joinInner(array('tu' => 'tenantusers'), 'u.uid = tu.userId', array('id','tenantId','cc_enable','send_as','complete_notification','main_contact'))
+				 ->joinInner(array('tu' => 'tenantusers'), 'u.uid = tu.userId', array('id','tenantId','cc_enable','send_as','complete_notification','main_contact','suite_location'))
 				 ->where('u.remove_status = ?', '0')				 
 				 ->where('tu.tenantId = ?', $tenantId);
 			if($buildingId!=''){
@@ -86,7 +86,7 @@ class Model_TenantUser extends Zend_Db_Table_Abstract {
 				 ->from(array('t' => 'tenant'))
 				 ->joinInner(array('tu' => 'tenantusers'), 't.id = tu.tenantId', array('id','tenantId','suite_location','cc_enable','send_as','complete_notification'))
 				 ->where('t.remove_status = ?', '0')				 
-				 ->where('tu.userId = ?', $uId);
+				 ->where('tu.userId = ?', $uid);
 		$res = 	 $db->fetchAll($select);
         return ($res && sizeof($res)>0)? $res : false ;
 	}

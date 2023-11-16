@@ -80,21 +80,23 @@ function cancelUser() {
 }
 
 /*********check company exists or not **********/
-
+/** *
 function checkTUser(tId) {
-    $('#addtenantuser').attr('disabled', true);
+    
+    //$('#addtenantuser').attr('disabled', true);
     parent.CheckForSessionpop(baseUrl);
     $('.loader').show();
     var checkComp = false;
     var email = $.trim($('#email').val());
     //alert('cname'+cname);
     if (email != '') {
-        if (!validateEmail(email)) {
-            $('.uemailErr').html("E-Mail Address Invalid");
-            $('#email').addClass('inputErr');
-            $('#email').focus();
-            $('#addtenantuser').attr('disabled', false);
-        } else {
+        if (email) {
+        //     $('.uemailErr').html("E-Mail Address Invalid");
+        //     $('#email').addClass('inputErr');
+        //     $('#email').focus();
+        //     $('#addtenantuser').attr('disabled', false);
+        // } else {
+          //  $('#addtenantuser').attr('disabled', false);
             $.ajax({
                 type: "POST",
                 url: baseUrl + 'tenant/checktenant',
@@ -109,12 +111,9 @@ function checkTUser(tId) {
                         $('#email').removeClass('inputErr');
                         createUser(tId);
                     } else {
-                        //alert('Company is not existed');
-                        $('#email-error').html("Email already in use.");
-                        $('#email').addClass('inputErr');
-                        $('#email').focus();
-                        $('#addtenantuser').attr('disabled', false);
-                        return false;
+
+                       // checktenantInfo(tId);                      
+                        
                     }
                 }
             });
@@ -129,6 +128,131 @@ function checkTUser(tId) {
     }
 
 }
+
+**/
+
+function checkTUser(tId) {
+    $('#addtenantuser').attr('disabled', true);
+    parent.CheckForSessionpop(baseUrl);
+    $('.loader').show();
+    var checkComp = false;
+    var email = $.trim($('#email').val());
+  //  alert('cname');
+    if (email != '') {
+        if (!validateEmail(email)) {
+            $('.uemailErr').html("E-Mail Address Invalid");
+            $('#email').addClass('inputErr');
+            $('#email').focus();
+            $('#addtenantuser').attr('disabled', false);
+        } else {
+            // check user exist in tenat option
+            var allowedMulitiUser = false;
+            $.ajax({
+                type: "POST",
+                url: baseUrl + 'tenant/checkmultiusers',
+                data: {email: $("#email").val()},
+                success: function (data) {
+                   
+                   var finalData =  JSON.parse(data);
+                 //  alert(finalData.UserID);
+
+                   if(finalData.UserID){                   
+                      var tenantId = $('#tenantId').val();  
+                      var buildingID = $('#building').val(); 
+                      var user_id = finalData.UserID;                     
+                      var suitelocation = $('#suite_location').val();
+                      var completenotification =  $('#complete_notification').val(); 
+                      var ccenable =  $('#cc_enable').val(); 
+                      var status  =  $('#status').val();                              
+                      mapTenantUserGroup(tenantId,buildingID,user_id,suitelocation,completenotification,ccenable);
+                     
+                   }else{
+                    $.ajax({
+                        type: "POST",
+                        url: baseUrl + 'tenant/checktenant',
+                        data: {email: email},
+                        beforeSend: function () {
+                            //$('.loader').show();
+                        },
+                        success: function (msg) {
+                            $('.loader').hide();
+                            if (msg != true) {
+                                $('#email-error').html("");
+                                $('#email').removeClass('inputErr');
+                                createUser(tId);
+                                location.reload();
+                            } else {
+                                //alert('Company is not existed');
+                                $('#email-error').html("Email already in use.");
+                                $('#email').addClass('inputErr');
+                                $('#email').focus();
+                                $('#addtenantuser').attr('disabled', false);
+                                return false;
+                            }
+                        }
+                    });
+                   }
+                   
+                }
+            });
+
+            
+        }
+
+    } else {
+        $('.loader').hide();
+        $('#email-error').html("Enter the email-id");
+        $('#email').addClass('inputErr');
+        $('#email').focus();
+        return false;
+    }
+
+}
+
+
+function checktenantInfo(tId){
+    if(tId!=''){
+            $.ajax({
+                type: "POST",
+                url: baseUrl + 'tenant/checktenantinfo',
+
+                data: {tid: tId},
+                beforeSend: function () {
+                    //$('.loader').show();
+                },
+                success: function (msg) {
+                console.log(msg);
+                }
+            });
+
+    }
+}
+
+function mapTenantUserGroup(tenantId,buildingID,user_id,suitelocation,completenotification,ccenable){
+         
+    $.ajax({
+         url         : baseUrl+"tenant/addtenantusers",
+         type        : "post",
+         datatype    : 'json',
+         data        : {
+            bid:buildingID,
+            uid:user_id,
+            tid:tenantId,
+            suitelocation:suitelocation,
+            ccenable:ccenable,
+            completenotification:completenotification
+        
+         },
+         beforeSend: function () {
+            //$('.loader').show();
+        },
+        success: function (msg) {
+            location.reload();
+        }
+         
+         });
+}
+
 function createUser(tId) {
     $('.loader').show();
     var submit_flag = 0;
@@ -1552,3 +1676,4 @@ function deleteTUserByTadmin(tId, uId) {
     }
 
 }
+
