@@ -165,7 +165,7 @@ function checkTUser(tId) {
                       var ccenable =  $('#cc_enable').val(); 
                       var status  =  $('#status').val();                              
                       mapTenantUserGroup(tenantId,buildingID,user_id,suitelocation,completenotification,ccenable);
-                     
+                    
                    }else{
                     $.ajax({
                         type: "POST",
@@ -247,7 +247,8 @@ function mapTenantUserGroup(tenantId,buildingID,user_id,suitelocation,completeno
             //$('.loader').show();
         },
         success: function (msg) {
-            location.reload();
+            alert(msg);
+           // location.reload();
         }
          
          });

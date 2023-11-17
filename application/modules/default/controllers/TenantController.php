@@ -711,8 +711,15 @@ class TenantController extends Ve_Controller_Base {
    // echo $tenentdata['UserID']. '--'.$tenentdata['BuidlingID'].'--'.$tenentdata['TenantID'];
     $tenantOptionModel = new Model_TenantOption();
      // echo $tenentdata['UserID']. '--'.$tenentdata['BuidlingID'].'--'.$tenentdata['TenantID'];
-    $tenantOptionModel->insertTenantOption($tenentdata);
-    echo 1;
+    try{
+     $tenantOptionModel->insertTenantOption($tenentdata);
+     echo 1;
+    } catch (Exception $e) {
+        echo $e->getMessage();  
+
+    }
+
+    exit(0);
 
  }
 

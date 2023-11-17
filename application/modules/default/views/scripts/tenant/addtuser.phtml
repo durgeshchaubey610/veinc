@@ -112,5 +112,37 @@ $sendDetail = $sendMapper->getSendAs();
 			  </div>
 			  
 <script type="text/javascript">
-	 $("#phone").mask("?999.999.9999")
+	 $("#phone").mask("?999.999.9999");
+	 $('input[name=email]').change(function() { 
+		$.ajax({
+        type: "POST",
+        url: baseUrl + 'tenant/checkmultiusers',
+        data: {email: $("#email").val()},
+        success: function (data) {
+          var finalData =  JSON.parse(data);
+           if(finalData.UserID){
+			//alert('mutiluser have access');
+			console.log(finalData);
+			$('#firstname').val(finalData.User_First_Name);
+			$('#lastname').val(finalData.User_Last_Name);
+			$('#phone').val(finalData.phoneNumber);
+			$( "#firstname" ).prop("disabled", true );
+			$( "#lastname" ).prop("disabled", true );
+			$('#phone').prop("disabled", true );           
+           }else{
+			$('#firstname').val('');
+			$('#lastname').val('');
+			$('#phone').val('');
+			$( "#firstname" ).prop("disabled", false );
+			$( "#lastname" ).prop("disabled", false );
+			$('#phone').prop("disabled", false );
+			
+		   }
+           
+        }
+    });
+
+	 });
+
+	
 </script>
