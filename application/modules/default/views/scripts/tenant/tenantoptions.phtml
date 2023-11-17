@@ -645,6 +645,7 @@ function unique_multidim_array($array, $key) {
                         $('#user_contact_info').show();
                         $('#user_contact_tbl').html(data);
                        var checkAccess =  checktenantallow();
+                      
                        $.ajax({
                             type: "POST",
                             url: baseUrl + 'tenant/sortmultiuser',
@@ -652,7 +653,7 @@ function unique_multidim_array($array, $key) {
                             success: function (data) {
                                 if(data){
                                 // $('#user_contact_tbl').hide();
-                                // $('#upperform').hide();
+                                 $('#upperform').hide();
                                  $('#email_address1').val($("#email_address").val());
                                 }
                                
