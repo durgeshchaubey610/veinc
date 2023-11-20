@@ -2989,6 +2989,7 @@ Where t1.AU_Template_Designation_ID='" . $desig_id . "'");
         $select->from(array('t1' => 'pm_au_equipment_name'), array('equipmentnameid' => 't1.AU_Equipment_Name_ID', 'AU_Equipment_Name' => 't1.AU_Equipment_Name', 'BuildingID' => 't1.BuildingID'))
                      ->where('t1.BuildingID  = ?', $buildingId)
                      ->order('AU_Equipment_Name ASC');
+                     
         $res = $db->fetchAll($select);
         foreach ($res as $data) {
             $datas[] = (array) $data;

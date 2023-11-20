@@ -714,12 +714,13 @@ class TenantController extends Ve_Controller_Base {
     try{
      $tenantOptionModel->insertTenantOption($tenentdata);
      echo 1;
+     exit(0);
     } catch (Exception $e) {
         echo $e->getMessage();  
 
     }
 
-    exit(0);
+   
 
  }
 

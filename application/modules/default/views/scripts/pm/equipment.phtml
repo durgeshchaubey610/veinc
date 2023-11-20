@@ -622,15 +622,8 @@ function unique_multidim_array($array, $key) {
                                                 <option  id="<?php //echo $equip->AU_Equipment_Name_ID;    ?>" value="<?php //echo $equip->AU_Equipment_Name;    ?>">
                                         <?php //endforeach;  ?>
                                         </datalist>-->
-                                        <?php
-
-                                        //var_dump($this->getEquipmentNameList);
-
-                                        ?>
                                         <select class="form-control input-csttm input-csttm-padd-0" name="eqname" id="eqname" onchange="searchfor();">
                                             <?php $getEquipmentNameList1 = $this->getEquipmentNameList;
-
-                                            ksort($getEquipmentNameList1,'AU_Equipment_Name');
 											foreach ($getEquipmentNameList1 as $equip): ?>
                                                 <option  id="<?php echo $equip['equipmentnameid']; ?>" <?php echo (isset($_COOKIE['eqname']) && $_COOKIE['eqname']==$equip['AU_Equipment_Name'])?"selected=selected":'';?> value="<?php echo $equip['AU_Equipment_Name']; ?>"><?php echo $equip['AU_Equipment_Name']; ?></option>
                                             <?php endforeach; ?>
