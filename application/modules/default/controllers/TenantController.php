@@ -639,8 +639,9 @@ class TenantController extends Ve_Controller_Base {
         $this->_helper->layout()->disableLayout();
         $email = $this->_getParam('email');
         $tenantModel = new Model_Tenant();
-       
-        $tenantDetail = $tenantModel->filterTenentMultiUserList($email);
+        $data = array();
+        $data['email'] = $email;
+        $tenantDetail = $tenantModel->filterTenentMultiUserList($data);
        
         if($tenantDetail){
           
