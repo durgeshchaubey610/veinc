@@ -74,7 +74,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
                    
  }
 
- public function filterTenentMultiUserList($email){
+ public function filterTenentMultiUserList($data){
    
     $db = Zend_Db_Table::getDefaultAdapter(); 
     $select = $db->select()
@@ -85,9 +85,14 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
            // ->joinInner(array('c'=>'company'),'c.cust_id = b.cust_id',array('Building_Name'=>'b.buildingName','Management_Company'=>'c.companyName','BuildingId'=>'b.build_id'))
            // ->joinInner(array('u'=>'users'),'tu.userId = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'));
            // ->joinInner(array('to'=>'au_tenant_options'),'to.TenantID = t.id');
-           if($email){
-                $select->where('u.email=?',$email);
+           if($data['email']){
+             $select->where('u.email=?',$data['email']);
            }
+           if ($data['id'] == '0') {
+               $select->order('u.userName DESC');
+            } else {
+                $select->order('u.userName ASC');
+            }
             //echo $select->__toString()."\n";
             $matchjobRes=$db->fetchAll($select);
             return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;  

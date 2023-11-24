@@ -450,8 +450,8 @@ function unique_multidim_array($array, $key) {
 
             <div class="row search-box-main-row">
             <h4>Tenant Options:</h4>
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12 controls bttons-view-right" id="upperform" >
-                    <form onsubmit="return false" id="allow-form" class="tbl-add-multi-role">
+                <div class="controls bttons-view-left" id="upperform" >
+                    <form onsubmit="return false" id="allow-form" class="tbl-add-multi-role pull-left">
                        
                         <table>
                             <tbody>
@@ -492,11 +492,11 @@ function unique_multidim_array($array, $key) {
                 </div>
                 
                 <div id="user_contact_info" style="display:none;">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
+                        <div class="">
                             <h4 style="text-align:left;">Contact Information:</h4>
                        
             
-            <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12 controls bttons-view-right">
+            <div class="controls bttons-view-left pull-left">
                     <form onsubmit="return false">
                        
                         <table>
@@ -530,7 +530,7 @@ function unique_multidim_array($array, $key) {
                 <div class="clearfix"></div>
                 <div class="clearfix"></div>
                 <br/>
-             <table id="user_contact_tbl" class="table100 ver2 m-b-110 user_contact_info" width="100%">
+             <table id="user_contact_tbl" class="table100 ver3 m-b-110 user_contact_info" width="100%">
              </table>
 
 
@@ -539,11 +539,9 @@ function unique_multidim_array($array, $key) {
              
              <div class="row" id="by_quipment" >
                 <div class="table100 ver2 m-b-110">
-                    <div class="heading-main-equipmnt">Muti-User Allowed List</div>
-                    <div class="heading-sub-equipmnt">Listed by User (A-Z)<span><a href="javascript:void(0);" id="sortingid" onclick="sortingalloweduser();"><span class="shorting-icon-white glyphicon glyphicon-sort-by-attributes arrow-shrting"></span><input type="hidden" value="1" name="sortingvalue" id="sortingvalue"></a></span></div>
+                    <div class="heading-main-equipmnt">Multi-User Allowed List</div>
+                    <div class="heading-sub-equipmnt">Listed by User (A-Z)<span><a href="javascript:void(0);" id="sortingid" onclick="sortingmultiusername();"><span class="shorting-icon-white glyphicon glyphicon-sort-by-attributes arrow-shrting"></span><input type="hidden" value="1" name="sortingvalue" id="sortingvalue"></a></span></div>
                     <div class="clearfix"></div>
-
-
                     <div id="pm-work-cta-1" class="pm-work-tbl">
 
                     
@@ -751,7 +749,38 @@ function checktenantallow(){
     });
 
 }
+function sortingmultiusername() {
+    var x = $("#sortingvalue").val();
+    if (x == 1) {
+        $("#sortingid").html('<span class="glyphicon glyphicon-sort-by-attributes-alt arrow-shrting"></span><input type="hidden" value="0" name="sortingvalue" id="sortingvalue">');
+        id = $("#sortingvalue").val();
+    } else {
+        $("#sortingid").html('<span class="shorting-icon-white glyphicon glyphicon-sort-by-attributes arrow-shrting"></span><input type="hidden" value="1" name="sortingvalue" id="sortingvalue">');
+        id = $("#sortingvalue").val();
+    }
 
+    // $.ajax({
+    //     type: "POST",
+    //     url: baseUrl + 'pm/sortequipmentname',
+    //     data: {id: id},
+    //     success: function (data) {
+    //         console.log(data);
+    //         $('#sortequipmentname').html(data);
+    //     }
+    // });
+    $.ajax({
+        type: "POST",
+        url: baseUrl + 'tenant/sortmultiuser',
+        data: {email: $("#email_address1").val(),
+            id: id
+        },
+        success: function (data) {
+            //console.log(data);
+            $('#pm-work-cta-1').html(data);
+        }
+    });
+
+}
 function sortingalloweduser(){
 
     $.ajax({
@@ -767,17 +796,27 @@ function sortingalloweduser(){
 
     </script>
     <style>
-        .table100.ver2 th {
+.table100.ver2 th {
   color: #000;
   line-height: 2.4;
   text-transform: none;
   background-color: #3bc95e;
   border-right: 1px solid #ccc;
 }
+.table100.ver3 th {
+  color: #000;
+  line-height: 2.4;
+  text-transform: none;
+  background-color: #3bc95e;
+  border-right: 1px solid #ccc;
+  padding:0px 3px;
+}
 .table100.ver2 td{
     text-align:left;
 }
-
+.tntopt-btn-section{
+    padding:5px 0px;
+}
 
     </style>
 

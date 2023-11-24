@@ -158,7 +158,17 @@ if (!in_array($userRoleID, $not_account)) {
 
 
     /*     * *****Utilities module access********* */
+    $tMultiuserAccess = $actionnHelper->checkAccess($userRoleID, 36);
+    $customeAccessmodeld = $customeAccessmodel->getUserCustomAccess($userId, 36);
+    if ($customeAccessmodeld[0]) {
+        $tMultiuserAccess = $customeAccessmodeld[0];
+    }
+  
+
+
+
     $tRecoveryAccess = $actionnHelper->checkAccess($userRoleID, 19);
+    
     $customeAccessmodeld = $customeAccessmodel->getUserCustomAccess($userId, 19);
     if ($customeAccessmodeld[0]) {
         $tRecoveryAccess = $customeAccessmodeld[0];
@@ -558,8 +568,11 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
                         <li><a href="<?php echo BASEURL . 'vendor/vendorrecovery/' ?>" <?php if ($controller == 'vendor' && $actionnm == 'tenantrecovery') { ?>class="menuselected"<?php } ?>>Vendor Recovery  </a></li>
                         <?php
                     }?>
-                    <li><a href="<?php echo BASEURL . 'tenant/tenantoptions/' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantoptions') { ?>class="menuselected"<?php } ?>>Tenant Options  </a></li>
-                    <?php
+                    <?php if ($tMultiuserAccess->is_access == 0) { ?>
+                       <li><a href="<?php echo BASEURL . 'tenant/tenantoptions/' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantoptions') { ?>class="menuselected"<?php } ?>>Tenant Options  </a></li>
+                   <?php } ?>
+
+                  <?php
                     if ($cRecoveryAccess->is_access == 0) {
                         ?>
                         <li><a href="<?php echo BASEURL . 'category/recovercategory' ?>" <?php if ($controller == 'category' && $actionnm == 'recovercategory') { ?>class="menuselected"<?php } ?>>Category Recovery</a></li>

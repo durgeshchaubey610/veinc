@@ -597,7 +597,7 @@ class TenantController extends Ve_Controller_Base {
         $html .= '<tr>';
         $html .= '<td>';
             
-        $html .= '<div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
+        $html .= '<div class="tntopt-btn-section">
                <a id="byequipment" type="button" class="btn btn-csttm btn-success group-btn-custom" href="">Cancel</a>
                <a id="addtenantOption" type="button" class="btn btn-csttm btn-success" href="javascript:void(0);" onclick=addTenantOption('.$tenantDetail[0]->BuildingId.','.$tenantDetail[0]->UserID.','.$tenantDetail[0]->TenantId.');>Add</a>';
         }
@@ -619,8 +619,9 @@ class TenantController extends Ve_Controller_Base {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $email = $this->_getParam('email');
+        $data = $this->_request->getParams();
 		$tenantModel = new Model_Tenant();
-		$multiUserList = $tenantModel->filterTenentMultiUserList($email);
+		$multiUserList = $tenantModel->filterTenentMultiUserList($data);
       
        // echo json_encode($tenantDetail);
        //$this->view->multiUserList = $multiUserList;
@@ -655,9 +656,10 @@ class TenantController extends Ve_Controller_Base {
  public function sortmultiuserAction(){
     $finalResultArr = array();
     $this->_helper->layout()->disableLayout();
+    $data = $this->_request->getParams();
     $email = $this->_getParam('email');
     $tenantModel = new Model_Tenant();
-    $tenantDetail = $tenantModel->filterTenentMultiUserList($email);
+    $tenantDetail = $tenantModel->filterTenentMultiUserList($data);
 
    
     foreach($tenantDetail as $rec){
