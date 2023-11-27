@@ -643,6 +643,7 @@ function unique_multidim_array($array, $key) {
                         $('#user_contact_info').show();
                         $('#user_contact_tbl').html(data);
                        var checkAccess =  checktenantallow();
+
                       
                        $.ajax({
                             type: "POST",
@@ -735,9 +736,10 @@ function checktenantallow(){
         data: {email: $("#email_address").val()},
         success: function (data) {
             var finalData =  JSON.parse(data);
-           if(finalData.UserID){
+           if(finalData.UserID){          
               $('#upperform').hide();
               $('#user_contact_tbl').hide();
+             
             //   $('#email_address').hide();
             //   $('#user_contact_tbl').hide();
            }else{

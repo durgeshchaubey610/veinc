@@ -85,13 +85,17 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
            // ->joinInner(array('c'=>'company'),'c.cust_id = b.cust_id',array('Building_Name'=>'b.buildingName','Management_Company'=>'c.companyName','BuildingId'=>'b.build_id'))
            // ->joinInner(array('u'=>'users'),'tu.userId = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'));
            // ->joinInner(array('to'=>'au_tenant_options'),'to.TenantID = t.id');
-           if($data['email']){
+           if(isset($data['email']) && !empty($data['email'])){
              $select->where('u.email=?',$data['email']);
            }
            if ($data['id'] == '0') {
                $select->order('u.userName DESC');
+               $select->order('b.buildingName ASC');
+               $select->order('t.tenantName ASC');
             } else {
                 $select->order('u.userName ASC');
+                $select->order('b.buildingName ASC');
+                $select->order('t.tenantName ASC');
             }
             //echo $select->__toString()."\n";
             $matchjobRes=$db->fetchAll($select);

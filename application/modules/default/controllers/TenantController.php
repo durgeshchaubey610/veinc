@@ -661,7 +661,6 @@ class TenantController extends Ve_Controller_Base {
     $email = $this->_getParam('email');
     $tenantModel = new Model_Tenant();
     $tenantDetail = $tenantModel->filterTenentMultiUserList($data);
-
    
     foreach($tenantDetail as $rec){
         $temp_array = array();
