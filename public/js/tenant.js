@@ -132,6 +132,7 @@ function checkTUser(tId) {
 **/
 
 function checkTUser(tId) {
+    var redirectPage = false;
     $('#addtenantuser').attr('disabled', true);
     parent.CheckForSessionpop(baseUrl);
     $('.loader').show();
@@ -147,6 +148,7 @@ function checkTUser(tId) {
         } else {
             // check user exist in tenat option
             var allowedMulitiUser = false;
+
             $.ajax({
                 type: "POST",
                 url: baseUrl + 'tenant/checkmultiusers',
@@ -167,6 +169,7 @@ function checkTUser(tId) {
                       mapTenantUserGroup(tenantId,buildingID,user_id,suitelocation,completenotification,ccenable);
                     
                    }else{
+
                     $.ajax({
                         type: "POST",
                         url: baseUrl + 'tenant/checktenant',
@@ -179,8 +182,10 @@ function checkTUser(tId) {
                             if (msg != true) {
                                 $('#email-error').html("");
                                 $('#email').removeClass('inputErr');
+                                redirectPage = true;
                                 createUser(tId);
-                                location.reload();
+
+                               // location.reload();
                             } else {
                                 //alert('Company is not existed');
                                 $('#email-error').html("Email already in use.");
@@ -191,6 +196,12 @@ function checkTUser(tId) {
                             }
                         }
                     });
+
+                    if(redirectPage){
+                        alert('redirecting page');
+                        location.reload();
+                    }
+
                    }
                    
                 }

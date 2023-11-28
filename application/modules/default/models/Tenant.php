@@ -135,7 +135,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
 
             ->joinLeft(array('tu'=>'tenantusers'),'tu.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
              
-            ->joinLeft(array('t'=>'tenant'),'tu.tenantId = t.id')
+            ->joinLeft(array('t'=>'tenant'),'tu.tenantId = t.id',array('Tenant_Remove_Status'=>'t.remove_status','tenantName'=>'t.tenantName'))
           
             
 
