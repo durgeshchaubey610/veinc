@@ -3038,6 +3038,58 @@ class TenantController extends Ve_Controller_Base {
         }
       
     }
+
+    public function removetenantlocationAction() {
+        $data = $this->getRequest()->getPost();
+        $user = new Model_User();
+        $tenant = new Model_Tenant();
+        $tenantuser = new Model_TenantUser();
+        $tuusersId = (int)$data['tuId'];       
+        $userData['is_location_removed'] = '1';
+       
+        if(isset($tuusersId) && !empty($tuusersId)){
+          $tenantuser->updateTenantUser($userData,$tuusersId);
+          $json_data = array();
+            $json_data['msg'] = "Record successfully de!";
+            $json_data['url'] = '/tenant/myaccountsetting/msg/2';
+            echo json_encode($json_data);
+            exit;
+       }
+
+             
+    }
+
+    public function recoverytenantlocationAction() {
+        $data = $this->getRequest()->getPost();
+        $user = new Model_User();
+        $tenant = new Model_Tenant();
+        $tenantuser = new Model_TenantUser();
+        $tuusersId = $data['tuId'];       
+        $userData['is_location_removed'] = '0';
+        if(isset($tuusersId) && !empty($tuusersId)){
+           $tenantuser->updateTenantUser($userData,$usersId);
+            $json_data = array();
+            $json_data['msg'] = "Record successfully de!";
+            $json_data['url'] = '/tenant/myaccountsetting/msg/2';
+            echo json_encode($json_data);
+            exit;
+        }
+             
+    }
+
+    public function updatetenantsuitAction() {
+        $data = $this->getRequest()->getPost();
+        $user = new Model_User();
+        $tenant = new Model_Tenant();
+        $usersId = $data['userid'];
+        $tenantId = $data['tenantid'];
+        $tenanuserid = $data['tenanuserid'];
+        $build_ID = $data['buildID'];
+
+             
+    }
+
+
 }
 
 

@@ -349,13 +349,17 @@ function createUser(tId) {
         var fdata = $("form#addNewUser").serialize();
         var action = $("form#addNewUser").attr('action');
         $.post(action, fdata, function (data) {
-            data = $.parseJSON(data);
+            //data = $.parseJSON(data);
+            data = JSON.parse(data);
             $('div.success_message').html(data.msg);
-            var main_url = baseUrl + data.url;
-            setInterval(function () {
-                window.parent.location.href = main_url;
-            }, 1000);
+            // setInterval(function () {
+            //     window.parent.location.href = main_url;
+            // }, 1000);
         });
+alert('test');
+        setInterval(function () {
+                window.parent.location.href = 'http://localhost/veinc/tenant/users/bid/82/tId/725';
+        }, 1000);
 
         /*var buildId = $('#building_id').val();
          $.ajax({
