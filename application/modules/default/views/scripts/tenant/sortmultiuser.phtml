@@ -44,9 +44,13 @@ $multiUserList = $this->finalResultArr;
                                                                 <td><?php echo $tenant->billAddress;?></td>
                                                                 <td><?php echo ($tenant->TenantUser_Removed==1)?'Yes':'NO';?></td>
                                                                 <td>   
-                                                                <a title="Edit" class="modalbox" onclick="javascript:editNewUser('<?php echo BASEURL . 'tenant/edittuser/tuId/' . $tenant->UserID; ?>');" href="#editNewUser" ><img src="<?php echo BASEURL . 'public/images/edit.png' ?>" /></a>                                          
-                                                                <a class="dyn" onclick="javascript:deleteTenantOptionUser('<?php echo $tenant->TenantUserId;?>','<?php echo $tenant->UserID;?>','<?php echo count($tenantuser); ?>')" href="#"><img src="<?php echo $this->baseUrl(); ?>/public/images/delete.png"></a>
+                                                                <a title="Edit" class="modalbox" onclick="javascript:editNewUser('<?php echo BASEURL . 'tenant/edittuser/tuId/' . $tenant->UserID; ?>');" href="#editNewUser" ><img src="<?php echo BASEURL . 'public/images/edit.png' ?>" /></a>
+                                                                <?php if($tenant->TenantUser_Removed==1){?>                                         
+                                                                <a title="recover" class="dyn" onclick="javascript:recoverTenantOptionUser('<?php echo $tenant->TenantUserId;?>','<?php echo $tenant->UserID;?>','<?php echo count($tenantuser); ?>')" href="#"><img src="<?php echo $this->baseUrl(); ?>/public/images/recovery.png" width="30%"></a>
+                                                                <?php }else{ ?>
+                                                                <a title="delete" class="dyn" onclick="javascript:deleteTenantOptionUser('<?php echo $tenant->TenantUserId;?>','<?php echo $tenant->UserID;?>','<?php echo count($tenantuser); ?>')" href="#"><img src="<?php echo $this->baseUrl(); ?>/public/images/delete.png"></a>
 
+                                                                <?php } ?>    
                                                                 </td>
                                                                
                                                             </tr>

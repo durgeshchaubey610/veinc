@@ -864,6 +864,47 @@ function deleteTenantOptionUser(tuId, uId, cnt) {
     }
 }
 
+function recoverTenantOptionUser(tuId, uId, cnt) {
+    var check_delete = 'YES';    
+    if (tuId) {
+        jPrompt('For Recover Tenant User, Enter Yes in Capital letters.', '', 'Tenant Option', function (r) {
+            if (r != null) {
+                if (check_delete === r) {
+                   // alert('test');
+                   $.ajax({
+                        url: baseUrl + "tenant/recoverytenantlocation",
+                        type: "post",
+                        datatype: 'json',
+                        data: {
+                            tuId: tuId, uId: uId
+                        },
+                        success: function (result) {
+                            $('.loader').hide();
+                            //data = result;
+                            var data = $.parseJSON(result);
+                            //alert(data.msg);
+                            if (data.msg == 'true') {
+                                $('.message').html('Tenant user reovered successfully.');
+                            } else {
+                                $('.error-txt').html('Some error occurred.');
+                            }
+                            filterData();
+                           // window.location.href = baseUrl + 'tenant/tenantoptions/';
+                            
+                        }
+                    });
+
+                   
+                } else {
+                    //$('.error-txt').html('You have entered wrong word.');
+                    jAlert('You have entered wrong word.');
+                }
+            }
+        });
+
+    }
+}
+
 
 function sortingalloweduser(){
 
