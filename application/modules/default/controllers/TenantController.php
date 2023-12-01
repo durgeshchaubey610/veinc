@@ -370,6 +370,7 @@ class TenantController extends Ve_Controller_Base {
             if(!empty($search_array))
             $tenantList = $tenant->gettenantsearchresult($build_ID, $search_array);
             
+          
             if($show!='all'){
                 $page = $this->_getParam('page', 1);
                 $pageObj = new Ve_Paginator();
@@ -3053,11 +3054,15 @@ class TenantController extends Ve_Controller_Base {
         $user = new Model_User();
         $tenant = new Model_Tenant();
         $tenantuser = new Model_TenantUser();
-        $tuusersId = (int)$data['tuId'];       
-        $userData['is_location_removed'] = '1';
+        $tuusersId = (int)$data['tuId']; 
+        $uId = (int)$data['uId']; 
+
+              
+        $userData['remove_status'] = '1';
        
-        if(isset($tuusersId) && !empty($tuusersId)){
-          $tenantuser->updateTenantUser($userData,$tuusersId);
+        if(isset($uId) && !empty($uId)){
+         // $tenantuser->updateTenantUser($userData,$tuusersId);
+          $user->updateUser($userData, $uId);
           $json_data = array();
             $json_data['msg'] = "Record successfully de!";
             $json_data['url'] = '/tenant/myaccountsetting/msg/2';
@@ -3074,10 +3079,11 @@ class TenantController extends Ve_Controller_Base {
         $tenant = new Model_Tenant();
         $tenantuser = new Model_TenantUser();
         $tuusersId = (int)$data['tuId'];       
-        $userData['is_location_removed'] = '0';
+        $userData['remove_status'] = '0';
+        $uId = (int)$data['uId']; 
        
-        if(isset($tuusersId) && !empty($tuusersId)){
-          $tenantuser->updateTenantUser($userData,$tuusersId);
+        if(isset($uId) && !empty($uId)){
+            $user->updateUser($userData, $uId);
           $json_data = array();
             $json_data['msg'] = "Record successfully de!";
             $json_data['url'] = '/tenant/myaccountsetting/msg/2';

@@ -34,8 +34,8 @@ $multiUserList = $this->finalResultArr;
                                                 </thead>
                                                 <tbody>
                                                 <?php foreach($rec['data']['list'] as $tenant){
-                                                 // echo '<pre>';
-                                                 // print_r($tenant)
+                                                //  echo '<pre>';
+                                                //  print_r($tenant)
                                                     ?>                  
                                                 <tr>
                                                                 <td><?php echo $tenant->email ;?></td>
@@ -45,7 +45,7 @@ $multiUserList = $this->finalResultArr;
                                                                 <td><?php echo ($tenant->TenantUser_Removed==1)?'Yes':'NO';?></td>
                                                                 <td>   
                                                                 <a title="Edit" class="modalbox" onclick="javascript:editTenantUserLocation('<?php echo BASEURL . 'tenant/edittuser/tuId/' . $tenant->UserID; ?>/locationuser/yes');" href="#editNewUser" ><img src="<?php echo BASEURL . 'public/images/edit.png' ?>" /></a>
-                                                                <?php if($tenant->TenantUser_Removed==1){?>                                         
+                                                                <?php if($tenant->remove_status==1){?>                                         
                                                                 <a title="recover" class="dyn" onclick="javascript:recoverTenantOptionUser('<?php echo $tenant->TenantUserId;?>','<?php echo $tenant->UserID;?>','<?php echo count($tenantuser); ?>')" href="#"><img src="<?php echo $this->baseUrl(); ?>/public/images/recovery.png" width="95%"></a>
                                                                 <?php }else{ ?>
                                                                 <a title="delete" class="dyn" onclick="javascript:deleteTenantOptionUser('<?php echo $tenant->TenantUserId;?>','<?php echo $tenant->UserID;?>','<?php echo count($tenantuser); ?>')" href="#"><img src="<?php echo $this->baseUrl(); ?>/public/images/delete.png"></a>
