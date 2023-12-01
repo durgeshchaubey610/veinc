@@ -338,10 +338,6 @@ $search_by = '';
 			$search_by = $this->search['search_by'];
 			$service_value=$this->search['search_value']; 
 	} 
-
-
-    
-
 $userRoleID = Zend_Auth::getInstance()->getStorage()->read()->role_id;
 $userId = Zend_Auth::getInstance()->getStorage()->read()->uid;
 $customeAccessmodelll = new Model_UserAccess();
@@ -472,7 +468,7 @@ function unique_multidim_array($array, $key) {
                                         </select>
                                     </td> -->
                                     <td class="common-wrap add-multi-role" >
-                                        <input type="text" name="email_address" list="typehintvalue" id="email_address" class="form-control input-csttm input-csttm-padd-0" autocomplete="off" />
+                                        <input type="text" name="email_address" list="typehintvalue" id="email_address" value="<?php echo (isset($_COOKIE['multiuser_search_email']))?$_COOKIE['multiuser_search_email']:'';?>" class="form-control input-csttm input-csttm-padd-0" autocomplete="off" />
                                         <datalist id="typehintvalue"></datalist>
                                     </td>
                                     <td class="common-btn add-multi-role" >       
@@ -509,7 +505,7 @@ function unique_multidim_array($array, $key) {
 
                                   
                                     <td class="common-wrap">
-                                        <input type="text" name="email_address" list="typehintvalue" id="email_address1" class="form-control input-csttm input-csttm-padd-0" autocomplete="off">
+                                        <input type="text" name="email_address" list="typehintvalue" id="email_address1" value="<?php echo (isset($_COOKIE['multiuser_search_email']))?$_COOKIE['multiuser_search_email']:'';?>" class="form-control input-csttm input-csttm-padd-0" autocomplete="off">
                                         <datalist id="typehintvalue"></datalist>
                                     </td>
                                     <td class="common-btn">       
@@ -785,7 +781,7 @@ function sortingmultiusername() {
 }
 function editNewUser(url) {
     CheckForSessionpop(baseUrl);
-    $('a[href="#editNewUser"]').fancybox({
+    $('a[href="#editNewUser1"]').fancybox({
         type: 'iframe',
         href: url,
         width: 750,
@@ -867,7 +863,7 @@ function deleteTenantOptionUser(tuId, uId, cnt) {
 function recoverTenantOptionUser(tuId, uId, cnt) {
     var check_delete = 'YES';    
     if (tuId) {
-        jPrompt('For Recover Tenant User, Enter Yes in Capital letters.', '', 'Tenant Option', function (r) {
+        jPrompt('For Recover Tenant User Location, Enter Yes in Capital letters.', '', 'Tenant Option', function (r) {
             if (r != null) {
                 if (check_delete === r) {
                    // alert('test');
@@ -905,6 +901,25 @@ function recoverTenantOptionUser(tuId, uId, cnt) {
     }
 }
 
+function editTenantUserLocation(url) {
+    CheckForSessionpop(baseUrl);
+    $('a[href="#editNewUser"]').fancybox({
+        type: 'iframe',
+        href: url,
+        width: 750,
+        height: 600,
+        'beforeClose': function () {
+            $('.loader').hide();
+        },
+        'afterLoad': function () {
+            $.fancybox.hideLoading();
+            $('.loader').show();
+            setInterval(function () {
+                $('.loader').hide();
+            }, 5000);
+        }
+    });
+}
 
 function sortingalloweduser(){
 
@@ -919,6 +934,13 @@ function sortingalloweduser(){
     });
 }
 
+// A $( document ).ready() block.
+$( document ).ready(function() {
+   
+    if($('#email_address').val()){
+        searchEmailData();
+    }
+});
     </script>
     <style>
 .table100.ver2 th {

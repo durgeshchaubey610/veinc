@@ -28,6 +28,8 @@ $sendDetail = $sendMapper->getSendAs();
 						  <input type="hidden" value="<?php echo $this->tuserDetial->uid;?>" name="uid" id="uid"/>
 						  <input type="hidden" value="<?php echo $this->tuserDetial->id;?>" name="id" id="id"/>		
 						  <input type="hidden" value="<?php echo $this->roleId;?>" name="role_id" id="role_id"/>
+						  <input type="hidden" value="<?php echo (isset($this->locationuser))?$this->locationuser:'';?>" name="locationuser" id="locationuser"/>
+
 						  <div class="left">				  					  						  					  						  					  
 							  <div class="row">
 							  <div class='col-lg-6  '>

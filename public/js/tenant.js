@@ -708,6 +708,7 @@ function editTUser() {
     var cc_enable = 0;
     var status = 0;
     var welcome_letter = 0;
+    
     if (firstname == '') {
         $('.ufirstErr').html("First Name Required");
         $('#firstname').addClass('inputErr');
@@ -829,9 +830,19 @@ function editTUser() {
                 $('.loader').hide();
                 $('div.success_message').html(data.msg);
                 var main_url = baseUrl + data.url;
+                var locationuser = $('#locationuser').val();
+                if(locationuser =="yes"){
+                    
+                    setInterval(function () {
+                        window.parent.location.href = baseUrl+'tenant/tenantoptions/id/'+id;
+                        tenantOptionfilterData(email);
+                    }, 1000);
+                       
+                }else{
                 setInterval(function () {
                     window.parent.location.href = main_url;
                 }, 1000);
+              }
             },
             error: function () {
                 $('.loader').hide();
@@ -872,6 +883,7 @@ function editTUser() {
          });*/
     }
 }
+
 
 
 function hideTenantInactiveUser(tId) {

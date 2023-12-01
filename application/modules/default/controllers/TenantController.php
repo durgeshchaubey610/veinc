@@ -398,6 +398,8 @@ class TenantController extends Ve_Controller_Base {
         }
         $msgId = $this->_getParam('msg', 0);
         $tId = $this->_getParam('tId', 0);
+        $tuid = $this->_getParam('id');
+        
 
         $buildingMapper = new Model_Building();
         
@@ -662,6 +664,10 @@ class TenantController extends Ve_Controller_Base {
     $tenantModel = new Model_Tenant();
     $tenantDetail = $tenantModel->filterTenentMultiUserList($data);
    
+    
+    setcookie('multiuser_search_email', $email, time() + (86400 / 24), "/");
+    
+
     foreach($tenantDetail as $rec){
         $temp_array = array();
         $temp_array['data']['allowed_user_data'] = $rec;
@@ -1508,6 +1514,7 @@ class TenantController extends Ve_Controller_Base {
     public function edittuserAction() {
         $this->_helper->layout()->setLayout('popuplayout');
         $tuId = $this->_getParam('tuId');
+        $locationuser = $this->_getParam('locationuser');       
         $message = array();
         $tenantUserModel = new Model_TenantUser();
         $tenant = new Model_Tenant();
@@ -1617,9 +1624,11 @@ class TenantController extends Ve_Controller_Base {
             $this->view->tenantData = $tenantData[0];
             $this->view->tuserDetial = $tuserDetail;
             $this->view->userId = $this->userId;
+           
 
         } else
             $message['msg'] = 'Invalid Data';
+        $this->view->locationuser = $locationuser;
         $this->view->message = $message;
     }
 

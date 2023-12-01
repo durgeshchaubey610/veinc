@@ -133,7 +133,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
             ->from(array('u'=>'users'))
             ->joinRight(array('to'=>'au_tenant_options'),'to.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
 
-            ->joinLeft(array('tu'=>'tenantusers'),'tu.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid','TenantUserId'=>'tu.id','TenantUser_Removed'=>'tu.is_location_removed'))
+            ->joinLeft(array('tu'=>'tenantusers'),'tu.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid','TenantUserId'=>'tu.id','TenantUser_Removed'=>'tu.is_location_removed','Tenant_Suit_Location'=>'tu.suite_location'))
              
             ->joinLeft(array('t'=>'tenant'),'tu.tenantId = t.id',array('Tenant_Remove_Status'=>'t.remove_status','tenantName'=>'t.tenantName'))
           
