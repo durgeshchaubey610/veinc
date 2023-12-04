@@ -300,6 +300,7 @@
 echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/pm-workorder.js');
 echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/emails.js');
 
+
 $reportModel = new Model_Report();
 $reportDetailLinks = '';
 $dashBoardViewsdetails = '';
@@ -311,7 +312,8 @@ $buildIdReportAll = '';
 $batch_number_report = '';
 $uniqueCostCenter = '';
 $batch_number_reportallbuilding = '';
-$buildIdReport = $this->select_build_id;
+$buildId= $this->select_build_id;
+
 $woNumberAllbuilding = '';
 $invoiceAllbuilding = '';
 $batch_number_reportall = '';
@@ -399,6 +401,47 @@ function unique_multidim_array($array, $key) {
 }
 ?>
 <div class="fdw" id="access-matrix">
+
+<ol id="toc" class="pm-work-order-toc-list">
+<?php
+foreach ($this->companyListing as $cb) {
+    if ($cb['build_id'] == $this->select_build_id) {
+        $uniqueCostCenter = $cb['uniqueCostCenter'];
+    }
+    ?>
+            <li><a class="<?php if ($cb['build_id'] == $this->select_build_id) echo 'active'; ?>"  href="<?php echo $this->baseUrl() . '/tenant/tenantoptions/bid/' . $cb['build_id']; ?>" ><span><?php echo $cb['buildingName']; ?></span></a>
+            <?php /*
+              if ($reportDetailLinks != '') {
+              if ($cb['build_id'] == $this->select_build_id) {
+              $uniqueCostCenter = $cb['uniqueCostCenter'];
+              $batchDetails = $woBatch->showBatch($cb['build_id']);
+              $batch_number_report = '';
+              if ($batchDetails != '') {
+              foreach ($batchDetails as $bd) {
+              $batch_number_report = $batch_number_report . $bd['batch_number'] . ',';
+              }
+              }
+              $order = 'woId';
+              $dir = 'DESC';
+              $wolist = $woReport->getWorkOrderByBuilding($cb['build_id'], $order, $dir);
+              $invoicelist = $woReport->invoiceByBatch($cb['build_id'], $order, $dir);
+              if ($wolist != '') {
+              foreach ($wolist as $woNumber) {
+              $woNumberAll = $woNumberAll . $woNumber->wo_number . ',';
+              }
+              }
+              if ($invoicelist != '') {
+              foreach ($invoicelist as $invoiceNumber) {
+              $invoiceAll = $invoiceAll . $invoiceNumber->wo_number . ',';
+              }
+              }
+              }
+              } */
+            ?> 
+            </li>
+
+<?php } ?>
+    </ol>
    
 
     <!-- Report Link -->
@@ -644,7 +687,9 @@ function unique_multidim_array($array, $key) {
                        $.ajax({
                             type: "POST",
                             url: baseUrl + 'tenant/sortmultiuser',
-                            data: {email: $("#email_address").val()},
+                            data: {email: $("#email_address").val(),
+                                  bid: <?php echo $buildId;?>                         
+                              },
                             success: function (data) {
                                 if(data){
                                 // $('#user_contact_tbl').hide();
@@ -716,7 +761,10 @@ function filterData() {
     $.ajax({
         type: "POST",
         url: baseUrl + 'tenant/sortmultiuser',
-        data: {email: $("#email_address1").val()},
+        data: {email: $("#email_address1").val(),
+            bid: <?php echo $buildId;?>
+        
+        },
         success: function (data) {
             //console.log(data);
             $('#pm-work-cta-1').html(data);
@@ -729,7 +777,9 @@ function checktenantallow(){
     $.ajax({
         type: "POST",
         url: baseUrl + 'tenant/checkmultiusers',
-        data: {email: $("#email_address").val()},
+        data: {email: $("#email_address").val(),
+            bid: "<?php echo $cbbuildId;?>"
+        },
         success: function (data) {
             var finalData =  JSON.parse(data);
            if(finalData.UserID){          
@@ -770,7 +820,8 @@ function sortingmultiusername() {
         type: "POST",
         url: baseUrl + 'tenant/sortmultiuser',
         data: {email: $("#email_address1").val(),
-            id: id
+            id: id,
+            bid: "<?php echo $cbbuildId;?>"
         },
         success: function (data) {
             //console.log(data);

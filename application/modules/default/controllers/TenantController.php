@@ -400,7 +400,7 @@ class TenantController extends Ve_Controller_Base {
         $msgId = $this->_getParam('msg', 0);
         $tId = $this->_getParam('tId', 0);
         $tuid = $this->_getParam('id');
-        
+        $bid = $this->_getParam('bid');                  
 
         $buildingMapper = new Model_Building();
         
@@ -420,6 +420,7 @@ class TenantController extends Ve_Controller_Base {
             }
         }
         $build_ID = $this->_getParam('bid', '');
+       
         foreach ($companyListing as $cl) {
             $buildIds[] = $cl['build_id'];
         }
@@ -568,8 +569,6 @@ class TenantController extends Ve_Controller_Base {
         $this->view->page = $page;
         $this->view->show = $show;
         $this->view->pmCompleteJobTime = $pmCompleteJobTime[0];
-
-
 
     }
 

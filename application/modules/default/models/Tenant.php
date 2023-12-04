@@ -88,6 +88,9 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
            if(isset($data['email']) && !empty($data['email'])){
              $select->where('u.email=?',$data['email']);
            }
+           if(isset($data['bid']) && !empty($data['bid'])){
+             $select->where('t.buildingId=?',$data['bid']);
+           }
            if ($data['id'] == '0') {
                $select->order('u.userName DESC');
                $select->order('b.buildingName ASC');
