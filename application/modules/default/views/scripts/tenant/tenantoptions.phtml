@@ -648,7 +648,20 @@ foreach ($this->companyListing as $cb) {
                           $('#user_contact_info').show();
                           $('#user_contact_tbl').html(data);
                          var checkAccess =  checktenantallow();
-  
+                         $.ajax({
+                            type: "POST",
+                            url: baseUrl + 'tenant/sortmultiuser',
+                            data: {email: $("#email_address1").val(),
+                                  bid: <?php echo $buildId;?>                         
+                              },
+                            success: function (data) {
+                                if(data){
+                                // $('#user_contact_tbl').hide();                               
+                                  $('#pm-work-cta-1').html(data);
+                                }
+                               
+                            }
+                        });
   
                           
                       }
@@ -710,14 +723,15 @@ foreach ($this->companyListing as $cb) {
                        $.ajax({
                             type: "POST",
                             url: baseUrl + 'tenant/sortmultiuser',
-                            data: {email: $("#email_address").val(),
+                            data: {email: $("#email_address1").val(),
                                   bid: <?php echo $buildId;?>                         
                               },
                             success: function (data) {
                                 if(data){
+                                  
                                 // $('#user_contact_tbl').hide();
-                               
-                                 $('#email_address1').val($("#email_address").val());
+                                 $('#pm-work-cta-1').html(data);
+                                // $('#email_address1').val($("#email_address").val());
                                 }
                                
                             }
