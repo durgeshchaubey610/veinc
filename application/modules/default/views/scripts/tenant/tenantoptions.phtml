@@ -555,7 +555,7 @@ foreach ($this->companyListing as $cb) {
                                         <!-- <a id="btn-login" href="/veinc/pm/pmworkorder" class="btn btn-csttm btn-success">Reset</a> -->
                                         <!--<input class="btn btn-csttm btn-success" type="button" onclick="resetForm()" value="Reset">-->
                                         <!--<a id="btn-fblogin" href="#" class="btn btn-csttm btn-success">Search</a>-->
-                                        <input type="button" class="btn btn-csttm btn-success" onclick="filterData();" value="Search"> 
+                                        <input type="button" class="btn btn-csttm btn-success" onclick="filterResults();" value="Search"> 
                                     </td>
                                 </tr>
                             </tbody>
@@ -653,6 +653,74 @@ foreach ($this->companyListing as $cb) {
         window.location = baseUrl + 'pm/pmworkorder/show/' + limit;
     }
 
+    function defualtResults(){
+
+        var email_address = $("#email_address").val().trim();;
+      
+      //var pmreadingtask = $("#pmreadingtask").val().trim();
+      
+      $.ajax({
+          type: "POST",
+          url: baseUrl + 'tenant/checkuseremail',
+          data: {email: email_address},
+          success: function (data) {
+            if(data =="1"){
+          
+                  $.ajax({
+                      type: "POST",
+                      url: baseUrl + 'tenant/checktenantuseremail',
+                      data: {email: $("#email_address").val()},
+                      success: function (data) {
+                         
+                          $('.loader').hide();
+                          $('#user_contact_info').show();
+                          $('#user_contact_tbl').html(data);
+                         var checkAccess =  checktenantallow();
+  
+                        
+                         $.ajax({
+                              type: "POST",
+                              url: baseUrl + 'tenant/sortmultiuser',
+                              data: {email: $("#email_address").val(),
+                                    bid: <?php echo $buildId;?>                         
+                                },
+                              success: function (data) {
+                                  if(data){
+                                  // $('#user_contact_tbl').hide();
+                                   $('#upperform').hide();
+                                   $('#email_address1').val($("#email_address").val());
+                                  }
+                                 
+                              }
+                          });
+                          filterData();
+  
+                          
+                      }
+                  });
+  
+               //   alert('test1');
+               //   $('#pm-work-cta').show();
+                //  $('#user_contact_info').show();
+             
+            }else{
+              $('#user_contact_info').hide();
+              $('#user_contact_tbl').html('');
+              jAlert('Email Address <strong>'+email_address+'</strong> has not been found in our system',
+              'information',function(){
+                  $('#email_address').focus();
+                 
+              });
+            }
+      
+            
+              $('.loader').hide();
+              $('#pmcompletewo').html(data);
+          }
+      });
+
+
+    }
     function searchEmailData() {
        var email_address = $("#email_address").val().trim();;
       
@@ -770,6 +838,75 @@ function filterData() {
             $('#pm-work-cta-1').html(data);
         }
     });
+
+}
+
+
+function filterResults() {
+
+    var email_address = $("#email_address1").val().trim();;
+      
+      //var pmreadingtask = $("#pmreadingtask").val().trim();
+      
+      $.ajax({
+          type: "POST",
+          url: baseUrl + 'tenant/checkuseremail',
+          data: {email: email_address},
+          success: function (data) {
+            if(data =="1"){
+          
+                  $.ajax({
+                      type: "POST",
+                      url: baseUrl + 'tenant/checktenantuseremail',
+                      data: {email: $("#email_address").val()},
+                      success: function (data) {
+                         
+                          $('.loader').hide();
+                          $('#user_contact_info').show();
+                          $('#user_contact_tbl').html(data);
+                         var checkAccess =  checktenantallow();
+  
+                        
+                         $.ajax({
+                              type: "POST",
+                              url: baseUrl + 'tenant/sortmultiuser',
+                              data: {email: $("#email_address1").val(),
+                                    bid: <?php echo $buildId;?>                         
+                                },
+                              success: function (data) {
+                                  if(data){
+                                  // $('#user_contact_tbl').hide();
+                                   $('#upperform').hide();
+                                   $('#email_address1').val($("#email_address").val());
+                                  }
+                                 
+                              }
+                          });
+                          filterData();
+  
+                          
+                      }
+                  });
+  
+               //   alert('test1');
+               //   $('#pm-work-cta').show();
+                //  $('#user_contact_info').show();
+             
+            }else{
+              $('#user_contact_info').hide();
+              $('#user_contact_tbl').html('');
+              jAlert('Email Address <strong>'+email_address+'</strong> has not been found in our system',
+              'information',function(){
+                  $('#email_address1').focus();
+                 
+              });
+            }
+      
+            
+              $('.loader').hide();
+              $('#pmcompletewo').html(data);
+          }
+      });
 
 }
 
@@ -987,9 +1124,12 @@ function sortingalloweduser(){
 
 // A $( document ).ready() block.
 $( document ).ready(function() {
-   
+    
+    
     if($('#email_address').val()){
         searchEmailData();
+    }else{
+        defualtResults();
     }
 });
     </script>
