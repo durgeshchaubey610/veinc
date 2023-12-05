@@ -489,66 +489,22 @@ foreach ($this->companyListing as $cb) {
 
             <div class="row search-box-main-row">
             <h4>Tenant Options:</h4>
-                <div class="controls bttons-view-left" id="upperform" >
-                    <form onsubmit="return false" id="allow-form" class="tbl-add-multi-role pull-left">
-                       
-                        <table>
-                            <tbody>
-                                <tr>
-                                    
-                                    <td class="serch-text-style">
-                                        <p>Search Email Address</p>
-                                    </td>
-
-                                    <!-- <td class="common-wrap">
-                                        <select class="form-control input-csttm input-csttm-padd-0" name="eqname" id="eqname" onchange="searchfor();">
-                                            <option  id="" value="0">Select From List</option>                                        
-                                            <option  id="wonumber" value="1">Work Order Number</option>
-                                            <option  id="woequipment" value="2">Equipment</option>
-                                            <option  id="wofloor" value="3">Floor</option>
-                                            <option  id="wounit" value="4">Unit</option>
-                                            <option  id="wolocation" value="5">Location</option>
-                                        </select>
-                                    </td> -->
-                                    <td class="common-wrap add-multi-role" >
-                                        <input type="text" name="email_address" list="typehintvalue" id="email_address" value="<?php echo (isset($_COOKIE['multiuser_search_email']))?$_COOKIE['multiuser_search_email']:'';?>" class="form-control input-csttm input-csttm-padd-0" autocomplete="off" />
-                                        <datalist id="typehintvalue"></datalist>
-                                    </td>
-                                    <td class="common-btn add-multi-role" >       
-                                        <!-- <a id="btn-login" href="<?php echo $this->baseUrl() . '/pm/pmworkorder'; ?>" class="btn btn-csttm btn-success">Reset</a> -->
-                                        <!--<input class="btn btn-csttm btn-success" type="button" onclick="resetForm()" value="Reset">-->
-                                        <!--<a id="btn-fblogin" href="#" class="btn btn-csttm btn-success">Search</a>-->
-                                        <input type="submit" class="btn btn-csttm btn-success" onclick="searchEmailData();" value="Search" /> 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-
-                  
-
-                   
-                </div>
-                
+               
                 <div id="user_contact_info" style="display:none;">
                         <div class="">
                             <h4 style="text-align:left;">Contact Information:</h4>
                        
             
             <div class="controls bttons-view-left pull-left">
-                    <form onsubmit="return false">
-                       
+                    <form onsubmit="return false">                       
                         <table>
                             <tbody>
-                                <tr>
-                                    
+                                <tr>                                    
                                     <td class="serch-text-style">
                                         <p>Search Email Address</p>
-                                    </td>
-
-                                  
+                                    </td>                                  
                                     <td class="common-wrap">
-                                        <input type="text" name="email_address" list="typehintvalue" id="email_address1" value="<?php echo (isset($_COOKIE['multiuser_search_email']))?$_COOKIE['multiuser_search_email']:'';?>" class="form-control input-csttm input-csttm-padd-0" autocomplete="off">
+                                        <input type="text" name="email_address1" list="typehintvalue" id="email_address1" value="<?php echo (isset($_COOKIE['multiuser_search_email']))?$_COOKIE['multiuser_search_email']:'';?>" class="form-control input-csttm input-csttm-padd-0" autocomplete="off">
                                         <datalist id="typehintvalue"></datalist>
                                     </td>
                                     <td class="common-btn">       
@@ -560,22 +516,15 @@ foreach ($this->companyListing as $cb) {
                                 </tr>
                             </tbody>
                         </table>
-                    </form>
-
-                  
-
-                   
+                    </form> 
                 </div>
                 <div class="clearfix"></div>
                 <div class="clearfix"></div>
                 <br/>
-             <table id="user_contact_tbl" class="table100 ver3 m-b-110 user_contact_info" width="100%">
-             </table>
-
+            <!-- Add new Tenant option wrapper class ---->
+            <table id="user_contact_tbl" class="table100 ver3 m-b-110 user_contact_info" width="100%"></table>
 
 <!---search results-->
-
-             
              <div class="row" id="by_quipment" >
                 <div class="table100 ver2 m-b-110">
                     <div class="heading-main-equipmnt">Multi-User Allowed List</div>
@@ -653,23 +602,46 @@ foreach ($this->companyListing as $cb) {
         window.location = baseUrl + 'pm/pmworkorder/show/' + limit;
     }
 
+    function checktenantallow(){
+            $.ajax({
+                type: "POST",
+                url: baseUrl + 'tenant/checkmultiusers',
+                data: {
+                    email: $("#email_address1").val()
+                   
+                },
+                success: function (data) {
+                    var finalData =  JSON.parse(data);
+                    console.log(finalData);
+
+                if(finalData.UserID){          
+                    $('#upperform').hide();
+                    $('#user_contact_tbl').hide();     
+                }else{
+                    $('#upperform').show();
+                    $('#user_contact_tbl').show();
+                }
+                
+                }
+            });
+    }
+
+
     function defualtResults(){
 
-        var email_address = $("#email_address").val().trim();;
+        var email_address = $("#email_address1").val().trim();;
       
-      //var pmreadingtask = $("#pmreadingtask").val().trim();
-      
-      $.ajax({
+         $.ajax({
           type: "POST",
           url: baseUrl + 'tenant/checkuseremail',
           data: {email: email_address},
           success: function (data) {
             if(data =="1"){
-          
+         
                   $.ajax({
                       type: "POST",
                       url: baseUrl + 'tenant/checktenantuseremail',
-                      data: {email: $("#email_address").val()},
+                      data: {email: $("#email_address1").val()},
                       success: function (data) {
                          
                           $('.loader').hide();
@@ -677,23 +649,6 @@ foreach ($this->companyListing as $cb) {
                           $('#user_contact_tbl').html(data);
                          var checkAccess =  checktenantallow();
   
-                        
-                         $.ajax({
-                              type: "POST",
-                              url: baseUrl + 'tenant/sortmultiuser',
-                              data: {email: $("#email_address").val(),
-                                    bid: <?php echo $buildId;?>                         
-                                },
-                              success: function (data) {
-                                  if(data){
-                                  // $('#user_contact_tbl').hide();
-                                   $('#upperform').hide();
-                                   $('#email_address1').val($("#email_address").val());
-                                  }
-                                 
-                              }
-                          });
-                          filterData();
   
                           
                       }
@@ -705,7 +660,7 @@ foreach ($this->companyListing as $cb) {
              
             }else{
               $('#user_contact_info').hide();
-              $('#user_contact_tbl').html('');
+             // $('#user_contact_tbl').html('');
               jAlert('Email Address <strong>'+email_address+'</strong> has not been found in our system',
               'information',function(){
                   $('#email_address').focus();
@@ -761,7 +716,7 @@ foreach ($this->companyListing as $cb) {
                             success: function (data) {
                                 if(data){
                                 // $('#user_contact_tbl').hide();
-                                 $('#upperform').hide();
+                               
                                  $('#email_address1').val($("#email_address").val());
                                 }
                                
@@ -858,7 +813,7 @@ function filterResults() {
                   $.ajax({
                       type: "POST",
                       url: baseUrl + 'tenant/checktenantuseremail',
-                      data: {email: $("#email_address").val()},
+                      data: {email: $("#email_address1").val()},
                       success: function (data) {
                          
                           $('.loader').hide();
@@ -876,7 +831,7 @@ function filterResults() {
                               success: function (data) {
                                   if(data){
                                   // $('#user_contact_tbl').hide();
-                                   $('#upperform').hide();
+                                
                                    $('#email_address1').val($("#email_address").val());
                                   }
                                  
@@ -909,30 +864,7 @@ function filterResults() {
 
 }
 
-function checktenantallow(){
-    $.ajax({
-        type: "POST",
-        url: baseUrl + 'tenant/checkmultiusers',
-        data: {email: $("#email_address").val(),
-            bid: "<?php echo $cbbuildId;?>"
-        },
-        success: function (data) {
-            var finalData =  JSON.parse(data);
-           if(finalData.UserID){          
-              $('#upperform').hide();
-              $('#user_contact_tbl').hide();
-             
-            //   $('#email_address').hide();
-            //   $('#user_contact_tbl').hide();
-           }else{
-              $('#upperform').show();
-              $('#user_contact_tbl').show();
-           }
-           
-        }
-    });
 
-}
 function sortingmultiusername() {
     var x = $("#sortingvalue").val();
     if (x == 1) {
@@ -1113,7 +1045,7 @@ function sortingalloweduser(){
     $.ajax({
         type: "POST",
         url: baseUrl + 'tenant/sortmultiuser',
-        data: {email: $("#email_address").val()},
+        data: {email: $("#email_address1").val()},
         success: function (data) {
             //console.log(data);
             $('#pm-work-cta-1').html(data);
@@ -1124,7 +1056,7 @@ function sortingalloweduser(){
 // A $( document ).ready() block.
 $( document ).ready(function() {
     
-    
+    $('#upperform').hide();
     if($('#email_address').val()){
         searchEmailData();
     }else{
