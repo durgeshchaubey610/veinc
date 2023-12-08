@@ -183,7 +183,9 @@ function updateWorkorder(woId) {
 
 function ValidateForm() {
 
-    var order_status = $('#order_status').val();
+   // var order_status = $('#order_status').val();
+    var order_status = $('#order_status').attr('selected','selected').val();
+
     var exist_schedule = $('#exist_schedule').val();
     var priority = $('#priority').val();
 
