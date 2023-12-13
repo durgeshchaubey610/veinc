@@ -185,7 +185,6 @@ function ValidateForm() {
 
    // var order_status = $('#order_status').val();
     var order_status = $('#order_status').attr('selected','selected').val();
-
     var exist_schedule = $('#exist_schedule').val();
     var priority = $('#priority').val();
 
@@ -226,7 +225,7 @@ function ValidateForm() {
         
         time = $('#Time').val();
         slength = $('#length').val();
-        order_status = $('#order_status').val();
+        //order_status = $('#order_status').val(); //code commented by @dvk on 11 Dec 2023
         priority = $('#priority').val();
         work_order_id = $('#work_order_id').val();
         
@@ -247,7 +246,7 @@ function ValidateForm() {
                                         $("#reloadworkorder").html(response);
                                       }
                              });
-                        console.log(msg);
+                        //console.log(msg);
                     }
                 });
         
