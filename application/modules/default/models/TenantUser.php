@@ -106,5 +106,21 @@ class Model_TenantUser extends Zend_Db_Table_Abstract {
 		
     }
 
+	public function getMutiluserInfo($data){
+
+		$uid = $data['userId'];
+		$tenantId = $data['tenantId'];
+		$suite_location = $data['suite_location'];
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+				 ->from(array('tu' => 'tenantusers'))	
+				 ->where('tu.tenantId = ?', $tenantId)
+				 ->where('tu.suite_location = ?', $suite_location)			 
+				 ->where('tu.userId = ?', $uid);
+		$res = 	 $db->fetchAll($select);
+		//echo $select;
+        return ($res && sizeof($res)>0)? $res : false ;
+	}
+
    
 }	

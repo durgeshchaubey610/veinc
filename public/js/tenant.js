@@ -156,17 +156,32 @@ function checkTUser(tId) {
                 success: function (data) {
                    
                    var finalData =  JSON.parse(data);
-                 //  alert(finalData.UserID);
+                    if(finalData.UserID){                   
+                        var tenantId = $('#tenantId').val();  
+                        var buildingID = $('#building').val(); 
+                        var user_id = finalData.UserID;                     
+                        var suitelocation = $('#suite_location').val();
+                        var completenotification =  $('#complete_notification').val(); 
+                        var ccenable =  $('#cc_enable').val(); 
+                        var status  =  $('#status').val();                              
+                        validateMultiuser(tenantId,buildingID,user_id,suitelocation,completenotification,ccenable);
+                     
+                        setTimeout(function(){
+                        var checkVaue = $('#add-tenant-data').attr('uservalidate');
+                        if(checkVaue=="true"){                               
+                            $('#email-error').html("This User is already assign at this location.");
+                            $('#email').addClass('inputErr');
+                            $('#suite_location').focus();
+                            $('#addtenantuser').attr('disabled', false);
+                            }else{
+                                //create new user
+                                mapTenantUser(tenantId,buildingID,user_id,suitelocation,completenotification,ccenable);
+                                //redirect page.
+                                parent.location.reload();
 
-                   if(finalData.UserID){                   
-                      var tenantId = $('#tenantId').val();  
-                      var buildingID = $('#building').val(); 
-                      var user_id = finalData.UserID;                     
-                      var suitelocation = $('#suite_location').val();
-                      var completenotification =  $('#complete_notification').val(); 
-                      var ccenable =  $('#cc_enable').val(); 
-                      var status  =  $('#status').val();                              
-                      mapTenantUserGroup(tenantId,buildingID,user_id,suitelocation,completenotification,ccenable);
+                            }
+                        }, 600);    
+
                     
                    }else{
 
@@ -239,8 +254,8 @@ function checktenantInfo(tId){
     }
 }
 
-function mapTenantUserGroup(tenantId,buildingID,user_id,suitelocation,completenotification,ccenable){
-         
+function mapTenantUser(tenantId,buildingID,user_id,suitelocation,completenotification,ccenable){
+    
     $.ajax({
          url         : baseUrl+"tenant/addtenantusers",
          type        : "post",
@@ -255,14 +270,36 @@ function mapTenantUserGroup(tenantId,buildingID,user_id,suitelocation,completeno
         
          },
          beforeSend: function () {
-            //$('.loader').show();
+         
         },
-        success: function (msg) {
-            alert(msg);
-           // location.reload();
+        success: function (response) {         
+        
         }
          
          });
+}
+
+function validateMultiuser(tenantId,buildingID,user_id,suitelocation){
+    $('#add-tenant-data').attr('uservalidate','');
+    $.ajax({
+        url         : baseUrl+"tenant/getmultiluserbylocation",
+        type        : "post",
+        datatype    : 'json',
+        data        : {
+            bid:buildingID,
+            userId:user_id,
+            tenantId:tenantId,
+            suite_location:suitelocation        
+        },       
+        success: function (response) {          
+           if(response =="1"){
+              $('#add-tenant-data').attr('uservalidate','true');
+           }else{
+             $('#add-tenant-data').attr('uservalidate','');
+           }
+          }
+        
+        });
 }
 
 function createUser(tId) {

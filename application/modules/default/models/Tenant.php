@@ -81,7 +81,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
             ->from(array('u'=>'users'))
             ->joinRight(array('to'=>'au_tenant_options'),'to.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
             ->joinInner(array('t'=>'tenant'),'t.id = to.TenantID')
-             ->joinInner(array('b'=>'buildings'),'b.build_id = to.BuidlingID');
+            ->joinInner(array('b'=>'buildings'),'b.build_id = to.BuidlingID');
            // ->joinInner(array('c'=>'company'),'c.cust_id = b.cust_id',array('Building_Name'=>'b.buildingName','Management_Company'=>'c.companyName','BuildingId'=>'b.build_id'))
            // ->joinInner(array('u'=>'users'),'tu.userId = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'));
            // ->joinInner(array('to'=>'au_tenant_options'),'to.TenantID = t.id');
