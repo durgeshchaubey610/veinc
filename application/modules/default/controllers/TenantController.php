@@ -3104,6 +3104,21 @@ class TenantController extends Ve_Controller_Base {
              
     }
 
+    public function getmultiluserbylocationAction(){
+        $this->_helper->layout()->disableLayout();
+        $data = $this->getRequest()->getPost();
+        $tenantUserModel = new Model_TenantUser();        
+        $json_data = $tenantUserModel->getMutiluserInfo($data);
+        if($json_data){
+          echo '1';
+        }else{
+            echo '0';
+        }
+
+        exit;
+         
+    }
+
 
 }
 
