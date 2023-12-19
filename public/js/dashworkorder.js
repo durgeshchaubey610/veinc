@@ -183,75 +183,77 @@ function updateWorkorder(woId) {
 
 function ValidateForm() {
 
-    var order_status = $('#order_status').val();
-    var exist_schedule = $('#exist_schedule').val();
-    var priority = $('#priority').val();
-
-    var update_flag = 'false';
-    var time = '';
-    var slength = '';
-    var current_status = $('#current_wstatus').val();
-    if (current_status > 1 && order_status == 1) {
-        $('#wstatus_error').html("Work order cann't be assign as new.");
-        return false;
-    } else if (current_status == order_status) {
-        $('#wstatus_error').html("Work order cann't be assign as same status again.");
-        return false;
-    } else {
-        $('#wstatus_error').html('');
-    }
-    var insert_schedule = '0';
-    var eschedule = exist_schedule.split(',');
-    if (eschedule.indexOf(order_status) == '-1') {
-        $('#time_length_div').show();
-        time = $('#Time').val();
-        slength = $('#length').val();
-        if (time == '') {
-            //alert('Please enter Time');
-            $('#schedule_error').html('Please enter Time');
-        } else {
-            //insert_schedule=1;
-            $('#insert_schedule').val('1');
-            $('#schedule_error').html('');
-            update_flag = 'true';
-        }
-    } else
-    {
-        update_flag = 'true';
-    }
-    if (order_status != '' && update_flag == 'true') {
-        
-        
-        time = $('#Time').val();
-        slength = $('#length').val();
-        order_status = $('#order_status').val();
-        priority = $('#priority').val();
-        work_order_id = $('#work_order_id').val();
-        
-        //document.worequestform.submit();
-        $('.loader').show();
-                $.ajax({
-                    type: "POST",
-                    url: baseUrl + 'dashboard/updateorder',
-                    data: {work_order_id:work_order_id, priority:priority, length: slength, Time: time,order_status:order_status},
-                    success: function (msg) {
-                        $('.loader').hide();
-                        $.ajax({    
-                                    type: "POST",
-                                    url: baseUrl + 'dashboard/reloadworkorder/',
-                                    data: {},
-                                    success: function (response) {
-                                        $('.loader').hide();               
-                                        $("#reloadworkorder").html(response);
-                                      }
-                             });
-                        console.log(msg);
-                    }
-                });
-        
-        
-    }
-}
+    // var order_status = $('#order_status').val();// commented by @dvk on 13-12-2023
+     var order_status = $('#order_status').attr('selected','selected').val(); 
+     var exist_schedule = $('#exist_schedule').val();
+     var priority = $('#priority').val();
+ 
+     var update_flag = 'false';
+     var time = '';
+     var slength = '';
+     var current_status = $('#current_wstatus').val();
+     if (current_status > 1 && order_status == 1) {
+         $('#wstatus_error').html("Work order cann't be assign as new.");
+         return false;
+     } else if (current_status == order_status) {
+         $('#wstatus_error').html("Work order cann't be assign as same status again.");
+         return false;
+     } else {
+         $('#wstatus_error').html('');
+     }
+     var insert_schedule = '0';
+     var eschedule = exist_schedule.split(',');
+     if (eschedule.indexOf(order_status) == '-1') {
+         $('#time_length_div').show();
+         time = $('#Time').val();
+         slength = $('#length').val();
+         if (time == '') {
+             //alert('Please enter Time');
+             $('#schedule_error').html('Please enter Time');
+         } else {
+             //insert_schedule=1;
+             $('#insert_schedule').val('1');
+             $('#schedule_error').html('');
+             update_flag = 'true';
+         }
+     } else
+     {
+         update_flag = 'true';
+     }
+     if (order_status != '' && update_flag == 'true') {
+         
+         
+         time = $('#Time').val();
+         slength = $('#length').val();
+        // order_status = $('#order_status').val(); 
+        //comment code by @dvk on 13-12-2023
+         priority = $('#priority').val();
+         work_order_id = $('#work_order_id').val();
+         
+         //document.worequestform.submit();
+         $('.loader').show();
+                 $.ajax({
+                     type: "POST",
+                     url: baseUrl + 'dashboard/updateorder',
+                     data: {work_order_id:work_order_id, priority:priority, length: slength, Time: time,order_status:order_status},
+                     success: function (msg) {
+                         $('.loader').hide();
+                         $.ajax({    
+                                     type: "POST",
+                                     url: baseUrl + 'dashboard/reloadworkorder/',
+                                     data: {},
+                                     success: function (response) {
+                                         $('.loader').hide();               
+                                         $("#reloadworkorder").html(response);
+                                       }
+                              });
+                         console.log(msg);
+                     }
+                 });
+         
+         
+     }
+ }
 
 function isNumberKey(evt)
 {
