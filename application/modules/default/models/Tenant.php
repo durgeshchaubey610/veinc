@@ -80,17 +80,16 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
     $select = $db->select()
             ->from(array('u'=>'users'))
             ->joinRight(array('to'=>'au_tenant_options'),'to.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
-            ->joinInner(array('t'=>'tenant'),'t.id = to.TenantID')
-            ->joinInner(array('b'=>'buildings'),'b.build_id = to.BuidlingID');
-           // ->joinInner(array('c'=>'company'),'c.cust_id = b.cust_id',array('Building_Name'=>'b.buildingName','Management_Company'=>'c.companyName','BuildingId'=>'b.build_id'))
-           // ->joinInner(array('u'=>'users'),'tu.userId = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'));
-           // ->joinInner(array('to'=>'au_tenant_options'),'to.TenantID = t.id');
+            ->joinRight(array('tu'=>'tenantusers'),'tu.UserId = to.UserId')
+            ->joinRight(array('t'=>'tenant'),'t.id = tu.tenantID')
+            ->joinRight(array('b'=>'buildings'),'b.build_id = t.buildingId');
            if(isset($data['email']) && !empty($data['email'])){
              $select->where('u.email=?',$data['email']);
            }
-           if(isset($data['bid']) && !empty($data['bid'])){
-             $select->where('t.buildingId=?',$data['bid']);
-           }
+         //  if(isset($data['bid'])){
+            // $select->where('t.buildingId=?',$data['bid']);
+             $select->where('to.BuidlingID=?',$data['bid']);
+          // }
            if ($data['id'] == '0') {
                $select->order('u.userName DESC');
                $select->order('b.buildingName ASC');
@@ -100,7 +99,11 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
                 $select->order('b.buildingName ASC');
                 $select->order('t.tenantName ASC');
             }
+            $select->group ( array ("tu.id") );
+
             //echo $select->__toString()."\n";
+            //echo $select ;
+          
             $matchjobRes=$db->fetchAll($select);
             return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;  
                    
