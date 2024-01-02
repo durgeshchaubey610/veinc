@@ -234,7 +234,7 @@ function ValidateForm() {
                 $.ajax({
                     type: "POST",
                     url: baseUrl + 'dashboard/updateorder',
-                    data: {work_order_id:work_order_id, priority:priority, length: slength, Time: time,order_status:order_status},
+                    data: {work_order_id:work_order_id, priority:priority, length: slength, Time: time,order_status:order_status,current_wstatus:current_status},
                     success: function (msg) {
                         $('.loader').hide();
                         $.ajax({    
