@@ -80,8 +80,8 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
     $select = $db->select()
             ->from(array('u'=>'users'))
             ->joinRight(array('to'=>'au_tenant_options'),'to.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
-            ->joinRight(array('tu'=>'tenantusers'),'tu.UserId = to.UserId')
-            ->joinRight(array('t'=>'tenant'),'t.id = tu.tenantID')
+            //->joinRight(array('tu'=>'tenantusers'),'tu.UserId = to.UserId')
+            ->joinRight(array('t'=>'tenant'),'t.id = to.tenantID')
             ->joinRight(array('b'=>'buildings'),'b.build_id = t.buildingId');
            if(isset($data['email']) && !empty($data['email'])){
              $select->where('u.email=?',$data['email']);
@@ -99,7 +99,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
                 $select->order('b.buildingName ASC');
                 $select->order('t.tenantName ASC');
             }
-            $select->group ( array ("tu.id") );
+           // $select->group ( array ("tu.id") );
 
             //echo $select->__toString()."\n";
             //echo $select ;
