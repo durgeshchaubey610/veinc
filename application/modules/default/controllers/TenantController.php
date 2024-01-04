@@ -663,8 +663,7 @@ class TenantController extends Ve_Controller_Base {
     $email = $this->_getParam('email');
     $tenantModel = new Model_Tenant();
     $tenantDetail = $tenantModel->filterTenentMultiUserList($data);
-   
-    
+
     setcookie('multiuser_search_email', $email, time() + (86400 / 24), "/");
     
 
