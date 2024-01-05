@@ -62,74 +62,16 @@ function cancelUser() {
     if (role_id == 5) {
         //window.location.href = baseUrl+'tenant/tenantuser';
         parent.jQuery.fancybox.close();
-    } else
+    } else{
         //window.location.href = baseUrl+'tenant/users/bid/'+building+'/tId/'+tenantId;
         parent.jQuery.fancybox.close();
-
-    /*$('#email_'+tId).removeClass('inputErr');
-     $('#firstname_'+tId).removeClass('inputErr');
-     $('#lastname_'+tId).removeClass('inputErr');
-     $('#phone_'+tId).removeClass('inputErr');
-     $('.uemailErr').html("");
-     $('.ufirstErr').html("");
-     $('.ulastErr').html("");
-     $('.uofficeErr').html("");
-     $('.moduleErr').html("");
-     $('#add-newuser-td-'+tId).hide();
-     $("#tenantuser_popup_"+tId).hide();*/
-}
-
-/*********check company exists or not **********/
-/** *
-function checkTUser(tId) {
-    
-    //$('#addtenantuser').attr('disabled', true);
-    parent.CheckForSessionpop(baseUrl);
-    $('.loader').show();
-    var checkComp = false;
-    var email = $.trim($('#email').val());
-    //alert('cname'+cname);
-    if (email != '') {
-        if (email) {
-        //     $('.uemailErr').html("E-Mail Address Invalid");
-        //     $('#email').addClass('inputErr');
-        //     $('#email').focus();
-        //     $('#addtenantuser').attr('disabled', false);
-        // } else {
-          //  $('#addtenantuser').attr('disabled', false);
-            $.ajax({
-                type: "POST",
-                url: baseUrl + 'tenant/checktenant',
-                data: {email: email},
-                beforeSend: function () {
-                    //$('.loader').show();
-                },
-                success: function (msg) {
-                    $('.loader').hide();
-                    if (msg != true) {
-                        $('#email-error').html("");
-                        $('#email').removeClass('inputErr');
-                        createUser(tId);
-                    } else {
-
-                       // checktenantInfo(tId);                      
-                        
-                    }
-                }
-            });
-        }
-
-    } else {
-        $('.loader').hide();
-        $('#email-error').html("Enter the email-id");
-        $('#email').addClass('inputErr');
-        $('#email').focus();
-        return false;
     }
 
 }
 
-**/
+/*********check company exists or not *********
+ * 
+*/
 
 function checkTUser(tId) {
     var redirectPage = false;
@@ -152,7 +94,11 @@ function checkTUser(tId) {
             $.ajax({
                 type: "POST",
                 url: baseUrl + 'tenant/checkmultiusers',
-                data: {email: $("#email").val()},
+                data: {
+                    email: $("#email").val(),
+                    bid: $("#building").val()
+            },
+                
                 success: function (data) {
                    
                    var finalData =  JSON.parse(data);
