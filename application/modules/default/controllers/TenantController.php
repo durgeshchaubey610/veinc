@@ -640,13 +640,14 @@ class TenantController extends Ve_Controller_Base {
         $finalResultArr = array();
         $this->_helper->layout()->disableLayout();
         $email = $this->_getParam('email');
+        $build_ID = $this->_getParam('bid');
         $tenantModel = new Model_Tenant();
-        $data = array();
+        $data = $this->_request->getParams();
         $data['email'] = $email;
-        $tenantDetail = $tenantModel->filterTenentMultiUserList($data);
+        $data['bid'] = $build_ID;
+        $tenantDetail = $tenantModel->filterTenentMultiUserList($data);  
        
-        if($tenantDetail){
-          
+        if($tenantDetail){          
 		$tenantDetailArr = $tenantModel->checkTenantUserEmail($email);
         echo json_encode((array)$tenantDetailArr[0]);
         }else{
