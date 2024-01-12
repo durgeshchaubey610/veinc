@@ -139,7 +139,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
             ->from(array('u'=>'users'))
             ->joinRight(array('to'=>'au_tenant_options'),'to.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
 
-            ->joinLeft(array('tu'=>'tenantusers'),'tu.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid','TenantUserId'=>'tu.id','Tenant_Suit_Location'=>'tu.suite_location'))
+            ->joinLeft(array('tu'=>'tenantusers'),'tu.UserID = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid','TenantUserId'=>'tu.id','Tenant_Suit_Location'=>'tu.suite_location','is_location_removed'=>'tu.is_location_removed'))
              
             ->joinLeft(array('t'=>'tenant'),'tu.tenantId = t.id',array('Tenant_Remove_Status'=>'t.remove_status','tenantName'=>'t.tenantName'))
           
@@ -171,9 +171,14 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
         else{
           $select = $db->select()
                     ->from(array('t'=>'tenant'))
+                    //->joinLeft(array('tu'=>'tenantusers'),'t.id = tu.tenantId')
+
                     ->joinLeft(array('u'=>'users'),'u.uid = t.userId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id'))
+                    
                     ->where('t.buildingId=?',$buildId)
                     ->where('t.remove_status=?',0);
+                   // ->where('tu.is_location_removed=?',0);
+
                     if(isset($search['search_by']) && $search['search_by']=='tenantName'){
                            $select = $select->where( "t.tenantName Like'%$search[search_value]%'" );
                     }
@@ -204,30 +209,39 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
                   ->from(array('t'=>'tenant'));
 
                   if(isset($search['search_by']) && $search['search_by']=='tenantName'){
+                        $select = $select->joinInner(array('tu'=>'tenantusers'),'t.id= tu.tenantId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id','is_location_removed'=>'tu.is_location_removed'));
                         $select = $select->joinLeft(array('u'=>'users'),'u.uid = t.userId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id'));
                         $select = $select->where('t.buildingId=?',$buildId);
                         $select = $select->where('t.remove_status=?',0);
                         $select = $select->where( "t.tenantName Like'$search[search_value]%'" );
+                        $select = $select->where('tu.is_location_removed=?',0);
+
                   }
                   if(isset($search['search_by']) && $search['search_by']=='first_name'){
-                        $select = $select->joinInner(array('tu'=>'tenantusers'),'t.id= tu.tenantId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id'));
+                        $select = $select->joinInner(array('tu'=>'tenantusers'),'t.id= tu.tenantId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id','is_location_removed'=>'tu.is_location_removed'));
                         $select = $select->joinInner(array('u'=>'users'),'u.uid = tu.userId');
                         $select = $select->where('t.buildingId=?',$buildId);
                         $select = $select->where('t.remove_status=?',0);
+                        $select = $select->where('tu.is_location_removed=?',0);
+
                         $select = $select->where( "u.firstname Like'$search[search_value]%'" );
                   }
                   if(isset($search['search_by']) && $search['search_by']=='last_name'){
-                        $select = $select->joinInner(array('tu'=>'tenantusers'),'t.id= tu.tenantId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id'));
+                        $select = $select->joinInner(array('tu'=>'tenantusers'),'t.id= tu.tenantId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id','is_location_removed'=>'tu.is_location_removed'));
                         $select = $select->joinInner(array('u'=>'users'),'u.uid = tu.userId');
                         $select = $select->where('t.buildingId=?',$buildId);
                         $select = $select->where('t.remove_status=?',0);
+                        $select = $select->where('tu.is_location_removed=?',0);
+
                         $select = $select->where( "u.lastname Like'$search[search_value]%'" );
                   }
                   if(isset($search['search_by']) && $search['search_by']=='email'){
-                        $select = $select->joinInner(array('tu'=>'tenantusers'),'t.id= tu.tenantId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id'));
+                        $select = $select->joinInner(array('tu'=>'tenantusers'),'t.id= tu.tenantId',array('uid'=>'u.uid','firstname'=>'u.firstName','lastname'=>'u.lastName','phonenumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id','is_location_removed'=>'tu.is_location_removed'));
                         $select = $select->joinInner(array('u'=>'users'),'u.uid = tu.userId');
                         $select = $select->where('t.buildingId=?',$buildId);
                         $select = $select->where('t.remove_status=?',0);
+                        $select = $select->where('tu.is_location_removed=?',0);
+
                         $select = $select->where( "u.email Like'$search[search_value]%'" );
                   }
         $select = $select->order(array('t.tenantName ASC'));

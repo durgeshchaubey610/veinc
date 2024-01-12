@@ -383,6 +383,7 @@ class TenantController extends Ve_Controller_Base {
             $this->view->show=$show;
             $this->view->acesshelper = $this->accessHelper;
             $this->view->tenant_location = $this->tenant_location;
+            
             $this->view->select_build_id = $build_ID;
             $this->view->tId = $tId;
             $this->view->userId = $this->userId;
@@ -3055,13 +3056,14 @@ class TenantController extends Ve_Controller_Base {
         $tenantuser = new Model_TenantUser();
         $tuusersId = (int)$data['tuId']; 
         $uId = (int)$data['uId']; 
+        
 
               
-        $userData['remove_status'] = '1';
+        $userData['is_location_removed'] = '1';
        
-        if(isset($uId) && !empty($uId)){
+        if(isset($tuusersId) && !empty($tuusersId)){
          // $tenantuser->updateTenantUser($userData,$tuusersId);
-          $user->updateUser($userData, $uId);
+          $tenantuser->updateTenantUser($userData, $tuusersId);
           $json_data = array();
             $json_data['msg'] = "Record successfully de!";
             $json_data['url'] = '/tenant/myaccountsetting/msg/2';
@@ -3078,11 +3080,11 @@ class TenantController extends Ve_Controller_Base {
         $tenant = new Model_Tenant();
         $tenantuser = new Model_TenantUser();
         $tuusersId = (int)$data['tuId'];       
-        $userData['remove_status'] = '0';
+        $userData['is_location_removed'] = '0';
         $uId = (int)$data['uId']; 
        
-        if(isset($uId) && !empty($uId)){
-            $user->updateUser($userData, $uId);
+        if(isset($tuusersId) && !empty($tuusersId)){
+            $tenantuser->updateTenantUser($userData, $tuusersId);
           $json_data = array();
             $json_data['msg'] = "Record successfully de!";
             $json_data['url'] = '/tenant/myaccountsetting/msg/2';

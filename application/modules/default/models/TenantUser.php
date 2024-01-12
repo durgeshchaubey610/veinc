@@ -43,8 +43,9 @@ class Model_TenantUser extends Zend_Db_Table_Abstract {
 		else{
 			$select = $db->select()
 				 ->from(array('u' => 'users'), array('uid','userName','firstName','lastName','email','role_id','phoneNumber','phoneExt','Title','status','note_notification'))
-				 ->joinInner(array('tu' => 'tenantusers'), 'u.uid = tu.userId', array('id','tenantId','cc_enable','send_as','complete_notification','main_contact','suite_location'))
-				 ->where('u.remove_status = ?', '0')				 
+				 ->joinInner(array('tu' => 'tenantusers'), 'u.uid = tu.userId', array('id','tenantId','cc_enable','send_as','complete_notification','main_contact','suite_location','is_location_removed'))
+				 ->where('u.remove_status = ?', '0')
+				 ->where('tu.is_location_removed = ?', '0')	
 				 ->where('tu.tenantId = ?', $tenantId);
 			if($buildingId!=''){
 				$select = $select->joinInner(array('ubm' => 'user_building_module_access'), 'u.uid = ubm.user_id')
