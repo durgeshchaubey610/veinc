@@ -343,7 +343,9 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
                          ->join(array('tuser'=>'tenantusers'),'tuser.tenantId = t.id',array('tuId'=>'tuser.id','tuserId'=>'tuser.id','tenantId'=>'tuser.tenantId','tenantuserId'=>'tuser.userId','suite_location'=>'tuser.suite_location','cc_enable'=>'tuser.cc_enable','send_as'=>'tuser.send_as','complete_notification'=>'tuser.complete_notification'))
                          ->joinLeft(array('u'=>'users'),'u.uid = tuser.userId',array('uid'=>'u.uid','firstName'=>'u.firstName','lastName'=>'u.lastName','userpNumber'=>'u.phoneNumber','email'=>'u.email','role_id'=>'u.role_id','userName'=>'u.userName','note_notification'=>'u.note_notification', 'userPhoneNumber'=>'u.phoneNumber'))
 						// ->joinLeft(array('st' => 'states'),'st.state_code = t.state_code',array('st.state as statename'))
-                         ->where('tuser.userId=?',$uid);
+                        
+                        ->where('tuser.userId=?',$uid)
+                        ->where('tuser.is_location_removed=?',0);
                          $select = $select->order(array('t.tenantName ASC'));
 
          $matchjobRes=$db->fetchAll($select);
