@@ -673,7 +673,7 @@ foreach ($this->companyListing as $cb) {
                 //  $('#user_contact_info').show();
              
             }else{
-              $('#user_contact_info').hide();
+              //$('#user_contact_info').hide();
              // $('#user_contact_tbl').html('');
               jAlert('Email Address <strong>'+email_address+'</strong> has not been found in our system',
               'information',function(){
@@ -681,10 +681,9 @@ foreach ($this->companyListing as $cb) {
                  
               });
             }
-      
-            
+                
               $('.loader').hide();
-              $('#pmcompletewo').html(data);
+              //$('#pmcompletewo').html(data);
           }
       });
 
