@@ -3121,6 +3121,16 @@ class TenantController extends Ve_Controller_Base {
          
     }
 
+    public function resettenantoptionfilterAction(){
+       // multiuser_search_email
+        if (isset($_COOKIE['multiuser_search_email'])) {
+            unset($_COOKIE['multiuser_search_email']); 
+            setcookie('multiuser_search_email', '', -1, '/');           
+        }         
+        $this->_redirect('/tenant/tenantoptions');    
+
+    }
+
 
 }
 
