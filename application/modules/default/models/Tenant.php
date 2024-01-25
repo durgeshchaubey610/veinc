@@ -59,7 +59,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
    }
     
 
-   public function checkTenantUserEmail($email){
+   public function checkTenantUserEmail($email,$bid){
     $db = Zend_Db_Table::getDefaultAdapter(); 
     $select = $db->select()
             ->from(array('b'=>'buildings'))
@@ -67,7 +67,8 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
             ->joinRight(array('t'=>'tenant'),'b.build_id = t.buildingId',array('Tenant_Name'=>'t.tenantName','Tenant_Suite'=>'t.suite'))
             ->joinLeft(array('tu'=>'tenantusers'),'t.id = tu.tenantId',array('User_Suit_Location'=>'tu.suite_location','TenantId'=>'t.id'))
             ->joinLeft(array('u'=>'users'),'tu.userId = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
-            ->where('u.email=?',$email);
+            ->where('u.email=?',$email)
+            ->where('t.buildingId=?',$bid);
             //echo $select->__toString()."\n";
             $matchjobRes=$db->fetchAll($select);
             return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;  

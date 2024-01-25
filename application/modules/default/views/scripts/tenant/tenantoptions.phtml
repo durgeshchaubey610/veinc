@@ -563,22 +563,7 @@ foreach ($this->companyListing as $cb) {
                     <div class="heading-main-equipmnt">Multi User List</div>
                  </div>           
         </div>            
-
-                <div class="col-sm-12 col-md-12 col-lg-3 col-xs-12 controls bttons-view-right">
                
-                   <?php 
-                    if($WorkOrders){
-                    if(!empty($this->pmCompleteJobTime->PM_Auto_Create_Jobs) && $this->pmCompleteJobTime->PM_Auto_Create_Jobs=='N'){
-                        ?>
-                    <a id="xtrigManualCreateWO" class="modalbox create_conf confirm manual-popup" onclick="javascript:pmSetupAndOption('<?php echo $this->baseUrl() . '/pm/pmmanuallycreatewo/buiild_id/' . $this->select_build_id; ?>');" href="#CreateNewMultiCon"> 
-                 Manually Create WO’s</a>
-                    <?php                        
-                    }}
-                    ?>
-                    
-                    <!-- <a id="expandall" href="#" onclick="expandAll();" class="btn btn-csttm btn-success group-btn-custom">Expand All</a>
-                    <a id=collapseall" href="#" onclick="collapseall();" class="btn btn-csttm btn-success">Collapse All</a> -->
-                </div>
             </div>
             <div class="row" id="by_quipment" style="display:none">
                 
@@ -603,6 +588,40 @@ foreach ($this->companyListing as $cb) {
         var limit = $("#show_limit").val();
         window.location = baseUrl + 'pm/pmworkorder/show/' + limit;
     }
+   
+    function chckTenantBuildingInfo(){
+        $.ajax({
+                type: "POST",
+                url: baseUrl + 'tenant/checktenaninfo',
+                data: {
+                    email: $("#email_address1").val(),
+                    bid: '<?php echo $buildId;?>'
+                   
+                },
+                success: function (data) {
+                    var bid = '<?php echo $buildId;?>';
+                    bid = parseInt(bid);
+                    
+                    var finalData =  JSON.parse(data);
+                    console.log(finalData);
+                    if(parseInt(finalData.BuildingId) !== bid){
+                        //$('#user_contact_tbl').hide();
+                        alert(finalData.BuildingId +'========='+bid);
+                        $('#user_contact_tbl').hide();
+                    }
+                 
+                // if(finalData.BuildingId == bid){          
+                //     $('#upperform').show();
+                //     $('#user_contact_tbl').show();     
+                // }else{
+                //     $('#upperform').hide();
+                //     $('#user_contact_tbl').hide(); 
+                // }
+                
+                }
+            });
+
+    }
 
     function checktenantallow(){
             $.ajax({
@@ -617,7 +636,8 @@ foreach ($this->companyListing as $cb) {
                     var finalData =  JSON.parse(data);
                     console.log(finalData);
 
-                if(finalData.UserID){          
+                if(finalData.UserID){   
+                           
                     $('#upperform').hide();
                     $('#user_contact_tbl').hide();     
                 }else{
@@ -631,7 +651,6 @@ foreach ($this->companyListing as $cb) {
 
 
     function defualtResults(){
-
         var email_address = $("#email_address1").val().trim();;
       
          $.ajax({
@@ -644,12 +663,18 @@ foreach ($this->companyListing as $cb) {
                   $.ajax({
                       type: "POST",
                       url: baseUrl + 'tenant/checktenantuseremail',
-                      data: {email: $("#email_address1").val()},
+                      data: {
+                        email: $("#email_address1").val(),
+                        bid: '<?php echo $buildId;?>'
+                    },
                       success: function (data) {
                          
                           $('.loader').hide();
                           $('#user_contact_info').show();
                           $('#user_contact_tbl').html(data);
+
+                        
+
                          var checkAccess =  checktenantallow();
                          $.ajax({
                             type: "POST",
@@ -661,6 +686,7 @@ foreach ($this->companyListing as $cb) {
                                 if(data){
                                 // $('#user_contact_tbl').hide();                               
                                   $('#pm-work-cta-1').html(data);
+                                  //chckTenantBuildingInfo();
                                 }
                                
                             }
@@ -778,8 +804,7 @@ function addTenantOption(bid,uid,tid){
                 uid:uid,
                 tid:tid
             },
-            success: function (data) {    
-                alert(data);             
+            success: function (data) {
                 $('#addtenantOption').hide();
                 $('#byequipment').hide();
                 filterData();
@@ -1072,6 +1097,7 @@ $( document ).ready(function() {
         searchEmailData();
     }else{
         defualtResults();
+       
     }
 });
     </script>

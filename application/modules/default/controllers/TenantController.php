@@ -578,8 +578,9 @@ class TenantController extends Ve_Controller_Base {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $email = $this->_getParam('email');
+        $bid = $this->_getParam('bid');
 		$tenantModel = new Model_Tenant();
-		$tenantDetail = $tenantModel->checkTenantUserEmail($email);
+		$tenantDetail = $tenantModel->checkTenantUserEmail($email,$bid);
         $html = '';  
         $html .= '<tr>';                             
         $html .= '<th><strong>User Name</strong></th>';
@@ -656,6 +657,25 @@ class TenantController extends Ve_Controller_Base {
         }
        exit();
               
+     }
+
+     public function checktenaninfoAction(){
+        $finalResultArr = array();
+        $this->_helper->layout()->disableLayout();
+        $email = $this->_getParam('email');
+        $build_ID = $this->_getParam('bid');
+        $tenantModel = new Model_Tenant();
+        $data = $this->_request->getParams();
+        $data['email'] = $email;
+        $data['bid'] = $build_ID;
+          if($email){          
+            $tenantDetailArr = $tenantModel->checkTenantUserEmail($email);
+            echo json_encode((array)$tenantDetailArr[0]);
+            }else{
+                echo '0';
+            }
+            exit();
+
      }
 
  public function sortmultiuserAction(){
