@@ -511,7 +511,9 @@ foreach ($this->companyListing as $cb) {
                                         <!-- <a id="btn-login" href="/veinc/pm/pmworkorder" class="btn btn-csttm btn-success">Reset</a> -->
                                         <!--<input class="btn btn-csttm btn-success" type="button" onclick="resetForm()" value="Reset">-->
                                         <!--<a id="btn-fblogin" href="#" class="btn btn-csttm btn-success">Search</a>-->
+                                        
                                         <input type="button" class="btn btn-csttm btn-success" onclick="defualtResults();" value="Search"> 
+                                        <input type="button" name="reset" id="reset1" value="Reset" class="btn btn-csttm btn-success"  onclick="window.location.href='<?php echo BASEURL. '/tenant/resettenantoptionfilter'; ?>'" >
                                     </td>
                                 </tr>
                             </tbody>
@@ -768,26 +770,22 @@ foreach ($this->companyListing as $cb) {
 
 
 function addTenantOption(bid,uid,tid){
-// var bid = bid;
-// var uid = uid;
-// var tid = tid;
 
-//console.log(uid+'=='+bid+'==='+tid);
-
-          $.ajax({
-                    type: "POST",
-                    url: baseUrl + 'tenant/addtenantoption',
-                    data: {bid: bid,
-                        uid:uid,
-                        tid:tid
-                    },
-                    success: function (data) {                 
-                        $('#addtenantOption').hide();
-                        $('#byequipment').hide();
-                        filterData();
-                        $('#user_contact_tbl').hide();                    
-                    }
-                });
+    $.ajax({
+            type: "POST",
+            url: baseUrl + 'tenant/addtenantoption',
+            data: {bid: bid,
+                uid:uid,
+                tid:tid
+            },
+            success: function (data) {    
+                alert(data);             
+                $('#addtenantOption').hide();
+                $('#byequipment').hide();
+                filterData();
+                $('#user_contact_tbl').hide();                    
+            }
+        });
 
 
 }

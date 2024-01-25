@@ -19,6 +19,16 @@ class Model_TenantOption extends Zend_Db_Table_Abstract {
             echo $e->getMessage();die;
         }
     }
+
+    public function checkMutiOptionByBuidingID($tenentdata){
+        $select=$this->select()->where('tenantName = ?', $tenentdata['UserID']);
+        $select = $select->where('buildingId = ?', $tenentdata['BuidlingID']);
+        $select = $select->where('buildingId = ?', $tenentdata['TenantID']);
+        				
+        $res=$this->fetchAll($select);
+        return ($res && sizeof($res)>0)? $res->toArray() : false ;
+    }
+
     /**
      * isTenantExist check user exist or not
      * 
