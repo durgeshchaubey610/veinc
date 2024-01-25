@@ -581,6 +581,14 @@ class TenantController extends Ve_Controller_Base {
         $bid = $this->_getParam('bid');
 		$tenantModel = new Model_Tenant();
 		$tenantDetail = $tenantModel->checkTenantUserEmail($email,$bid);
+        // check allow
+        $data = array();
+        $data['email'] = $email;
+        $data['bid'] = $bid;
+        $allowtenantDetail = $tenantModel->filterTenentMultiUserList($data);  
+       
+
+
         $html = '';  
         $html .= '<tr>';                             
         $html .= '<th><strong>User Name</strong></th>';
@@ -608,7 +616,9 @@ class TenantController extends Ve_Controller_Base {
         $html .= '</td>';
         $html .= '</tr>';
 
-        echo $html;
+        if(empty($allowtenantDetail)){
+          echo $html;
+        }
      
 	 }
 
