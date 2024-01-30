@@ -270,6 +270,7 @@ class TenantController extends Ve_Controller_Base {
                 $tuser = new Zend_Session_Namespace('tenant_user');
                 $tuser->detail = $detail;
                 $res = $this->getWelcomeLetter($detail);
+               echo $res['content']; 
             } else {
                 $res = false;
             }
