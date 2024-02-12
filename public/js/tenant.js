@@ -339,9 +339,9 @@ function createUser(tId) {
             //     window.parent.location.href = main_url;
             // }, 1000);
         });
-alert('test');
         setInterval(function () {
-                window.parent.location.href = 'http://localhost/veinc/tenant/users/bid/82/tId/725';
+                 var buildId = $('.fancybox-iframe').val();
+                window.parent.location.href = document.referrer;
         }, 1000);
 
         /*var buildId = $('#building_id').val();
