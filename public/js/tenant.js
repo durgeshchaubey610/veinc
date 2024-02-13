@@ -341,7 +341,7 @@ function createUser(tId) {
         });
         setInterval(function () {
                var buildId = $('#building').val();
-                 var buildId = $('.fancybox-iframe').val();
+                // var buildId = $('.fancybox-iframe').val();
                 window.parent.location.href = baseUrl+"tenant/users/bid/"+buildId;
         }, 1000);
 
