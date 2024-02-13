@@ -69,7 +69,8 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
             ->joinLeft(array('u'=>'users'),'tu.userId = u.uid',array('User_EMail'=>'u.email','User_First_Name'=>'u.firstName','User_Last_Name'=>'u.lastName','User_User_Name'=>'u.userName','UserID'=>'u.uid'))
             ->where('u.email=?',$email)
             ->where('t.buildingId=?',$bid);
-            //echo $select->__toString()."\n";
+           // echo $select;
+
             $matchjobRes=$db->fetchAll($select);
             return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;  
                    
@@ -103,7 +104,7 @@ class Model_Tenant extends Zend_Db_Table_Abstract {
            // $select->group ( array ("tu.id") );
 
             //echo $select->__toString()."\n";
-            //echo $select ;
+           // echo $select ;
           
             $matchjobRes=$db->fetchAll($select);
             return ($matchjobRes && sizeof($matchjobRes)>0)? $matchjobRes : false ;  
