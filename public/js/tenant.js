@@ -340,8 +340,11 @@ function createUser(tId) {
             // }, 1000);
         });
         setInterval(function () {
-               var buildId = $('#building').val();
-                // var buildId = $('.fancybox-iframe').val();
+                var buildId = $('#building').val();
+                var role_id = $('#role_id').val();
+                if(role_id==5)
+                window.parent.location.href = baseUrl+"tenant/tenantuser";
+                else
                 window.parent.location.href = baseUrl+"tenant/users/bid/"+buildId;
         }, 1000);
 
