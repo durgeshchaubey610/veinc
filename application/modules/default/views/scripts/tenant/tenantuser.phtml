@@ -12,6 +12,10 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/bootstrap-ed
 
 ?>
 <div id="fdw">
+
+	<?php 
+	if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){?>
+
             <div class="tabmenu my_tabmenu">
 				<?php
 				$tenantCompanyList = $this->tenantGroupListArr;
@@ -33,7 +37,7 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/bootstrap-ed
                 </ul>
 				<?php } ?>
             <!-- Report Link -->
-
+<?php } ?>
 
 
         </div>

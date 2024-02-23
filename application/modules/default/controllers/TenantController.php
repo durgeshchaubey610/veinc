@@ -1368,6 +1368,7 @@ class TenantController extends Ve_Controller_Base {
       
      
         if($tId){
+            $set_cookie = setcookie('tenant_company', $tId, time() + (86400 / 24), "/");
             $tenantuser = $tenant->getTenanyUserByTenantGroup($tId);
             $this->view->tId = $tId;
         }
@@ -3158,6 +3159,21 @@ class TenantController extends Ve_Controller_Base {
             setcookie('multiuser_search_email', '', -1, '/');           
         }         
         $this->_redirect('/tenant/tenantoptions');    
+
+    }
+
+// update tenant menu version
+
+public function updatemenuversionAction(){   
+    $data = $this->getRequest()->getPost();
+
+        $tenantversion = $this->_getParam('tenantversion');      
+        if(isset($tenantversion)){            
+            setcookie('tenant_version', $tenantversion, time() + (86400 / 24), "/");
+        }  
+        echo $tenantversion;    
+        exit();
+       
 
     }
 

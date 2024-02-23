@@ -1,6 +1,36 @@
 <div class="container-right" id="woListData1">
 <?php if($this->roleId=='5' || $this->roleId=='7'){
-   
+    $tenantCompanyList = $this->tenantGroupListArr;
+  
+?>
+<style>
+.tenant-address li{
+    margin: 0px 3px;
+}
+</style>
+    <?php if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){?>
+
+
+<div id="fdw">
+  <div class="tabmenu my_tabmenu">
+<?php
+    $tId = $this->tId;
+    if(!$tId){
+        $tId = $tenantCompanyList[0]->tenantId;
+    }							
+    if($tenantCompanyList){?>
+    <ul class="tenant-address">
+
+        <?php foreach($tenantCompanyList as $tenantCompany){?>
+        <li style="background-color:#800000" class="<?php echo ($tenantCompany->tenantId==$tId)?'resp-tab-active':'';?>"><a class="" href="<?php echo $this->baseUrl();?>/workorder/index/tid/<?php echo $tenantCompany->tenantId;?>"><?php echo $tenantCompany->tenantName;?></a>
+
+        <?php } ?>
+    </ul>
+    </div>
+    </div>
+    <?php } ?>
+<?php } ?>
+   <?php
 	echo $this->headScript()->appendFile($this->baseUrl() . '/public/jquery/jquery.multiple.select.js');
 	echo $this->headLink()->appendStylesheet($this->baseUrl() . '/public/css/multiple-select.css');
 	echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/dashworkorder.js');

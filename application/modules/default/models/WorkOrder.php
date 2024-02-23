@@ -262,8 +262,14 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 			   if(isset($search_array['from_date']) && $search_array['to_date']!='')
                {
 				  $select = $select->where("DATE(wo.created_at) BETWEEN '".$search_array['from_date'] ."' AND '".$search_array['to_date']."'");
-			   }                             
+			   } 
+				if (isset($_COOKIE['tenant_company'])){
+					$tId = $_COOKIE['tenant_company'];
+					$select = $select->where('wo.tenant=?',$tId);
+
+				}                            
              $select = $select->order(array($orderBy));
+			 
              //if(empty($search_array))
              $select = $select->limit($show,$offset);
                                             
@@ -1391,7 +1397,10 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
                {
 				  $select = $select->where("DATE(wo.created_at) BETWEEN '".$search_array['from_date'] ."' AND '".$search_array['to_date']."'");
 			   }                          
-            $select = $select->order(array($order));                      
+            $select = $select->order(array($order));   
+			
+			echo $select;
+			
             $res = $db->fetchAll( $select );        
             return ($res && sizeof($res)>0)? $res : false ;
 		}else

@@ -617,7 +617,7 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
     if ($userRoleID == 5 || $userRoleID == 7) { ?>
      <?php if(!empty($tenantcountcrRoom) && $tenantcountcrRoom >0){?>
 
-        <li class="menuver22" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active" <?php } ?>>
+        <li class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active" <?php } ?>>
             <a href="javascript:void(0)" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="head_select_nav" <?php } ?>>Tenant Administration<span class="fa arrow whitefont_color"></span></a>
             <ul class="nav nav-second-level" <?php if ($controller == 'tenant' || $controller == 'workorder') { ?>style="display:block;" <?php } ?>>
                 <li><a href="<?php echo BASEURL . 'tenant/tenantuser' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantuser') { ?>class="menuselected" <?php } ?>>Tenant Information</a></li>
@@ -632,12 +632,12 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
         </li>
        
         <?php if (!empty($conf_acc)) : ?>
-        <li class="menuver22" onclick="hideMenu()" <?php if (($controller == 'tenant' && $actionnm == 'conavailability')) { ?> class="active conavailability" <?php } ?>>
+        <li class="menuver23" onclick="hideMenu()" <?php if (($controller == 'tenant' && $actionnm == 'conavailability')) { ?> class="active conavailability" <?php } ?>>
                     <a href="<?php echo BASEURL . 'tenant/conavailability/' ?>" <?php if ($controller == 'tenant' && $actionnm == 'conavailability') { ?>class="menuselected" <?php } ?>>Conference Availability</a></li>
         <?php endif; ?>
         <?php } ?>
 
-        <li class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active" <?php } ?>>
+        <li class="menuver22" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active" <?php } ?>>
             <a href="javascript:void(0)" <?php if (($controller == 'workorder') && ($actionnm == 'index' ||$actionnm == 'createworkorder' )) { ?>  class="head_select_nav" <?php } ?>>Work Orders<span class="fa arrow whitefont_color"></span></a>
             <ul class="nav nav-second-level" <?php if ( $controller == 'workorder') { ?>style="display:block;" <?php } ?>>
                 <li><a href="<?php echo BASEURL . 'workorder/index' ?>" <?php if ($controller == 'workorder' && $actionnm == 'index') { ?>class="menuselected" <?php } ?>>Current Work Orders</a></li>
@@ -645,23 +645,23 @@ $pmaction = array('pmworkorder', 'equipment', 'equipmenttemplate', 'history');
             </ul>
         </li>
         <?php if(!empty($tenantcountcrRoom) && $tenantcountcrRoom>0){?>
-        <li class="menuver23" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active conavailability" <?php } ?>>
+        <li class="menuver22" onclick="hideMenu()" <?php if (in_array($controller, $tcontr) && in_array($actionnm, $taction)) { ?> class="active conavailability" <?php } ?>>
             <a href="<?php echo BASEURL . 'tenant/conavailability/' ?>" <?php if ($controller == 'tenant' && $actionnm == 'conavailability') { ?>class="head_select_nav" <?php } ?>>Conference Availability</a>
         </li>
         <?php } ?>
         <?php
         if ($userRoleID == 5) {            
         ?>
-                <li class="menuver23" onclick="hideMenu()" >
+                <li class="menuver22" onclick="hideMenu()" >
                     <a href="<?php echo BASEURL . 'tenant/coidetail/' ?>" class="<?php echo ($controller == "tenant" && $actionnm == "coidetail")?'menuselected':"";?>">Certificate of Insurance</a>
                 </li>
         <?php           
         } ?>
-        <li class="menuver23" onclick="hideMenu()">
+        <li class="menuver22" onclick="hideMenu()">
             <a href="javascript:void(0)" <?php if (($controller == 'tenant' && ($actionnm == 'tenantinfo' || $actionnm == 'myaccountsetting' || $actionnm == 'currentusers' ))  ) {  ?> class="head_select_nav" <?php } ?>>Tenant Administration<span class="fa arrow whitefont_color"></span></a>
-            <ul class="nav nav-second-level" <?php if (($controller == 'tenant' && ($actionnm == 'tenantinfo' || $actionnm == 'myaccountsetting' || $actionnm == 'currentusers' ))  )  { ?>style="display:block;" <?php } ?>>
+            <ul class="nav nav-second-level" <?php if (($controller == 'tenant' && ($actionnm == 'tenantuser' || $actionnm == 'myaccountsetting' || $actionnm == 'currentusers' ))  )  { ?>style="display:block;" <?php } ?>>
             <?php if ($userRoleID == 5) { ?>
-                <li><a href="<?php echo BASEURL . 'tenant/tenantinfo' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantinfo') { ?>class="menuselected" <?php } ?>>Tenant Information</a></li>
+                <li><a href="<?php echo BASEURL . 'tenant/tenantuser' ?>" <?php if ($controller == 'tenant' && $actionnm == 'tenantuser') { ?>class="menuselected" <?php } ?>>Tenant Information</a></li>
             <?php } ?>
             <?php if ($userRoleID == 5 || $userRoleID == 7) { ?>
             <li><a href="<?php echo BASEURL . 'tenant/myaccountsetting' ?>" <?php if ($controller == 'tenant' && $actionnm == 'myaccountsetting') { ?>class="menuselected" <?php } ?>>My Account Info</a></li>
@@ -817,6 +817,7 @@ if(!empty($time)){
     //$session->setExpirationSeconds( 24000 ); // 24 minutes time duration for session 
 } 
 
+
 ?>
 
 <script type="text/javascript" src="<?php echo $this->baseUrl() ?>/public/js/confirm/msc-script.js"></script>
@@ -849,7 +850,7 @@ $(document).ready(function(){
     }else{
        $(".show-collapes").trigger("click"); 
     }
-
+/** *
     if(getCookie("tenantversion")=="22.12"){
     $('.menuver22').show();
     $('.menuver23').hide();
@@ -866,21 +867,79 @@ $(document).ready(function(){
     $('.menuver22').show();
     $('.menuver23').hide();    
 }
+**/
+//  $(".tentVesionWrap").click(function(){
+//       if($('.tentVesionWrap .inner-switch').hasClass('tnt-v23')==true){
+//             $('.tentVesionWrap .inner-switch').removeClass('tnt-v23').addClass('tnt-v22');
+//             $('.tentVesionWrap .inner-switch').text('20.12');            
+//              setCookie("tenantversion","23.01");
+//              $('.menuver23').show();
+//              $('.menuver22').hide();
+//       }else if($('.tentVesionWrap .inner-switch').hasClass('tnt-v22')==true){
+//             $('.tentVesionWrap .inner-switch').removeClass('tnt-v22').addClass('tnt-v23');
+//             $('.tentVesionWrap .inner-switch').text('23.01');
+//             setCookie("tenantversion","20.12"); 
+//             $('.menuver22').show();
+//             $('.menuver23').hide();        
+//       }
+  
+//  });
+var tenantmenuVersion = "<?php echo (isset($_COOKIE['tenant_version']))?$_COOKIE['tenant_version']:''; ?>";
+if(tenantmenuVersion=="20.12"){
+     $('.menuver23').show();
+     $('.menuver22').hide();
+}else if(tenantmenuVersion=="23.01"){
+    $('.menuver22').show();
+     $('.menuver23').hide();
 
- $(".tentVesionWrap").click(function(){
-      if($('.tentVesionWrap .inner-switch').hasClass('tnt-v23')==true){
-            $('.tentVesionWrap .inner-switch').removeClass('tnt-v23').addClass('tnt-v22');
-            $('.tentVesionWrap .inner-switch').text('20.12');            
-             setCookie("tenantversion","23.01");
-             $('.menuver23').show();
-             $('.menuver22').hide();
-      }else if($('.tentVesionWrap .inner-switch').hasClass('tnt-v22')==true){
-            $('.tentVesionWrap .inner-switch').removeClass('tnt-v22').addClass('tnt-v23');
-            $('.tentVesionWrap .inner-switch').text('23.01');
-            setCookie("tenantversion","20.12"); 
-            $('.menuver22').show();
-            $('.menuver23').hide();        
-      }
+}else{
+    $('.menuver22').show();
+    $('.menuver23').hide(); 
+}
+ $(".inner-switch").click(function(){     
+   $innerElement =  $(this);
+   if ($(this).hasClass('tv20')) {
+    $(this).text('Switch to Version 23.01'); 
+    $('.menuver22').show();
+    $('.menuver23').hide(); 
+    $.ajax({        			
+			url: baseUrl + "tenant/updatemenuversion",
+            type        : "post",
+            datatype    : 'json',
+            data: {
+                "tenantversion":"20.12"
+            },
+			success: function (content) {
+                $('.menuver23').show();
+                $('.menuver22').hide();
+              
+			}
+
+		});
+     
+    //update version tv23
+   }else if ($(this).hasClass('tv23')) {
+    $(this).text('Switch to Version 20.12'); 
+     //update version tv22   
+   
+     $.ajax({        			
+			url: baseUrl + "tenant/updatemenuversion",
+            type        : "post",
+            datatype    : 'json',
+            data: {
+                "tenantversion":"23.01"
+            },
+			success: function (content) {
+                $('.menuver22').show();
+                $('.menuver23').hide();
+               
+			}
+
+		});
+       
+   }
+   $(this).toggleClass('tv20 tv23');
+  
   
  });
 
@@ -911,11 +970,26 @@ function getCookie(cname) {
  
  <?php 
 if ($userRoleID == 5 || $userRoleID == 7 ) { ?>
- <div class="switch tentVesionWrap">Switch to Version 
-  <span class="inner-switch tnt-v22">20.12</span>
+<?php if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){?>
+  <div class="switch tentVesionWrap"> 
+  <span class="inner-switch tnt-v22 tv23">Switch to Version 20.12</span>
+  <!--- 20.12 | 23.01-->
+  </div>
+<?php }
+ else if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="20.12"){?>
+
+<div class="switch tentVesionWrap"> 
+  <span class="inner-switch tnt-v23 tv20">Switch to Version 23.01</span>
  <!--- 20.12 | 23.01-->
 </div>
-<?php } ?>
+<?php }else{?>
+<div class="switch tentVesionWrap"> 
+  <span class="inner-switch tnt-v22 tv23">Switch to Version 20.12</span>
+  <!--- 20.12 | 23.01-->
+</div>
+<?php }  
+  } 
+     ?>
 
 
  <?php if($user_id!=1): ?>

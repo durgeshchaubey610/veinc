@@ -120,6 +120,7 @@ class WorkorderController extends Ve_Controller_Base {
             $show = 25;
         }
 
+		
         $category_name = $this->_getParam('category_name', '');
         if ($category_name != '') {
             $search_array['category_name'] = addslashes($category_name);
@@ -244,10 +245,22 @@ class WorkorderController extends Ve_Controller_Base {
 
 
 		 if($this->roleId=='5' || $this->roleId=='7'){
-           
-		 $tenant = new Model_Tenant();
-		 //$tenantuser = $tenant->getTenantById($this->userId);
-		// echo $this->userId;
+			$tId = $this->_getParam('tid');
+			if(isset($tId) && !empty($tId)){
+				$set_cookie = setcookie('tenant_company', $tId, time() + (86400 / 24), "/");
+			}
+		    $tenant = new Model_Tenant();
+
+			$tId  = $_COOKIE['tenant_company'];
+		if ($tId){				
+			$tenantCompanyList = $tenant->getTenantCompanies($this->userId);     
+			$tenantuser = $tenant->getTenanyUserByTenantGroup($tId);
+			$this->view->tId = $tId;				
+			$this->view->tenantGroupListArr = $tenantCompanyList;
+		}		
+		else
+		$tenantuser = $tenant->getTenantByUser($this->userId);
+
 		 $tenantData = $tenant->getTenantByUser($this->userId);
 		 $tenantInfo = $tenantData[0];
 		 $page=$this->_getParam('page',1);
@@ -255,14 +268,18 @@ class WorkorderController extends Ve_Controller_Base {
 		 $dir=$this->_getParam('dir','DESC');
 		 
 		 //for tanant Admin
-		 if($this->roleId=='5'){		
+		 if($this->roleId=='5'){	
+			
 			$wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array,$page, $show);
 			$wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
 		 }else if($this->roleId=='7'){
-			//for tanant User
-			$userId =  $this->userId;
-		    $wolist = $this->woMapper->getTenantUserWorkOrder($tenantInfo->tenantId,$order,$dir,$userId);
-
+			//for tanant User			
+			if (isset($tId)){				
+				$wolist = $this->woMapper->getTenantUserWorkOrder($tId,$order,$dir,$userId);	
+			}else{
+				$wolist = $this->woMapper->getTenantUserWorkOrder($tenantInfo->tenantId,$order,$dir,$userId);
+			}
+		   
 		 }		
 		//  if($this->roleId=='7')		 
 		//  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir,$this->userId);
