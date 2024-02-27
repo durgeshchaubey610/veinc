@@ -1,4 +1,5 @@
-<?php    
+<?php 
+
          //$this->headLink()->appendStylesheet($this->baseUrl() . '/public/tabs.css');
          $this->headLink()->appendStylesheet($this->baseUrl() . '/public/css/bootstrap.css');
          $this->headLink()->appendStylesheet($this->baseUrl() . '/public/css/bootstrap-editable.css');
@@ -16,7 +17,7 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/bootstrap-ed
 	<?php 
 	if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){?>
 
-            <div class="tabmenu my_tabmenu">
+            <div class="tabmenu my_tabmenusss" style="display:none;">
 				<?php
 				$tenantCompanyList = $this->tenantGroupListArr;
 				$tId = $this->tId;
@@ -24,10 +25,10 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/bootstrap-ed
 					$tId = $tenantCompanyList[0]->tenantId;
 				}							
 				if($tenantCompanyList){?>
-                <ul>
+                <ul class="tenant_tabs">
 
                  <?php foreach($tenantCompanyList as $tenantCompany){?>
-					<li style="background-color:#800000" class="<?php echo ($tenantCompany->tenantId==$tId)?'resp-tab-active':'';?>"><a class="" href="<?php echo $this->baseUrl();?>/tenant/tenantuser/company/<?php echo $tenantCompany->tenantId;?>"><?php echo $tenantCompany->tenantName;?></a>
+					<li style="background-color:#800000" class="<?php echo (isset($_COOKIE['tenant_company']) && $tenantCompany->tenantId==$_COOKIE['tenant_company'])?'resp-tab-active':'';?>" tid="<?php echo $tenantCompany->tenantId;?>"><a class="" href="javascript:void(0);" ><?php echo $tenantCompany->tenantName;?></a>
 
                   <?php } ?>
 
@@ -37,10 +38,11 @@ echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/bootstrap-ed
                 </ul>
 				<?php } ?>
             <!-- Report Link -->
-<?php } ?>
+	<?php } ?>
 
 
-        </div>
+</div>
+
 <?php
 $roleMapper = new Model_Role();
 $roleDetail = $roleMapper->getRole();

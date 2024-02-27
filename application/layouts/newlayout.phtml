@@ -137,7 +137,10 @@ jQuery(document).ready(function() {
   </nav>
   <div id="page-wrapper"> 
     <!--Body Top Part start-->
-    
+	<!----------Tenant Admin and User Tab Conatiner---->
+	<?php echo $this->render('tenant_headertabs.phtml'); ?>
+	<!----------Tenant Admin and User Tab Conatiner Added By DVK On 26th Feb 2024---->
+
 							 <?php echo $this->layout()->content ?>
 					<div class="clearfix"></div>	                 
                    </div>

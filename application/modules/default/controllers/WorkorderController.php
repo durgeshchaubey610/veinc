@@ -250,7 +250,6 @@ class WorkorderController extends Ve_Controller_Base {
 				$set_cookie = setcookie('tenant_company', $tId, time() + (86400 / 24), "/");
 			}
 		    $tenant = new Model_Tenant();
-
 			$tId  = $_COOKIE['tenant_company'];
 		if ($tId){				
 			$tenantCompanyList = $tenant->getTenantCompanies($this->userId);     
@@ -378,7 +377,12 @@ class WorkorderController extends Ve_Controller_Base {
 	 * Save worke order
 	 */ 
 	public function saveworkorderAction(){
-		$data = $this->getRequest()->getPost();		
+		$data = $this->getRequest()->getPost();	
+		
+		
+	
+	
+		
 		if(isset($data) && $data['building']!=''){
 			$form_key = $data['form_key'];
 			$smsg = new Zend_Session_Namespace('message');
@@ -418,8 +422,17 @@ class WorkorderController extends Ve_Controller_Base {
 					$settimezone = new Model_TimeZone();
 					$settimezone -> setTimezone($data['building']);
 					/******************* end - set timezone through building id ****************************/
+									
+
 					
 					$insertData['tenant'] = $data['tenant'];
+					// for multi tenant and tenant panel					
+                    if(isset($_SESSION['Admin_User']['role_id']) && $_SESSION['Admin_User']['role_id']=="5"){
+						if(isset($_COOKIE['tenant_company'])){
+						$insertData['tenant'] = $_COOKIE['tenant_company'];
+						}
+					}
+
 					$insertData['building'] = $data['building'];
 					if(isset($data['suite_location'])) $insertData['suite_location'] = $data['suite_location'];
 					if(isset($data['suite_location2'])) $insertData['suite_location2'] = $data['suite_location2'];

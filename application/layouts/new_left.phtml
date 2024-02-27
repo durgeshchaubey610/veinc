@@ -888,13 +888,16 @@ var tenantmenuVersion = "<?php echo (isset($_COOKIE['tenant_version']))?$_COOKIE
 if(tenantmenuVersion=="20.12"){
      $('.menuver23').show();
      $('.menuver22').hide();
+     $('.tenantLocationTab').hide();
 }else if(tenantmenuVersion=="23.01"){
     $('.menuver22').show();
      $('.menuver23').hide();
+     $('.tenantLocationTab').show();
 
 }else{
     $('.menuver22').show();
     $('.menuver23').hide(); 
+    $('.tenantLocationTab').show();
 }
  $(".inner-switch").click(function(){     
    $innerElement =  $(this);
@@ -912,6 +915,10 @@ if(tenantmenuVersion=="20.12"){
 			success: function (content) {
                 $('.menuver23').show();
                 $('.menuver22').hide();
+                // setTimeout(() => {
+                //     window.location.reload();
+                // }, "1000");
+               
               
 			}
 
@@ -932,6 +939,9 @@ if(tenantmenuVersion=="20.12"){
 			success: function (content) {
                 $('.menuver22').show();
                 $('.menuver23').hide();
+                // setTimeout(() => {
+                //     window.location.reload();
+                // }, "1000");
                
 			}
 
@@ -943,6 +953,29 @@ if(tenantmenuVersion=="20.12"){
   
  });
 
+
+ $(".tenant_tabs li").each(function(){    
+   $(this).on("click", function(){
+    $('.tenant_tabs li').removeClass('resp-tab-active');
+    $(this).addClass('resp-tab-active');
+        // For the boolean value
+        var tid = $(this).attr('tid');
+        $.ajax({        			
+			url: baseUrl + "tenant/updattenantcompany",
+            type        : "post",
+            datatype    : 'json',
+            data: {
+                "tenant_company":tid
+            },
+			success: function (content) {
+                  window.location.reload();
+              
+			}
+
+		});
+    });
+   
+ });
         
 });
 function setCookie(cname, cvalue, exdays) {

@@ -3177,6 +3177,21 @@ public function updatemenuversionAction(){
 
     }
 
+    // update tenant company version
+
+    public function updattenantcompanyAction(){   
+        $data = $this->getRequest()->getPost();
+
+            $tenant_company = $this->_getParam('tenant_company');      
+            if(isset($tenant_company)){            
+                setcookie('tenant_company', $tenant_company, time() + (86400 / 24), "/");
+            }  
+            echo $tenant_company;    
+            exit();
+        
+
+        }
+
 
 }
 

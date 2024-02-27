@@ -263,11 +263,13 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
                {
 				  $select = $select->where("DATE(wo.created_at) BETWEEN '".$search_array['from_date'] ."' AND '".$search_array['to_date']."'");
 			   } 
-				if (isset($_COOKIE['tenant_company'])){
-					$tId = $_COOKIE['tenant_company'];
-					$select = $select->where('wo.tenant=?',$tId);
-
-				}                            
+			   if(isset($_SESSION['Admin_User']['role_id']) && $_SESSION['Admin_User']['role_id']=="5"){
+				
+				if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01" && isset($_COOKIE['tenant_company'])){
+					$select = $select->where('wo.tenant=?',$_COOKIE['tenant_company']);
+				}
+			  }
+				                         
              $select = $select->order(array($orderBy));
 			 
              //if(empty($search_array))
