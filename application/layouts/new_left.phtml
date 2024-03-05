@@ -844,6 +844,7 @@ $(".show-collapes").click(function(){
     setCookie("sidemenuview=show;");
 
 });
+
 $(document).ready(function(){
     if(getCookie("sidemenuview")=='hide'){
         $(".hide-collapes").trigger("click"); 
@@ -925,7 +926,25 @@ if(tenantmenuVersion=="20.12"){
 		});
      
     //update version tv23
-   }else if ($(this).hasClass('tv23')) {
+    
+               setTimeout(() => {
+                    $.ajax({        			
+                        url: baseUrl + "tenant/updattenantcompany",
+                        type        : "post",
+                        datatype    : 'json',
+                        data: {
+                            "tenant_company":""
+                        },
+                        success: function (content) {
+                                window.location.reload();
+                            
+                        }
+
+                    });
+                    window.location.href = baseUrl+'workorder/index';
+                }, "1000");
+
+}else if ($(this).hasClass('tv23')) {
     $(this).text('Switch to Version 20.12'); 
      //update version tv22   
    
@@ -946,6 +965,23 @@ if(tenantmenuVersion=="20.12"){
 			}
 
 		});
+
+              setTimeout(() => {
+                $.ajax({        			
+                        url: baseUrl + "tenant/updattenantcompany",
+                        type        : "post",
+                        datatype    : 'json',
+                        data: {
+                            "tenant_company":""
+                        },
+                        success: function (content) {
+                                window.location.reload();
+                            
+                        }
+
+                    });
+                    window.location.reload();
+                }, "1000");
        
    }
    $(this).toggleClass('tv20 tv23');
@@ -960,6 +996,7 @@ if(tenantmenuVersion=="20.12"){
     $(this).addClass('resp-tab-active');
         // For the boolean value
         var tid = $(this).attr('tid');
+        //alert(tid);
         $.ajax({        			
 			url: baseUrl + "tenant/updattenantcompany",
             type        : "post",

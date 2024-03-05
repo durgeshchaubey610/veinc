@@ -1258,9 +1258,13 @@ ol#toc li a.active {
 .resp-tab-active {padding:5px 10px !important;}
 .my_resp-tab-active{background:none!important;}
 .my_tabmenu a {padding: 6px 10px;}
+.my_tabmenu .tenant_tabs  a {padding: 2px 10px;}
+.my_tabmenu .tenant_tabs li a {padding: 2px 10px !important;}
 #search_mini_form > ul {margin: 0;padding: 0;}
 .my_middle_btn {margin: 25px 0;}
-
+#fdw .tenant_tabs ul li:first-child {
+    padding: 6px 10px;
+ }
 select.selectbox {
     /*  background:#ebebeb;*/
     border: 1px solid #c7c7c7;
