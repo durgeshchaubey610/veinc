@@ -22,7 +22,7 @@ if(in_array($controllerName,$tabs_allow_module_array)){
                  <?php //if(!isset($_COOKIE['tenant_company'])){?>
                  <?php if($actioname!="createworkorder"){?>
                     <li style="background-color:#800000;" tid=""  class="<?php echo (!isset($_COOKIE['tenant_company']) )?'resp-tab-active':'';?>" >
-                    <a>ALL</a>
+                    <a>Work Order for All Locations</a>
                     </li>
                 <?php } ?>
            <?php    
@@ -46,7 +46,10 @@ if(in_array($controllerName,$tabs_allow_module_array)){
 }
 #fdw .tabmenu .tenant_tabs li a{
         padding:0x 4px !important;
-
+        font-family: arial;
+        font-weight: bold;
+        position: relative;
+        font-size: 13px;
 }
 #fdw .tabmenu ul li {
     margin-right:6px !important;
