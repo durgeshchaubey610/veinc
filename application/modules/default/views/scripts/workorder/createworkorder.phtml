@@ -241,13 +241,21 @@ $current_date = '';
 	</div>
     </div>
     </section>
-    
+    <script type="text/javascript">
+	var tanant_loc = '<?php echo (!isset($_COOKIE['tenant_company']))?"all":$_COOKIE['tenant_company'];?>';
+    if(tanant_loc=="all"){
+		$('.tenant_tabs li:first').addClass('resp-tab-active');
+	}
+	
+	
+  </script> 
     <?php }else
           echo 'You cann\'t accssess this module.';
     ?>
 </div>
 <div class="loader" style="display:none;" > <img src="<?php echo BASEURL.'public/images/loader.gif';?>"><div>
 <script type="text/javascript">
+	
 	/* $(function() {
 	$( "#date_requested" ).datepicker({
 		 dateFormat:'yy-mm-dd',

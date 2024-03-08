@@ -1,6 +1,9 @@
 <?php
 $actionnTenantHelper=Zend_Controller_Action_HelperBroker::getStaticHelper('Tenantaccess'); 
 $tenantLocationArr = $actionnTenantHelper->checkTenantaccess();
+// echo '<pre>';
+// print_r($tenantLocationArr);
+
 $controllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
 $actioname= Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 $tabs_allow_module_array= array('workorder','tenant');
@@ -12,21 +15,19 @@ if(in_array($controllerName,$tabs_allow_module_array)){
 ?>
 <div id="fdw" class="tenantLocationTab">
 	<div class="tabmenu my_tabmenu">
-<?php if($tenantLocationArr){
-    // echo '<pre>';
-    // print_r($_COOKIE);
+<?php if($tenantLocationArr){ 
     ?>
          <ul class="tenant_tabs">
             <?php if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){?>
                  <?php //if(!isset($_COOKIE['tenant_company'])){?>
-                <li style="background-color:#800000;" tid=""  class="<?php echo (!isset($_COOKIE['tenant_company']) )?'resp-tab-active':'';?>" >
-                <a>ALL</a>
-                </li>
-           <?php 
-                 
-                // }
+                 <?php if($actioname!="createworkorder"){?>
+                    <li style="background-color:#800000;" tid=""  class="<?php echo (!isset($_COOKIE['tenant_company']) )?'resp-tab-active':'';?>" >
+                    <a>ALL</a>
+                    </li>
+                <?php } ?>
+           <?php    
                 
-        } ?>     
+              } ?>     
   <?php foreach($tenantLocationArr as $tenantCompany){?>
       <li style="background-color:#800000" class="<?php echo (isset($_COOKIE['tenant_company']) && $tenantCompany->tenantId==$_COOKIE['tenant_company'])?'resp-tab-active':'';?>" tid="<?php echo $tenantCompany->tenantId;?>"><a class="" href="javascript:void(0);" ><?php echo $tenantCompany->tenantName;?></a>
   <?php } ?>
