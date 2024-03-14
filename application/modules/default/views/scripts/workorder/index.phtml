@@ -7,6 +7,26 @@
 	echo $this->headScript()->appendFile($this->baseUrl() . '/public/jquery/jquery.multiple.select.js');
 	echo $this->headLink()->appendStylesheet($this->baseUrl() . '/public/css/multiple-select.css');
 	echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/dashworkorder.js');
+
+$actionnTenantHelper=Zend_Controller_Action_HelperBroker::getStaticHelper('Tenantaccess'); 
+    $tenantLocationArr = $actionnTenantHelper->checkTenantaccess();
+
+
+$color_code = array('00FFFF','FF0000','FF00FF','800000','008000','800080','808000','0000FF','00FF00','000080','FFFF00','808000','008080','FFA500');						
+$building_color = array();
+
+
+$j = 1;
+foreach($tenantLocationArr as $tenantcompany){ 
+    // echo '<pre>';
+    // print_r($tenantcompany->id);
+    $building_color[$tenantcompany->id] = $color_code[$j];
+    ?>
+
+<?php $j++; }        
+//print_r($building_color);
+
+
         $order = $this->order;
         $dir = $this->dir;
         $wdir = 'ASC';
@@ -61,8 +81,6 @@ if ($this->view_type != 'detail') {
 } else {
     $reportDetailLinks = $reportModel->getReport($this->custID, 3);
 }
-
-
 	?>
 	 <!--Body middle Part button start-->
      <div class="row">
@@ -335,22 +353,19 @@ if(strlen($descText)>=30){ ?>
                                                                         }
                                                                         ?>" ><img src="<?php echo BASEURL . 'public/images/printer.png'; ?>" style="width:20px;"></a></td>                                                                                                                                    
                                                                 
+                                                                
+                                                        <td style="background-color:#<?php echo $building_color[$wl->tenant] ?>">
+                                                                   
+                                                                   <a href="javascript:void(0)" onclick="showWorkOrder('<?php echo $wl->woId ?>')">
+                                                                       <i id="plus_<?php echo $wl->woId ?>" class="fa fa-plus blackfont_color plus_min_icon"></i></a>
+                                                              
+                                                                </td>
                                                             </tr> 
-                                                            <?php if ($veiw_type == 'line') { ?>
                                                                 <tr id="workrequest_<?php echo $wl->woId ?>" style="display:none;" class="tr-order">
                                                                     <td colspan="9" id="order_content_<?php echo $wl->woId ?>" class="order-detail"></td>
                                                                 </tr> 
                                                                 <?php
-                                                            } else {
 
-                                                                $catlist = $catModel->getBuildingCategoryList($wl->building);
-                                                                $cat_array = array();
-                                                                foreach ($catlist as $cat)
-                                                                    $cat_array[$cat['cat_id']] = $cat['categoryName'];
-                                                                ?>
-                                                              
-                                                                <?php
-                                                            }
                                                         }
                                                     } else {
                                                         ?>
@@ -548,4 +563,15 @@ if(strlen($descText)>=30){ ?>
     setTimeout(function(){ $('.container-right').css('max-width','100%'); }, 600);
 
     
+</script>
+
+
+
+<script>
+
+    var hash = window.location.hash;
+    if (hash != '') {
+        hash = hash.replace('#', '');
+        showWorkOrder(hash);
+    }
 </script>
