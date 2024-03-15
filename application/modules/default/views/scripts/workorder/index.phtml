@@ -353,13 +353,19 @@ if(strlen($descText)>=30){ ?>
                                                                         }
                                                                         ?>" ><img src="<?php echo BASEURL . 'public/images/printer.png'; ?>" style="width:20px;"></a></td>                                                                                                                                    
                                                                 
-                                                                
-                                                        <td style="background-color:#<?php echo $building_color[$wl->tenant] ?>">
+                                                                <?php
+                                                                if(isset($_COOKIE['tenant_version']) 
+                                                                 && $_COOKIE['tenant_version']=="23.01" ){
+                                                                   
+                                                                    ?>
+                                                                <td style="background-color:#<?php echo $building_color[$wl->tenant] ?>">
                                                                    
                                                                    <a href="javascript:void(0)" onclick="showWorkOrder('<?php echo $wl->woId ?>')">
                                                                        <i id="plus_<?php echo $wl->woId ?>" class="fa fa-plus blackfont_color plus_min_icon"></i></a>
                                                               
                                                                 </td>
+                                                              <?php } ?>
+
                                                             </tr> 
                                                                 <tr id="workrequest_<?php echo $wl->woId ?>" style="display:none;" class="tr-order">
                                                                     <td colspan="9" id="order_content_<?php echo $wl->woId ?>" class="order-detail"></td>
