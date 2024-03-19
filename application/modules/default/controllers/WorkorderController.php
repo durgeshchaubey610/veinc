@@ -267,15 +267,18 @@ class WorkorderController extends Ve_Controller_Base {
 		 $dir=$this->_getParam('dir','DESC');
 		 
 		 //for tanant Admin
+		 $userId = $this->userId;	
 		 if($this->roleId=='5'){	
 			
 			$wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array,$page, $show);
 			$wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
-		 }else if($this->roleId=='7'){
-			//for tanant User			
-			if (isset($tId)){				
+		 }else if($this->roleId=='7'){		
+				
+			if (isset($tId)){	
+					// echo $userId;
 				$wolist = $this->woMapper->getTenantUserWorkOrder($tId,$order,$dir,$userId);	
-			}else{
+				
+			}else{				
 				$wolist = $this->woMapper->getTenantUserWorkOrder($tenantInfo->tenantId,$order,$dir,$userId);
 			}
 		   
