@@ -87,7 +87,7 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 			}          
              $select = $select->order(array($orderBy)); 
 			 
-			 echo $select;
+			
             $res = $db->fetchAll( $select );        
             return ($res && sizeof($res)>0)? $res : false ;
 		}else
@@ -241,7 +241,13 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
                       ->joinLeft(array('wop'=>'work_order_update'),'wop.wo_id = wo.woId AND wop.current_update = 1',array('wop.wo_status','wop.internal_note','wop.wo_request','wop.billable_opt','created_date'=>'wop.created_at','updated_date'=>'wop.updated_at'))
                       ->joinLeft(array('u'=>'users'),'wo.create_user = u.uid',array('firstName','lastName','email'))                      
                       ->where('wo.building in ('.implode(",", $buildingIds).')');
-              if(isset($search_array['search_status']) && $search_array['search_status']!='')
+             //@kitrila
+			// if(isset($search_array['userId']) && $search_array['userId']!='')
+			// {
+			// $select = $select->where('u.uid ='.$search_array['userId']);
+			// }
+			 //@kitrila
+			  if(isset($search_array['search_status']) && $search_array['search_status']!='')
                {
 				  $select = $select->where('wop.wo_status in ('.implode(",",$search_array['search_status']).')');
 			   }
@@ -265,8 +271,13 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 			   } 
 			   if(isset($_SESSION['Admin_User']['role_id']) && $_SESSION['Admin_User']['role_id']=="5"){
 				
-				if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01" && isset($_COOKIE['tenant_company'])){
-					$select = $select->where('wo.tenant=?',$_COOKIE['tenant_company']);
+				if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01" ){
+					if(isset($_COOKIE['tenant_company'])){
+						$tenant_company_arr = explode(",",$_COOKIE['tenant_company']);
+						//$select = $select->where('wo.tenant in ('.implode(".",$tenant_company_arr).')');
+						$select = $select->where('wo.tenant in ('.$_COOKIE['tenant_company'].')');
+
+					}
 				}
 			  }
 				                         
@@ -323,7 +334,18 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
                {
 				  $select = $select->where("DATE(wo.created_at) BETWEEN '".$search_array['from_date'] ."' AND '".$search_array['to_date']."'");
 			   }  
-			         
+			    
+			   if(isset($_SESSION['Admin_User']['role_id']) && $_SESSION['Admin_User']['role_id']=="5"){
+				
+				if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01" ){
+					if(isset($_COOKIE['tenant_company'])){
+						$tenant_company_arr = explode(",",$_COOKIE['tenant_company']);
+						//$select = $select->where('wo.tenant in ('.implode(".",$tenant_company_arr).')');
+						$select = $select->where('wo.tenant in ('.$_COOKIE['tenant_company'].')');
+					}
+				}
+			  }
+			   
              //$select = $select->group('wo.woId');
                                  
             $res = $db->fetchAll( $select ); 

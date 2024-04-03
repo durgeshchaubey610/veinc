@@ -16,12 +16,18 @@ if(in_array($controllerName,$tabs_allow_module_array)){
 <div id="fdw" class="tenantLocationTab">
 	<div class="tabmenu my_tabmenu">
 <?php if($tenantLocationArr){ 
+    $allLocation = array();
+    $alllocationIds = '';
+    foreach($tenantLocationArr as $tenantCompany){
+        $allLocation[] = $tenantCompany->tenantId;
+        $alllocationIds = implode(',',$allLocation);
+    }
     ?>
          <ul class="tenant_tabs">
             <?php if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){?>
                  <?php //if(!isset($_COOKIE['tenant_company'])){?>
                  <?php if($actioname!="createworkorder"){?>
-                    <li style="background-color:#800000;" tid=""  class="<?php echo (!isset($_COOKIE['tenant_company']) )?'resp-tab-active':'';?>" >
+                    <li style="background-color:#800000;" tid="<?php echo $alllocationIds;?>"  class="<?php echo (isset($_COOKIE['tenant_company']) &&  strpos( $_COOKIE['tenant_company'], ',' ) !== false )?'resp-tab-active':'';?>" >
                     <a>Work Order for All Locations</a>
                     </li>
                 <?php } ?>

@@ -63,8 +63,10 @@ class WorkorderController extends Ve_Controller_Base {
         $order = $this->_getParam('order', 'woId');
         $dir = $this->_getParam('dir', 'DESC');
         $wolist = '';
-        $show =  $_COOKIE['show_limit'];
-        $build_ID = $this->_getParam('bid', '');  
+		$per_page_record = $this->_getParam('show', 1);
+        $show =  (isset($per_page_record))?$per_page_record:$_COOKIE['show_limit'];
+       
+		$build_ID = $this->_getParam('bid', '');  
           
         $select_build_id = $build_ID;
         /*         * *******set building in cookie ********* */
@@ -163,11 +165,13 @@ class WorkorderController extends Ve_Controller_Base {
                     $buildIds[] = $cl['build_id'];
                 }
                $wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array,$page, $show);
-              $wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
+               $wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
             } else {
                 $wolist = $woModel->getBuildingWorkOrder($build_ID, $order, $dir, $search_array,$page, $show);
-             $wolistcount = $woModel->getBuildingWorkOrderNew($build_ID, $order, $dir, $search_array);
+              $wolistcount = $woModel->getBuildingWorkOrderNew($build_ID, $order, $dir, $search_array);
             }
+			
+			
             /* }else{
               //$eguModel = new Model_EmailGroupUsers();
               //$egulist =  $eguModel->getGroupIdByUser($this->userId);
@@ -269,7 +273,8 @@ class WorkorderController extends Ve_Controller_Base {
 		 //for tanant Admin
 		 $userId = $this->userId;	
 		 if($this->roleId=='5'){	
-			
+           $search_array['userId'] = $userId;
+ 
 			$wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array,$page, $show);
 			$wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
 		 }else if($this->roleId=='7'){		
@@ -381,11 +386,7 @@ class WorkorderController extends Ve_Controller_Base {
 	 */ 
 	public function saveworkorderAction(){
 		$data = $this->getRequest()->getPost();	
-		
-		
-	
-	
-		
+						
 		if(isset($data) && $data['building']!=''){
 			$form_key = $data['form_key'];
 			$smsg = new Zend_Session_Namespace('message');
@@ -432,7 +433,10 @@ class WorkorderController extends Ve_Controller_Base {
 					// for multi tenant and tenant panel					
                     if(isset($_SESSION['Admin_User']['role_id']) && $_SESSION['Admin_User']['role_id']=="5"){
 						if(isset($_COOKIE['tenant_company'])){
-						$insertData['tenant'] = $_COOKIE['tenant_company'];
+						$tenant_company_arr = explode(",",$_COOKIE['tenant_company']);
+						if(isset($tenant_company_arr[0])){
+						  $insertData['tenant'] = $tenant_company_arr[0];
+						 }
 						}
 					}
 

@@ -242,7 +242,7 @@ $current_date = '';
     </div>
     </section>
     <script type="text/javascript">
-	var tanant_loc = '<?php echo (!isset($_COOKIE['tenant_company']))?"all":$_COOKIE['tenant_company'];?>';
+	var tanant_loc = '<?php echo (!isset($_COOKIE['tenant_company'])|| strpos($_COOKIE['tenant_company'], ",") !== false)?"all":$_COOKIE['tenant_company'];?>';
     if(tanant_loc=="all"){
 		$('.tenant_tabs li:first').addClass('resp-tab-active');
 	}
