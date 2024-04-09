@@ -389,6 +389,9 @@ class IndexController extends Ve_Controller_Base {
         $uid = $_SESSION['Admin_User']['user_id'];
         $updateUser = $userModel->updateUser(array("ip" => ""), $uid);
 
+        if(isset($_COOKIE['tenant_company'])){
+            setcookie('tenant_company', "", time() -3600, '/');
+        }
 
         $Auth->doLogout();
         //echo 'dddddd'; die;
