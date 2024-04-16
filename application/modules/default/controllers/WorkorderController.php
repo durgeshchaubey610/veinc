@@ -42,6 +42,9 @@ class WorkorderController extends Ve_Controller_Base {
      */ 
     public function indexAction(){
 
+		echo '<pre>';
+		print_r($_COOKIE);
+		print_r($_SESSION);
 		$companyListing = '';
         $buildingMapper = new Model_Building();
         if ($this->roleId == '9') {
@@ -293,7 +296,7 @@ class WorkorderController extends Ve_Controller_Base {
 		//  else
 		//  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir);
 		 $pageObj=new Ve_Paginator();
-		 $paginator=$pageObj->fetchPageDataResult($wolist,$page,10);		 
+		 $paginator=$pageObj->fetchPageDataResult($wolist,$page,$show);		 
 		 $this->view->page = $page;
 		 $this->view->roleId = $this->roleId;
 		 //$this->view->tenantuser = $tenantuser[0];
@@ -431,7 +434,7 @@ class WorkorderController extends Ve_Controller_Base {
 					
 					$insertData['tenant'] = $data['tenant'];
 					// for multi tenant and tenant panel					
-                    if(isset($_SESSION['Admin_User']['role_id']) && $_SESSION['Admin_User']['role_id']=="5"){
+                    if(isset($_SESSION['Admin_User']['role_id']) && $_SESSION['Admin_User']['role_id']=="5" ){
 						if(isset($_COOKIE['tenant_company'])){
 						$tenant_company_arr = explode(",",$_COOKIE['tenant_company']);
 						if(isset($tenant_company_arr[0])){
