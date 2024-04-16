@@ -42,9 +42,7 @@ class WorkorderController extends Ve_Controller_Base {
      */ 
     public function indexAction(){
 
-		echo '<pre>';
-		print_r($_COOKIE);
-		print_r($_SESSION);
+		
 		$companyListing = '';
         $buildingMapper = new Model_Building();
         if ($this->roleId == '9') {
