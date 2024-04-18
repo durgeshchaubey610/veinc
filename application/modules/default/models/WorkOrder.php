@@ -95,7 +95,7 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 	}
 
 
-	public function getTenantUserWorkOrder($tenantId,$order,$dir,$userId=''){
+	public function getTenantUserWorkOrder($tenantId,$order,$dir,$userId='',$search_array){
 		if($tenantId){
 			
 			//$select = $this->select()->where('status=?','1') ;
@@ -112,6 +112,10 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 					 // ->where('wo.master_internal_work_order!=?',1);
             if($userId!=''){
 				$select = $select->where('wo.create_user=?',$userId);
+			}
+			if(isset($search_array['search_status']) && $search_array['search_status']!='')
+			{
+				$select = $select->where('wop.wo_status in ('.implode(",",$search_array['search_status']).')');
 			}          
              $select = $select->order(array($orderBy)); 
 			 

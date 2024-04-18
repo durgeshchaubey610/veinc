@@ -282,10 +282,10 @@ class WorkorderController extends Ve_Controller_Base {
 				
 			if (isset($tId)){	
 					// echo $userId;
-				$wolist = $this->woMapper->getTenantUserWorkOrder($tId,$order,$dir,$userId);	
+				$wolist = $this->woMapper->getTenantUserWorkOrder($tId,$order,$dir,$userId,$search_array);	
 				
 			}else{				
-				$wolist = $this->woMapper->getTenantUserWorkOrder($tenantInfo->tenantId,$order,$dir,$userId);
+				$wolist = $this->woMapper->getTenantUserWorkOrder($tenantInfo->tenantId,$order,$dir,$userId,$search_array);
 			}
 		   
 		 }		
