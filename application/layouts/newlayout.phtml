@@ -203,9 +203,9 @@ var content = "<?php echo $myaccount; ?>";
 var userrole = "<?php echo $userRoleID; ?>";
 var check_default_loc = '<?php echo (!isset($_COOKIE['tenant_company']))?"all":'';?>';
 if(check_default_loc=="all" && (userrole=="5" ||userrole=="7" )){
-	setTimeout(function(){
-        $(".tenant_tabs li:first a").trigger("click");
-    },600);
+	// setTimeout(function(){
+    //     $(".tenant_tabs li:first a").trigger("click");
+    // },600);
 }
 $(document).ready(function(){
     $('#myaccount').popover({content: content, html: true, placement: "bottom"}); 
