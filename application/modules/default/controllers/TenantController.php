@@ -2326,6 +2326,21 @@ class TenantController extends Ve_Controller_Base {
         exit();
     }
 
+    public function gettenantsAction() {
+        $query = $this->_request->getParams();
+		$tenantModel = new Model_Tenant();
+		$tenantDetails = $tenantModel->getTenantUserEmail($query['q'],$query['bid']);
+        
+        if(!empty($tenantDetails)) {
+            foreach($tenantDetails as $key => $tenant) {
+                $tenantDetail[$key]['label'] = $tenant->User_EMail;
+                $tenantDetail[$key]['value'] = $tenant->User_EMail;
+            }
+        }
+        echo $query["callback"]."(".json_encode($tenantDetail).")";
+        exit(0);
+    }
+    
     public function createtuserAction() {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);

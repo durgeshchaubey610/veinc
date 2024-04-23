@@ -1099,8 +1099,36 @@ $( document ).ready(function() {
         defualtResults();
        
     }
+    $( "#email_address1" ).autocomplete({
+            source: function( request, response ) {
+                $.ajax({
+                    url: baseUrl+"tenant/gettenants",
+                    dataType: "jsonp",
+                    data: {
+                        q: request.term,
+                        bid: '<?php echo $buildId;?>'
+                    },
+                    success: function( data ) {					
+                        response( data );
+                    }
+                });
+            },
+            minLength: 1,
+            select: function( event, ui ) {
+                $("#uid").val(ui.item.uid);
+                                
+                $("#email").val(ui.item.email);
+               
+            },
+            open: function() {
+                $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+            }            
+         });
+
+
 });
     </script>
+
     <style>
 .table100.ver2 th {
   color: #000;
