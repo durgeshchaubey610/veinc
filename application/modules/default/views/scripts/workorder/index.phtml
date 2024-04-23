@@ -568,8 +568,15 @@ if(strlen($descText)>=30){ ?>
     }
 
     $( document ).ready(function() {
+        $('#page-wrapper').fadeOut();
+     
+       setTimeout(function(){ 
         $('.container-right').css('max-width','100%');
+        $('#page-wrapper').fadeIn(); }, 600);
+
+        
    });
+
     //$('.container-right').css('max-width','100%');
     
     //Fixed the responsive design issue with Tenant Admin - By Dadhi Vallabh
