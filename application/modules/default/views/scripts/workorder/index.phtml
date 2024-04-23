@@ -1,4 +1,4 @@
-<div class="container-right" id="woListData1">
+<div class="container-right" id="woListData1" style="display:none">
 <?php if($this->roleId=='5' || $this->roleId=='7'){
    
 
@@ -566,13 +566,13 @@ if(strlen($descText)>=30){ ?>
             window.location = baseUrl + 'workorder/index/show/' + limit;
         }
     }
-
+   // $('#page-wrapper').fadeOut();
     $( document ).ready(function() {
-        $('#page-wrapper').fadeOut();
+        
      
        setTimeout(function(){ 
         $('.container-right').css('max-width','100%');
-        $('#page-wrapper').fadeIn(); }, 600);
+        $('.container-right').show(); }, 600);
 
         
    });
@@ -595,3 +595,4 @@ if(strlen($descText)>=30){ ?>
         showWorkOrder(hash);
     }
 </script>
+
