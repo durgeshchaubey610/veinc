@@ -1,6 +1,7 @@
 <div class="container-right" id="woListData1">
 <?php if($this->roleId=='5' || $this->roleId=='7'){
-  
+   
+
 ?>
 
    <?php
@@ -565,8 +566,11 @@ if(strlen($descText)>=30){ ?>
             window.location = baseUrl + 'workorder/index/show/' + limit;
         }
     }
+
+    $('.container-right').css('max-width','100%');
+    
     //Fixed the responsive design issue with Tenant Admin - By Dadhi Vallabh
-    setTimeout(function(){ $('.container-right').css('max-width','100%'); }, 600);
+    //setTimeout(function(){ $('.container-right').css('max-width','100%'); }, 600);
 
     
 </script>
