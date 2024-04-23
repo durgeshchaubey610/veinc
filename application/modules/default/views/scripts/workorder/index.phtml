@@ -567,7 +567,10 @@ if(strlen($descText)>=30){ ?>
         }
     }
 
-    $('.container-right').css('max-width','100%');
+    $( document ).ready(function() {
+        $('.container-right').css('max-width','100%');
+   });
+    //$('.container-right').css('max-width','100%');
     
     //Fixed the responsive design issue with Tenant Admin - By Dadhi Vallabh
     //setTimeout(function(){ $('.container-right').css('max-width','100%'); }, 600);
