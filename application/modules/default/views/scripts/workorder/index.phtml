@@ -517,7 +517,16 @@ if(strlen($descText)>=30){ ?>
             </div>
         </div>
         <!-- /#page-wrapper -->
+<script>
+ function reloadPage() {   
+        window.location.reload();
+    }
+    function scheduleReload(s) {    
+        setInterval(reloadPage, s); 
 
+    }
+    scheduleReload(30000);// 30000 milliseconds = 30 sec
+ </script>   
 <?php } else { ?>
     You don't have access for this module.
 <?php } ?>
@@ -581,14 +590,7 @@ if(strlen($descText)>=30){ ?>
     
     //Fixed the responsive design issue with Tenant Admin - By Dadhi Vallabh
     //setTimeout(function(){ $('.container-right').css('max-width','100%'); }, 600);
-
-    
-</script>
-
-
-
-<script>
-
+   
     var hash = window.location.hash;
     if (hash != '') {
         hash = hash.replace('#', '');
