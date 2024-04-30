@@ -5,7 +5,6 @@ $tenantLocationArr = $actionnTenantHelper->checkTenantaccess();
 
 $tenantBuildingArr = $actionnTenantHelper->getTenantbuilding();
 
-
 $controllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
 $actioname= Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 $tabs_allow_module_array= array('workorder','tenant');
@@ -14,6 +13,7 @@ $tabs_allow_module_action_array= array('index','tenantuser','createworkorder');
 if(in_array($controllerName,$tabs_allow_module_array)){
     if(in_array($actioname,$tabs_allow_module_action_array)){
 //allow pages
+if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){
 
 if($getTenantbuilding){
     foreach($getTenantbuilding as $tenantBuilding){
@@ -28,6 +28,7 @@ if($getTenantbuilding){
     </div>
         <?php
     }
+}
 }
 ?>
 <div id="fdw" class="tenantLocationTab">
