@@ -197,8 +197,9 @@
 					<span id="assign_error_<?php echo $woData->woId;?>" class="error"></span>
 					<div id="assign_category" class="my_agn_div">
 					<div class="lbl_div">
-						 <label>Assign new category</label> </div>
+						 <label>Assign new category  </label> </div>
 						 <input type="hidden" name="curr_cat_<?php echo $woData->woId;?>" id="curr_cat_<?php echo $woData->woId;?>" value="<?php echo $woData->category; ?>"/>
+						 
 						 <select name="assign_category_<?php echo $woData->woId;?>" id="assign_category_<?php echo $woData->woId;?>" class="my_assign_div">
 							 <option value="">Select Category</option>
 							 <?php 
@@ -211,8 +212,10 @@
 							   }
 							 ?>
 						 </select>
+						 <?php if($this->roleId==5){?>
 						 <input type="button" name="assign_button" class="form_btn" value="Assign Category" onClick="reassignCategory('<?php echo $woData->woId;?>');"/>
-					</div>
+					     <?php } ?>
+						</div>
 				</form>	
 			<?php }?>	
           <form name="worequestform" id="worequestform" action="<?php echo BASEURL.'/dashboard/updateorder/'?>" method="post">
@@ -265,8 +268,9 @@
               </div>
             </div>
 			
-          
+			<?php if($this->roleId==5){?>
             <div class="form_group"><input type="button" class="form_btn float_right" value="Update" onclick="ValidateForm()"></div>
+			<?php } ?>
 			
              <div class="form_group note_group">
               <!-- <div class="lbl_div">
