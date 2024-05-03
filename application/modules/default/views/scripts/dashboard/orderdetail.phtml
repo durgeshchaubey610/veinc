@@ -56,7 +56,7 @@
 ?>
 <div class="editworkorder">
 <div class="order-details">     
-      <h1>Work Order Details :</h1>
+      <h1>Work Order Details <?php echo $this->roleId;?>:</h1>
 	  
         <div class="col-lg-8">
 			<?php if($dline_access->is_write==1) {?>
@@ -200,7 +200,7 @@
 						 <label>Assign new category  </label> </div>
 						 <input type="hidden" name="curr_cat_<?php echo $woData->woId;?>" id="curr_cat_<?php echo $woData->woId;?>" value="<?php echo $woData->category; ?>"/>
 						 
-						 <select name="assign_category_<?php echo $woData->woId;?>" id="assign_category_<?php echo $woData->woId;?>" class="my_assign_div">
+						 <select <?php echo ($this->roleId == 7)?'disabled':'';?> name="assign_category_<?php echo $woData->woId;?>" id="assign_category_<?php echo $woData->woId;?>" class="my_assign_div">
 							 <option value="">Select Category</option>
 							 <?php 
 								if($catlist){
@@ -244,7 +244,7 @@
               <div class="form_field_div">
                 <div class="btn-group work_update_select">
 					<div id="wstatus_error" class="wst_error"></div>
-					<select name="order_status" id="order_status" class="all_select" onChange="javascript:checkSchedule('orderdetail','<?php echo $woData->woId;?>');">
+					<select <?php echo ($this->roleId == 7)?'disabled':'';?> name="order_status" id="order_status" class="all_select" onChange="javascript:checkSchedule('orderdetail','<?php echo $woData->woId;?>');">
 						   <?php foreach($status_array as $key=>$value){ ?>
 							   <option value="<?php echo $key;?>" <?php echo ($work_status==$key)?'selected':'';?>><?php echo $value;?></option>
 							 <?php }?>  
