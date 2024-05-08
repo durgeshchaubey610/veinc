@@ -56,7 +56,7 @@
 ?>
 <div class="editworkorder">
 <div class="order-details">     
-      <h1>Work Order Details <?php echo $this->roleId;?>:</h1>
+      <h1>Work Order Details :</h1>
 	  
         <div class="col-lg-8">
 			<?php if($dline_access->is_write==1) {?>
@@ -199,8 +199,10 @@
 					<div class="lbl_div">
 						 <label>Assign new category  </label> </div>
 						 <input type="hidden" name="curr_cat_<?php echo $woData->woId;?>" id="curr_cat_<?php echo $woData->woId;?>" value="<?php echo $woData->category; ?>"/>
-						 
-						 <select <?php echo ($this->roleId == 7)?'disabled':'';?> name="assign_category_<?php echo $woData->woId;?>" id="assign_category_<?php echo $woData->woId;?>" class="my_assign_div">
+						<?php if($this->roleId == 7)
+                            
+						?>
+						 <select <?php echo ($this->roleId == 7 || $this->roleId == 5 )?'disabled':'';?> name="assign_category_<?php echo $woData->woId;?>" id="assign_category_<?php echo $woData->woId;?>" class="my_assign_div">
 							 <option value="">Select Category</option>
 							 <?php 
 								if($catlist){
@@ -212,9 +214,9 @@
 							   }
 							 ?>
 						 </select>
-						 <?php if($this->roleId==5){?>
+						 <!-- <?php if($this->roleId!=5 || $this->roleId!=7){?>
 						 <input type="button" name="assign_button" class="form_btn" value="Assign Category" onClick="reassignCategory('<?php echo $woData->woId;?>');"/>
-					     <?php } ?>
+					     <?php } ?> -->
 						</div>
 				</form>	
 			<?php }?>	
@@ -244,7 +246,7 @@
               <div class="form_field_div">
                 <div class="btn-group work_update_select">
 					<div id="wstatus_error" class="wst_error"></div>
-					<select <?php echo ($this->roleId == 7)?'disabled':'';?> name="order_status" id="order_status" class="all_select" onChange="javascript:checkSchedule('orderdetail','<?php echo $woData->woId;?>');">
+					<select <?php echo ($this->roleId == 7 || $this->roleId == 5)?'disabled':'';?> name="order_status" id="order_status" class="all_select" onChange="javascript:checkSchedule('orderdetail','<?php echo $woData->woId;?>');">
 						   <?php foreach($status_array as $key=>$value){ ?>
 							   <option value="<?php echo $key;?>" <?php echo ($work_status==$key)?'selected':'';?>><?php echo $value;?></option>
 							 <?php }?>  
@@ -268,9 +270,9 @@
               </div>
             </div>
 			
-			<?php if($this->roleId==5){?>
+			<!-- <?php if($this->roleId==5 || $this->roleId==7){?>
             <div class="form_group"><input type="button" class="form_btn float_right" value="Update" onclick="ValidateForm()"></div>
-			<?php } ?>
+			<?php } ?> -->
 			
              <div class="form_group note_group">
               <!-- <div class="lbl_div">
