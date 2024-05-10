@@ -47,10 +47,12 @@ class WorkorderController extends Ve_Controller_Base {
         $buildingMapper = new Model_Building();
         if ($this->roleId == '9') {
             $companyListing = $buildingMapper->getCompanyBuilding($this->cust_id);
-        } else {
+       
+		} else {
             $user_build_mod = new Model_UserBuildingModule();
             $buildinglists = $user_build_mod->getUserBuildingIds($this->userId);
-            if ($buildinglists) {
+        
+			if ($buildinglists) {
 				$build_ID = $buildinglists[0]['building_id'];
                 // $build_id_array = array();
                 foreach ($buildinglists as $buildlist){
@@ -250,6 +252,9 @@ class WorkorderController extends Ve_Controller_Base {
 
 
 		 if($this->roleId=='5' || $this->roleId=='7'){
+		
+			$tenantDefualtbuildinglists = $buildinglists;
+
 			$tId = $this->_getParam('tid');
 			if(isset($tId) && !empty($tId)){
 				$set_cookie = setcookie('tenant_company', $tId, time() + (86400 / 24), "/");
@@ -259,6 +264,8 @@ class WorkorderController extends Ve_Controller_Base {
 		if ($tId){				
 			$tenantCompanyList = $tenant->getTenantCompanies($this->userId);     
 			$tenantuser = $tenant->getTenanyUserByTenantGroup($tId);
+
+			
 			$this->view->tId = $tId;				
 			$this->view->tenantGroupListArr = $tenantCompanyList;
 		}		
@@ -301,6 +308,9 @@ class WorkorderController extends Ve_Controller_Base {
 		 $this->view->wolist = $paginator;
 		 $this->view->order = $order;
 		 $this->view->dir = $dir;
+
+		 
+		 $this->tenantDefualtbuildinglists = $tenantDefualtbuildinglists;
 		 }
 	   $this->view->roleId = $this->roleId;
 	 }
@@ -740,7 +750,23 @@ class WorkorderController extends Ve_Controller_Base {
 			$tenantData       = (array)$tenantInfo;//->toArray();
 			$sendmail = $this->woMapper->sendWorkOrderEmail($woId,$tenantData);
 			exit;
-		}		
+		}
+		
+		
+		public function ajaxworkordernotifyAction(){
+			$data = $this->getRequest()->getPost();	
+			//print_r($data);	
+			if($this->getRequest()->getMethod() == 'POST'){
+				$buildId = $data['tenant_buiding'];
+				$tenantIds = $data['tenant_location_info'];
+				$woModel = new Model_WorkOrder();
+
+				$last_recods = $woModel->getBuildingWorklastOrderDetail($buildId,$tenantIds);
+				echo json_encode($last_recods);
+				
+			}
+			exit(0);
+		}
 		
 }
 

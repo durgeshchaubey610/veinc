@@ -518,8 +518,68 @@ if(strlen($descText)>=30){ ?>
         </div>
         <!-- /#page-wrapper -->
 <script>
+    // when page load; for getting las work order
+    var tenant_buiding = $('.fdw').attr('bid');
+    var tenant_location_info = $('#tenant_data').attr('tenant_location_info');
+    $.ajax({
+                    type: "POST",
+                    url: baseUrl + 'workorder/ajaxworkordernotify',
+                    data: {tenant_buiding: tenant_buiding,
+                        tenant_location_info:tenant_location_info
+                    },
+                    datatype: 'json',
+                    success: function (msg) {                      
+                       
+                        obj = JSON.parse(msg);                      
+                        $('.fdw').attr('last_work_order',obj.wo_number);
+                      
+                       // alert(obj.tenant);
+                    }
+        });
+
+
  function reloadPage() {   
-        window.location.reload();
+        //window.location.reload();
+        var tenant_buiding = $('.fdw').attr('bid');
+        var tenant_location_info = $('#tenant_data').attr('tenant_location_info');
+        console.log(tenant_buiding);
+        $.ajax({
+                    type: "POST",
+                    url: baseUrl + 'workorder/ajaxworkordernotify',
+                    data: {tenant_buiding: tenant_buiding,
+                        tenant_location_info:tenant_location_info
+                    },
+                    datatype: 'json',
+                    success: function (msg) {
+
+                       var last_work_order_id =  $('.fdw').attr('last_work_order');
+                       last_work_order_id = parseInt(last_work_order_id);
+                       
+                        var obj = JSON.parse(msg);
+                        // console.log(obj.tenant);
+                        // console.log(obj.wo_number);
+                        // console.log(obj.woId);
+                        var current_work_order_id = obj.wo_number;
+                        current_work_order_id = parseInt(current_work_order_id);
+                        if(current_work_order_id != last_work_order_id){
+                            //new work order created
+                            console.log('new order id '+ current_work_order_id);
+                            console.log(current_work_order_id);
+                            console.log('last order id '+ last_work_order_id);
+                            $('.fdw').attr('last_work_order',current_work_order_id);
+                            tenant_location = obj.tenant;
+                            $('ul.tenant_tabs li').each(function(){
+                             var loc = $(this).attr('tid');
+                             if($(this).attr('tid') == obj.tenant){
+                                $(this).trigger('click');
+                             }
+
+                            });
+                        }
+                       // alert(obj.tenant);
+                    }
+        });
+
     }
     function scheduleReload(s) {    
         setInterval(reloadPage, s); 

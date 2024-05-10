@@ -1712,6 +1712,37 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
                 $count = $res[0]->c;
 		return ($count && $count>0)? $count : false ;
         }
+
+
+		public function getBuildingWorklastOrderDetail($buildID,$tenantids){
+			if($buildID){
+				//$select = $this->select()->where('status=?','1') ;
+
+				$tenantIdArr  = explode(", ", $tenantids);
+				$orderBy = $order.' '.$dir;
+				$db = Zend_Db_Table::getDefaultAdapter();
+				$select = $db->select()
+						  ->from(array('wo' => 'work_order'), array('woId','tenant','wo_number'))
+						  ->joinInner(array('t' => 'tenant'),'t.id = wo.tenant',array('tenantName','tenantContact'))
+						  ->joinLeft(array('bu'=>'buildings'),'bu.build_id = wo.building',array('buildingName','uniqueCostCenter'))
+						  ->joinLeft(array('cat'=>'category'),'cat.cat_id = wo.category',array('categoryName','prioritySchedule'))                      
+						  ->joinLeft(array('wop'=>'work_order_update'),'wop.wo_id = wo.woId',array('wop.wo_status', 'wop.internal_note', 'wop.wo_request','wop.billable_opt','created_date'=>'wop.created_at','updated_date'=>'wop.updated_at'))                     
+						  ->joinLeft(array('u'=>'users'),'wo.create_user = u.uid',array('firstName','lastName','email'))                      
+						  ->where('wo.building=?',$buildID)
+						  ->where('wo.tenant in ('.implode(",", $tenantIdArr).')');
+			    $orderBy = 'wo.woId DESC';
+				$select = $select->order(array($orderBy)); 
+				
+				$select ->limit(1, 0);
+
+				//echo $select;
+
+				$res = $db->fetchAll( $select );
+			
+				return $res[0];
+			}
+		}
+	
 	
 }
 

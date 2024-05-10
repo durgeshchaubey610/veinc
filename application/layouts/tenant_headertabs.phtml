@@ -10,6 +10,8 @@ $actioname= Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 $tabs_allow_module_array= array('workorder','tenant');
 $tabs_allow_module_action_array= array('index','tenantuser','createworkorder');
 
+
+
 if(in_array($controllerName,$tabs_allow_module_array)){
     if(in_array($actioname,$tabs_allow_module_action_array)){
 //allow pages
@@ -17,10 +19,13 @@ if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){
 
 if($getTenantbuilding){
     foreach($getTenantbuilding as $tenantBuilding){
-        ?>
-        <div class="fdw" id="access-matrix">
+      
+       // $tenanttotalwocount = $actionnTenantHelper->getTenantCurrentTotalWorder($tenantBuilding['build_id']);
 
-    <ol id="toc" class="pm-work-order-toc-list">
+        ?>
+        <div class="fdw" id="access-matrix" bid="<?php echo $tenantBuilding['build_id'];?>" tenant_order_count="<?php echo $tenanttotalwocount;?>" last_work_order="">
+
+    <ol id="toc" class="pm-work-order-toc-list" >
             <li><a><span><?php echo $tenantBuilding['buildingName']; ?></span></a>
              
             </li>
@@ -41,6 +46,7 @@ if($getTenantbuilding){
         $alllocationIds = implode(',',$allLocation);
     }
     ?>
+        <div id="tenant_data" style="display:none;" tenant_location_info="<?php echo $alllocationIds;?>"></div>
          <ul class="tenant_tabs">
             <?php if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){?>
                  <?php //if(!isset($_COOKIE['tenant_company'])){?>
