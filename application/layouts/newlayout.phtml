@@ -231,8 +231,65 @@ function myaccountinfo() {
 <!-- Page-Level Plugin Scripts - Tables --> 
 <script src="<?php echo BASEURL.'/public'?>/js/plugins/dataTables/jquery.dataTables.js"></script> 
 <script src="<?php echo BASEURL.'/public'?>/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<script>
 
+    var tid = $('.tenant_tabs .resp-tab-active').attr('tid');
+$('#myTable1').DataTable( {
+  "pagingType": "full_numbers",
+   "lengthChange": true,
+     "searching": true,
+  "paging": true,
+  "pageLength" : 10,
+"processing": true,
+"serverSide": true,
+"ajax": baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid'),
+'data': {
+           formName: 'afscpMcn',
+           action: 'search',
+           // etc..
+        },
+
+} );
+
+
+
+function reloadDatatable(bid,tid,order_id,wo_status,per_page_rec){
+	//$('#myTable1').DataTable().ajax.reload();
+  var woid = '', records='', status='';
+
+  if(order_id){
+    woid =order_id;
+  }
+  if(per_page_rec){
+    records = per_page_rec;
+  }
+  if(wo_status){
+    status = wo_status;
+  }
+	$('#myTable1').DataTable().ajax.url(baseUrl + 'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+per_page_rec).load();
+
+
+// 	$('#myTable1').DataTable( {
+// "processing": true,
+// "serverSide": true,
+// "ajax": baseUrl + 'workorder/getdata?bid='+bid+'&tid='+tid,
+// 'data': {
+//            formName: 'afscpMcn',
+//            action: 'search',
+//            // etc..
+//         },
+
+// } );
+}
+</script>	
 <!--Plug-in Initialisation--> 
-
+<style>
+  div#myTable1_length {
+  display: none;
+}
+div#myTable1_filter {
+  display: none;
+}
+</style>
 </body>
 </html>

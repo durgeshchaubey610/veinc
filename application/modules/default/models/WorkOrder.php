@@ -170,12 +170,77 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 			   }                          
              $select = $select->order(array($orderBy)); 
              //if(empty($search_array))
+			// echo $select;
+
              $select = $select->limit($show,$offset);
             $res = $db->fetchAll( $select );        
             return ($res && sizeof($res)>0)? $res : false ;
 		}else
 		 return false;
 	}
+
+	public function getBuildingWorkOrderTenantLoc($buildID,$order,$dir,$search_array=array(),$page, $show,$tid){
+		$offset=0;
+		if($page>0){
+		 $offset = ($page-1) * $show; 
+	    }
+	    $show;
+		
+	if($buildID){
+		//$select = $this->select()->where('status=?','1') ;
+		$orderBy = $order.' '.$dir;
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+				  ->from(array('wo' => 'work_order'))
+				  ->joinInner(array('t' => 'tenant'),'t.id = wo.tenant',array('tenantName','tenantContact'))
+				  ->joinLeft(array('bu'=>'buildings'),'bu.build_id = wo.building',array('buildingName','uniqueCostCenter'))
+				  ->joinLeft(array('cat'=>'category'),'cat.cat_id = wo.category',array('categoryName','prioritySchedule'))                      
+				  ->joinLeft(array('wop'=>'work_order_update'),'wop.wo_id = wo.woId AND wop.current_update=1',array('wop.wo_status', 'wop.internal_note', 'wop.wo_request','wop.billable_opt','created_date'=>'wop.created_at','updated_date'=>'wop.updated_at'))                     
+				  ->joinLeft(array('u'=>'users'),'wo.create_user = u.uid',array('firstName','lastName','email'))                      
+				  ->where('wo.building=?',$buildID);
+			
+					if(isset($tid)){
+						$tenant_company_arr = explode(",",$tid);
+						//$select = $select->where('wo.tenant in ('.implode(".",$tenant_company_arr).')');
+						$select = $select->where('wo.tenant in ('.$tid.')');
+
+					}
+				
+		   if(isset($search_array['search_status']) && $search_array['search_status']!='')
+		   {
+			  $select = $select->where('wop.wo_status in ('.implode(",",$search_array['search_status']).')');
+		   } 			   
+		   
+		   if(isset($search_array['category_name']) && $search_array['category_name']!='')
+		   {
+			  $select = $select->where("cat.categoryName LIKE '".$search_array['category_name']."%'");
+		   }
+		   
+		   if(isset($search_array['tenant_name']) && $search_array['tenant_name']!='')
+		   {
+			  $select = $select->where("t.tenantName LIKE '".$search_array['tenant_name']."%'");
+		   }
+		   
+		   if(isset($search_array['search_wo']) && $search_array['search_wo']!='')
+		   {
+			  $select = $select->where('wo.wo_number=?',$search_array['search_wo']);
+		   }
+		   
+		   if(isset($search_array['from_date']) && $search_array['to_date']!='')
+		   {
+			  $select = $select->where("DATE(wo.created_at) BETWEEN '".$search_array['from_date'] ."' AND '".$search_array['to_date']."'");
+		   }                          
+		 $select = $select->order(array($orderBy)); 
+		 //if(empty($search_array))
+		 //echo $select;
+
+		 $select = $select->limit($show,$offset);
+		
+		$res = $db->fetchAll( $select );        
+		return ($res && sizeof($res)>0)? $res : false ;
+	}else
+	 return false;
+}
         
         /**
          * This is also for count only

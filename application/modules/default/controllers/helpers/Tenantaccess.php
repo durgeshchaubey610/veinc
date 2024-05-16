@@ -41,5 +41,16 @@ class Zend_Controller_Action_Helper_Tenantaccess extends Zend_Controller_Action_
 			
 		}
 
+		// public function getTenantCurrentTotalWorder($build_ID){
+			
+		// 	if($build_ID){
+		// 		$woModel = new Model_WorkOrder();
+		// 		$tenanttotalwocount = $woModel->getBuildingWorkOrderNew($build_ID);
+				
+		// 		return $tenanttotalwocount;
+		// 	}
+		// }
+
+
 
 }
