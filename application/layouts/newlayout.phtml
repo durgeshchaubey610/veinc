@@ -232,7 +232,6 @@ function myaccountinfo() {
 <script src="<?php echo BASEURL.'/public'?>/js/plugins/dataTables/jquery.dataTables.js"></script> 
 <script src="<?php echo BASEURL.'/public'?>/js/plugins/dataTables/dataTables.bootstrap.js"></script>
 <script>
-if($('#tenant_data').attr('tenant_location_info')){
 
     var tid = $('.tenant_tabs .resp-tab-active').attr('tid');
 $('#myTable1').DataTable( {
@@ -243,9 +242,8 @@ $('#myTable1').DataTable( {
   "pageLength" : 10,
 "processing": true,
 "serverSide": true,
-"ajax": baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('#tenant_data').attr('tenant_location_info'),
 
-//"ajax": baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid'),
+"ajax": baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid'),
 'data': {
            formName: 'afscpMcn',
            action: 'search',
@@ -254,7 +252,6 @@ $('#myTable1').DataTable( {
 
 } );
 
-}
 
 
 function reloadDatatable(bid,tid,order_id,wo_status,per_page_rec){
@@ -272,9 +269,9 @@ function reloadDatatable(bid,tid,order_id,wo_status,per_page_rec){
   }
     // Destroy the existing DataTable instance (if it exists)
 
-if ($.fn.DataTable.isDataTable('#myTable1')) {
-    $('#myTable1').DataTable().destroy();
-}
+// if ($.fn.DataTable.isDataTable('#myTable1')) {
+//     $('#myTable1').DataTable().destroy();
+// }
 
 	$('#myTable1').DataTable().ajax.url(baseUrl + 'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+per_page_rec).load();
 
