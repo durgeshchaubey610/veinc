@@ -154,8 +154,9 @@ if ($this->view_type != 'detail') {
                                 </select>
                             </div>
                             <span class="my_se_icon">
-                            <a href="javascript:void(0)" name="submit" id="searchBystatus" ><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                    
-                            
+                              <!-- <a href="javascript:void(0)" name="submit" id="searchBystatus" ><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                     -->
+
+                                <a href="javascript:void(0)" name="submit" onclick="showStatusValidation()"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                    
                             </span>
                             <?php /* ?>
                               <select name="search_status"  onchange="showStatus(this.value)" class="selectbox awo-sselect">
@@ -619,6 +620,9 @@ if(strlen($descText)>=30){ ?>
                              }
 
                             });
+                        }else{
+                            $('.tenant_tabs .resp-tab-active').trigger('click');
+
                         }
                        // alert(obj.tenant);
                     }
