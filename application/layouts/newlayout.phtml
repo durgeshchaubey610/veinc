@@ -232,8 +232,8 @@ function myaccountinfo() {
 <script src="<?php echo BASEURL.'/public'?>/js/plugins/dataTables/jquery.dataTables.js"></script> 
 <script src="<?php echo BASEURL.'/public'?>/js/plugins/dataTables/dataTables.bootstrap.js"></script>
 <script>
-
-    var tid = $('.tenant_tabs .resp-tab-active').attr('tid');
+setTimeout(function(){
+  var tid = $('.tenant_tabs .resp-tab-active').attr('tid');
 $('#myTable1').DataTable( {
   "pagingType": "full_numbers",
    "lengthChange": true,
@@ -251,6 +251,10 @@ $('#myTable1').DataTable( {
         },
 
 } );
+}, 1000);
+
+
+
 
 
 
