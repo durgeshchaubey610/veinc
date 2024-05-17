@@ -912,6 +912,8 @@ class WorkorderController extends Ve_Controller_Base {
 			
 			 $filter_data = array();
 			 $filter_data['search_wo'] = $this->_getParam('woid');
+			 $filter_data['search_status'] = $this->_getParam('status');
+
 			 $order = "created_at";
 			 $dir="DESC";
              if($tenantId){
@@ -926,6 +928,29 @@ class WorkorderController extends Ve_Controller_Base {
 			$ssModel = new Model_ScheduleStatus();
 			$status_list = $ssModel->getScheduleStatus();
 			$status_array = array();
+			$view_type = $this->_getParam('view_type', 'line');
+ 
+			$reportModel = new Model_Report();
+			$reportDetailLinks = '';
+			$dashBoardViewsdetails = '';
+			if ($view_type!= 'detail') {
+			$reportDetailLinks = $reportModel->getReport($this->custID, 2);
+			$dashBoardViewsdetails = $reportModel->getReport($this->custID, 27);
+			} else {
+			$reportDetailLinks = $reportModel->getReport($this->custID, 3);
+			}		   
+
+			if ($dashBoardViewsdetails != '') {
+				$dashBoardViewsdetailsoption = $dashBoardViewsdetails[0]->report_option;
+				$dashBoardViewsdetailsoption = explode(',', $dashBoardViewsdetailsoption);
+				
+			if ($dashBoardViewsdetails[0]->Report_Type == 'Flash') {
+				$report_type = 'reports/VisionReportEngine/index.php?stimulsoft_client_key=ViewerFx&stimulsoft_';
+			}else {
+				$report_type = 'vnsreports/index.php?';
+			}
+		}
+
 			foreach ($status_list as $sl) {
 				if ($sl['ssID'] != 8)
 					$status_array[$sl['ssID']] = $sl['title'];
@@ -937,9 +962,68 @@ class WorkorderController extends Ve_Controller_Base {
 			  if(!empty($wolist)){
 				foreach($wolist as $rec){
 					$wo_status = $status_array[$rec->wo_status];
-			
+					
+					$printStr = '<div class="center">';
+					$printStr .='<div class="text">';				
+					
+					 $descText = strip_tags($rec->work_order_request);
+					 $descText = str_replace("&nbsp;", ' ', $descText);
+					 $printStr .= substr($descText, 0, 25);
+					 $printStr .=(substr($descText, 30)) ? '...' : '';
+					 $printStr .='</div>';					
+					if(strlen($descText)>=30){ 
+					$printStr .='<div class="text-tooltip " >'. $descText.'</div>';
+					 } 
+					 $printStr .='</div>';
+
+					 $plusicon='<a ';
+
+					  if ($dashBoardViewsdetails[0]->report_target == 1) {
+						 $plusicon .='target="_blank"';
+						
+						}
+						 
+						$plusicon .=' href="'. BASEURL;
+						$plusicon .= $report_type;
+						$plusicon .='report_key=' . $dashBoardViewsdetails[0]->report_mrt;
+
+                                                                        if (in_array('[[++user_id]]', $dashBoardViewsdetailsoption)) {
+                                                                            $plusicon .= '&User=' . $this->userId;
+                                                                        }
+                                                                       
+                                                                        if ((in_array('[[++CostCenterNumber]]', $dashBoardViewsdetailsoption))) {
+                                                                            $plusicon .= '&Cost_Center_Number=' . $rec->uniqueCostCenter;
+                                                                        }
+                                                                       
+                                                                        if ((in_array('[[++KeyBuildingNumber]]', $dashBoardViewsdetailsoption))) {
+                                                                            $plusicon .= '&buildkey=' . $rec->building;
+                                                                        }
+                                                                       
+                                                                        if (in_array('[[++BatchNumber]]', $dashBoardViewsdetailsoption) && $rec->wo_batch != 0) {
+                                                                            $plusicon .= '&Batch_Number=' . $rec->wo_batch;
+                                                                        }
+                                                                     
+                                                                        if ((in_array('[[++WONumber]]', $dashBoardViewsdetailsoption))) {
+                                                                            $plusicon .= '&WO_Number=' . $rec->wo_number;
+                                                                        }
+                                                                     
+                                                                        if ((in_array('[[++InvoiceNumber]]', $dashBoardViewsdetailsoption)) && $rec->billable_opt == 1) {
+                                                                            $plusicon .= '&Invoice_Number=' . $rec->wo_number;
+                                                                        }
+                                                                      
+                                                                        if ((in_array('[[++Status_id]]', $dashBoardViewsdetailsoption))) {
+                                                                            $plusicon .= '&Status=' . $rec->wo_status;
+                                                                        }
+																		$plusicon .= '" >';
+																		
+																		$plusicon .='<img';
+																		$plusicon .=' src="'. BASEURL;																		
+																		$plusicon .='public/images\printer.png"' .' style="width:20px;">';
+																		$plusicon .='</a>';
+
+
 					$temp = array(date("m/d/Y", strtotime($rec->date_requested)),$rec->date_requested,$rec->wo_number,$wo_status,
-					$rec->tenant,$rec->category,
+					stripslashes($rec->categoryName),$printStr,$plusicon,''
 				);
 					
 					// array_push($temp,$rec->woId);
@@ -982,7 +1066,7 @@ class WorkorderController extends Ve_Controller_Base {
 			  **/
 			 $jsondataAry = array();
 			 $jsondataAry['data'] =$record_data;
-			  echo json_encode($jsondataAry);	
+			  echo json_encode($jsondataAry,JSON_UNESCAPED_SLASHES);	
 
 			exit(0);
 		

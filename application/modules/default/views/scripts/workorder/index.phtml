@@ -154,7 +154,8 @@ if ($this->view_type != 'detail') {
                                 </select>
                             </div>
                             <span class="my_se_icon">
-                                <a href="javascript:void(0)" name="submit" onclick="showStatusValidation()"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                    
+                            <a href="javascript:void(0)" name="submit" id="searchBystatus" ><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                    
+                            
                             </span>
                             <?php /* ?>
                               <select name="search_status"  onchange="showStatus(this.value)" class="selectbox awo-sselect">
@@ -196,6 +197,8 @@ if ($this->view_type != 'detail') {
                             <th>Work Order#</th>
                             <th>Current Status</th>
                             <th>Category</th>                            
+                            <th>Work Request</th>
+                            <th>&nbsp;</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -626,7 +629,7 @@ if(strlen($descText)>=30){ ?>
         setInterval(reloadPage, s); 
 
     }
-    scheduleReload(30000);// 30000 milliseconds = 30 sec
+    scheduleReload(7000);// 30000 milliseconds = 30 sec
  </script>   
 <?php } else { ?>
     You don't have access for this module.
