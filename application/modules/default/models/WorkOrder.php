@@ -232,10 +232,10 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 		   }                          
 		 $select = $select->order(array($orderBy)); 
 		 //if(empty($search_array))
-		 //echo $select;
+		
 
 		 $select = $select->limit($show,$offset);
-		
+		// echo $select;
 		$res = $db->fetchAll( $select );        
 		return ($res && sizeof($res)>0)? $res : false ;
 	}else

@@ -132,7 +132,7 @@ if ($this->view_type != 'detail') {
                         <li>
                             <span class="ser_sp">Search</span>
                             <input type="text" name="search_wo" id="search_wo" placeholder="Work Order Id" onkeypress="return isNumberKey(event)" value="<?php echo (isset($_REQUEST['search_wo'])) ? $_REQUEST['search_wo'] : ''; ?>"> <span class="my_se_icon">
-                                <a href="javascript:void(0)" name="submit" id="search_wo"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a></span> 
+                                <a href="javascript:void(0)" name="submit" id="btn_search_wo"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a></span> 
                         </li>
                         <li>
                             <span class="ser_sp">Show</span>
@@ -423,98 +423,22 @@ if(strlen($descText)>=30){ ?>
                                         }
 
                                         //echo $this->paginationControl($this->wolist, 'Sliding', 'pagination.phtml', $params);
-                                        $pageno = $this->pageno;
-                                        $total_pages = $this->total_pages;
+                                        // $pageno = $this->pageno;
+                                        // $total_pages = $this->total_pages;
                                         // This is for first and previous disabled class
-                                        if ($pageno <= 1) {
-                                            $disFirstPre = 'disabled';
-                                        } else {
-                                            $disFirstPre = '';
-                                        }
-                                        // This is for Next and last disabled class
-                                        if ($pageno >= $total_pages) {
-                                            $disNextLast = 'disabled';
-                                        } else {
-                                            $disNextLast = '';
-                                        }
+                                        // if ($pageno <= 1) {
+                                        //     $disFirstPre = 'disabled';
+                                        // } else {
+                                        //     $disFirstPre = '';
+                                        // }
+                                        // // This is for Next and last disabled class
+                                        // if ($pageno >= $total_pages) {
+                                        //     $disNextLast = 'disabled';
+                                        // } else {
+                                        //     $disNextLast = '';
+                                        // }
                                         ?>
-                                        <ul class="pagination">
-                                            <li class="<?php echo $disFirstPre; ?>"><a href="<?php
-                                                if ($pageno <= 1) {
-                                                    echo '#';
-                                                } else {
-                                                    $params['page'] = 1;
-                                                    //echo BASEURL . "dashboard/workorder/page/1";
-                                                    echo $this->url($params);
-                                                }
-                                                ?>">First</a></li>
-                                            <li class="<?php echo $disFirstPre; ?>">
-                                                <a href="<?php
-                                                if ($pageno <= 1) {
-                                                    echo '#';
-                                                } else {
-                                                    $params['page'] = $pageno - 1;
-                                                    //echo BASEURL . "dashboard/workorder/page/" . ($pageno - 1);
-                                                    echo $this->url($params);
-                                                }
-                                                ?>">Previous</a>
-                                            </li>
-                                            <?php
-                                            $range = 10; //set this to what ever range you want to show in the pagination link
-                                            $range_min = ($range % 2 == 0) ? ($range / 2) - 1 : ($range - 1) / 2;
-                                            $range_max = ($range % 2 == 0) ? $range_min + 1 : $range_min;
-                                            $page_min = $pageno - $range_min;
-                                            $page_max = $pageno + $range_max;
-                                            $page_min = ($page_min < 1) ? 1 : $page_min;
-                                            $page_max = ($page_max < ($page_min + $range - 1)) ? $page_min + $range - 1 : $page_max;
-                                            if ($page_max > $total_pages) {
-                                                $page_min = ($page_min > 1) ? $total_pages - $range + 1 : 1;
-                                                $page_max = $total_pages;
-                                            }
-                                            $page_min = ($page_min < 1) ? 1 : $page_min;
-                                            ?>
-                                            <li>
-                                                <?php
-                                                for ($i = $page_min; $i <= $page_max; $i++) {
-                                                    if ($pageno == $i) {
-                                                        ?>
-                                                        <a class="disabled" href="#"><?php echo $i; ?></a>
-                                                        <?php
-                                                    } else {
-                                                        $params['page'] = $i;
-                                                        ?>
-                                                        <a href="<?php //echo BASEURL . 'dashboard/workorder/page/' . $i;
-                                        echo $this->url($params);
-                                                        ?>"><?php echo $i; ?></a>
-                                                           <?php
-                                                       }
-                                                   }
-                                                   ?>
-                                            </li>
-                                            <li class="<?php echo $disNextLast; ?>">
-                                                <a href="<?php
-                                                if ($pageno >= $total_pages) {
-                                                    echo '#';
-                                                } else {
-                                                    $params['page'] = $pageno + 1;
-                                                    //echo BASEURL . "dashboard/workorder/page/" . ($pageno + 1);
-                                                    echo $this->url($params);
-                                                }
-                                                ?>">Next</a>
-                                            </li>
-                                            <li class="<?php echo $disNextLast; ?>"><a href="<?php
-                                                if ($pageno >= $total_pages) {
-                                                    echo '#';
-                                                } else {
-                                                    $params['page'] = $total_pages;
-                                                    //echo BASEURL . "dashboard/workorder/page/" . $total_pages;
-                                                    echo $this->url($params);
-                                                }
-                                                ?>">Last</a></li>
-                                        </ul>
-                                        <ul class="pull-right list-inline">
-                                            <li><?php echo "Page $pageno of  $total_pages"; ?></li>
-                                        </ul>
+                                      
                                         <?php
                                         //}
                                         //echo $this->count;
@@ -621,7 +545,7 @@ if(strlen($descText)>=30){ ?>
 
                             });
                         }else{
-                            $('.tenant_tabs .resp-tab-active').trigger('click');
+                           // $('.tenant_tabs .resp-tab-active').trigger('click');
 
                         }
                        // alert(obj.tenant);
@@ -633,7 +557,7 @@ if(strlen($descText)>=30){ ?>
         setInterval(reloadPage, s); 
 
     }
-    scheduleReload(7000);// 30000 milliseconds = 30 sec
+    scheduleReload(15000);// 30000 milliseconds = 30 sec
  </script>   
 <?php } else { ?>
     You don't have access for this module.
