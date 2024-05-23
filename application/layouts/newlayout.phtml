@@ -232,6 +232,7 @@ function myaccountinfo() {
 <script src="<?php echo BASEURL.'/public'?>/js/plugins/dataTables/jquery.dataTables.js"></script> 
 <script src="<?php echo BASEURL.'/public'?>/js/plugins/dataTables/dataTables.bootstrap.js"></script>
 <script>
+  //test
 setTimeout(function(){
 
 if ( $.fn.DataTable.isDataTable('#myTable1') ) {
@@ -240,17 +241,16 @@ if ( $.fn.DataTable.isDataTable('#myTable1') ) {
 
 var tid = $('.tenant_tabs .resp-tab-active').attr('tid');
 $('#myTable1').DataTable( {
-  "pagingType": "full_numbers",
-   "lengthChange": true,
-    "searching": true,
-   "paging": true,
-   "paginate": true,
-   "pageLength" : <?php echo $this->total_pages;?>,
-   "processing": true,
-  "serverSide": true,
- "ajax": baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid')+'&per_page_rec=10',
+"pagingType": "full_numbers",
+"lengthChange": true,
+"searching": true,
+"paging": true,
+"paginate": true,
+"pageLength" : 1,
+"processing": true,
+"serverSide": true,
+"ajax": baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid')+'&per_page_rec=10',
 'order': [[3, 'desc']]
-
 
 } );
 }, 1000);
@@ -278,26 +278,28 @@ function reloadDatatable(bid,tid,order_id,wo_status,per_page_rec){
   }
     // Destroy the existing DataTable instance (if it exists)
 
-if ($.fn.DataTable.isDataTable('#myTable1')) {
-    $('#myTable1').DataTable().destroy();
+// if ($.fn.DataTable.isDataTable('#myTable1')) {
+//     $('#myTable1').DataTable().destroy();
+// }
+if ( $.fn.DataTable.isDataTable('#myTable1') ) {
+  $('#myTable1').DataTable().destroy();
 }
+	$('#myTable1').DataTable({'order': [[2, 'desc']]}).ajax.url(baseUrl + 'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+per_page_rec).load();
+//   $('#myTable1').DataTable( {
+//   "pagingType": "full_numbers",
+//    "lengthChange": true,
+//   "searching": true,
+//   "paging": true,  
+//   "processing": true,
+//   "bDestroy": true,
+//   "pageLength" : 1,
+//   "serverSide": true,
+//   "stateSave": true,
+//   "ajax": baseUrl +'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+records,
+//   'order': [[3, 'desc']]
 
-	//$('#myTable1').DataTable().ajax.url(baseUrl + 'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+per_page_rec).load();
-  $('#myTable1').DataTable( {
-  "pagingType": "full_numbers",
-   "lengthChange": true,
-     "searching": true,
-  "paging": true,  
-"processing": true,
-"pageLength" : 50,
-"bDestroy": true,
-"serverSide": true,
-"stateSave": true,
-"ajax": baseUrl +'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+records,
-'order': [[3, 'desc']]
 
-
-} );
+// } );
 
 // 	$('#myTable1').DataTable( {
 // "processing": true,

@@ -522,19 +522,19 @@ if(strlen($descText)>=30){ ?>
     var tenant_buiding = $('.fdw').attr('bid');
     var tenant_location_info = $('#tenant_data').attr('tenant_location_info');
     $.ajax({
-                    type: "POST",
-                    url: baseUrl + 'workorder/ajaxworkordernotify',
-                    data: {tenant_buiding: tenant_buiding,
-                        tenant_location_info:tenant_location_info
-                    },
-                    datatype: 'json',
-                    success: function (msg) {                      
-                       
-                        obj = JSON.parse(msg);                      
-                        $('.fdw').attr('last_work_order',obj.wo_number);
-                      
-                       // alert(obj.tenant);
-                    }
+            type: "POST",
+            url: baseUrl + 'workorder/ajaxworkordernotify',
+            data: {tenant_buiding: tenant_buiding,
+                tenant_location_info:tenant_location_info
+            },
+            datatype: 'json',
+            success: function (msg) {                      
+                
+                obj = JSON.parse(msg);                      
+                $('.fdw').attr('last_work_order',obj.wo_number);
+                
+                // alert(obj.tenant);
+            }
         });
 
 
@@ -575,6 +575,8 @@ if(strlen($descText)>=30){ ?>
                              }
 
                             });
+                        }else{
+                            $('.tenant_tabs .resp-tab-active').trigger('click');
                         }
                        // alert(obj.tenant);
                     }

@@ -1073,6 +1073,8 @@ class WorkorderController extends Ve_Controller_Base {
 			 ]; 
 			  **/
 			 $jsondataAry = array();
+			// $jsondataAry['draw']=1;
+			 $jsondataAry['recordsTotal']= count($record_data);
 			 $jsondataAry['data'] =$record_data;
 			  echo json_encode($jsondataAry,JSON_UNESCAPED_SLASHES);	
 
