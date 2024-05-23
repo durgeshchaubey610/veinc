@@ -1011,10 +1011,12 @@ if(tenantmenuVersion=="20.12"){
                   //window.location.reload();
                  
                   var bid = $('.fdw').attr('bid')
-                  var search_wo = $('search_wo').val();
+                  var search_wo = $('#search_wo').val();
                   var record_per_page = $('show_limit').val();
+                  $('#search_mini_form').trigger("reset");
                   reloadDatatable(bid,tid,search_wo,null,record_per_page);
-              
+                 
+
 			}
 
 		});

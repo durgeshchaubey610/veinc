@@ -137,10 +137,10 @@ if ($this->view_type != 'detail') {
                         <li>
                             <span class="ser_sp">Show</span>
                             <select id="show_limit"  name="show_limit" style="width:100px !important;" >
-                                <option value="10" <?php echo ($this->show == 10 ? "noselected" : ""); ?> >10</option>
-                                <option value="25" <?php echo ($this->show == 25 ? "selnoselectedected" : ""); ?>>25</option>
-                                <option value="50" <?php echo ($this->show == 50 ? "noselected" : ""); ?>>50</option>
-                                <option value="100" <?php echo ($this->show == 100 ? "noselected" : ""); ?>>100</option>
+                                <option value="10" <?php echo ($this->show == 10 ? "selected" : ""); ?> >10</option>
+                                <option value="25" <?php echo ($this->show == 25 ? "selected" : ""); ?>>25</option>
+                                <option value="50" <?php echo ($this->show == 50 ? "selected" : ""); ?>>50</option>
+                                <option value="100" <?php echo ($this->show == 100 ? "selected" : ""); ?>>100</option>
                                 <!--<option value="all" <?php //echo ($this->show == 1000 ? "selected" : "");    ?>>All</option>-->
                             </select>
                         </li>
@@ -545,9 +545,9 @@ if(strlen($descText)>=30){ ?>
 
                             });
                         }else{
-                            $('.tenant_tabs .resp-tab-active').trigger('click');
+                            //$('.tenant_tabs .resp-tab-active').trigger('click');
 
-                            
+
                         }
                        // alert(obj.tenant);
                     }

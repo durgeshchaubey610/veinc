@@ -237,16 +237,18 @@ setTimeout(function(){
 if ( $.fn.DataTable.isDataTable('#myTable1') ) {
   $('#myTable1').DataTable().destroy();
 }
+
 var tid = $('.tenant_tabs .resp-tab-active').attr('tid');
 $('#myTable1').DataTable( {
   "pagingType": "full_numbers",
    "lengthChange": true,
-     "searching": true,
-  "paging": true,
-  "pageLength" : <?php echo $this->total_pages;?>,
-"processing": true,
-"serverSide": true,
-"ajax": baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid'),
+    "searching": true,
+   "paging": true,
+   "paginate": true,
+   "pageLength" : <?php echo $this->total_pages;?>,
+   "processing": true,
+  "serverSide": true,
+ "ajax": baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid')+'&per_page_rec=10',
 'order': [[3, 'desc']]
 
 
@@ -262,11 +264,14 @@ function reloadDatatable(bid,tid,order_id,wo_status,per_page_rec){
 	//$('#myTable1').DataTable().ajax.reload();
   var woid = '', records='', status='';
 
-  if(order_id){
-    woid =order_id;
-  }
-  if(per_page_rec){
+    woid = $('#search_wo').val();
+  
+  if(per_page_rec == undefined){
+  
+    records = 10;
+  }else{
     records = per_page_rec;
+
   }
   if(wo_status){
     status = wo_status;
@@ -284,8 +289,11 @@ if ($.fn.DataTable.isDataTable('#myTable1')) {
      "searching": true,
   "paging": true,  
 "processing": true,
+"pageLength" : 50,
+"bDestroy": true,
 "serverSide": true,
-"ajax": baseUrl +'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+per_page_rec,
+"stateSave": true,
+"ajax": baseUrl +'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+records,
 'order': [[3, 'desc']]
 
 

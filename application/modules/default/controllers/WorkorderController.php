@@ -1020,10 +1020,18 @@ class WorkorderController extends Ve_Controller_Base {
 																		$plusicon .=' src="'. BASEURL;																		
 																		$plusicon .='public/images\printer.png"' .' style="width:20px;">';
 																		$plusicon .='</a>';
+																		
+
+						$plusicon2='<div style="background-color:#;padding:10px 8px;">';
+						$plusicon2 .= '  <a href="javascript:void(0); onclick="showWorkOrder('. $rec->woId.')";>';
+
+						$plusicon2 .= '<i id="plus_'. $rec->woId.'" class="fa fa-plus blackfont_color plus_min_icon"></i></a>';
+						$plusicon2 .= '</div>';
+
 
 
 					$temp = array(date("m/d/Y", strtotime($rec->date_requested)),$rec->date_requested,$rec->wo_number,$wo_status,
-					stripslashes($rec->categoryName),$printStr,$plusicon,''
+					stripslashes($rec->categoryName),$printStr,$plusicon,$plusicon2
 				);
 					
 					// array_push($temp,$rec->woId);
