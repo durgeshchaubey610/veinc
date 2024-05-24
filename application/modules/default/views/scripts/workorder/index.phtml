@@ -560,10 +560,10 @@ if(strlen($descText)>=30){ ?>
     scheduleReload(15000);// 30000 milliseconds = 30 sec
 
 
-    function showTenantWorkOrder(woId){
+    function showTenantWorkOrder(woId,wo_number){
 		
                    $.ajax({        			
-               url: baseUrl + "dashboard/orderdetail/woId/"+woId,
+               url: baseUrl + "dashboard/orderdetail/woId/"+wo_number,
                success: function (content) {
                    //$('.loader').hide();
                   // $('#order_content_'+woId).html(content);
@@ -571,9 +571,9 @@ if(strlen($descText)>=30){ ?>
                   $( "#workrequest_"+woId ).remove();
 
                    $('<tr id="workrequest_'+woId+'" class="tr-order"><td id="order_content_'+woId+'" colspan="9">'+content+'</td></tr>').insertAfter($('#wo_'+woId));
-
                   
-                  // $('.loader').hide();
+                   $('#plus_'+wo_number).removeClass("fa-plus");
+                   $('#plus_'+wo_number).addClass("fa-minus");
                }
 
            });
