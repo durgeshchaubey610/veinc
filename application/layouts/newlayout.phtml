@@ -241,6 +241,10 @@ if ( $.fn.DataTable.isDataTable('#myTable1') ) {
 
 var tid = $('.tenant_tabs .resp-tab-active').attr('tid');
 $('#myTable1').DataTable( {
+  'fnCreatedRow': function (nRow, aData, iDataIndex) {
+    //console.log(aData);
+        $(nRow).attr('id', 'wo_' + aData[2]); // or whatever you choose to set as the id
+    },
 "pagingType": "full_numbers",
 "lengthChange": true,
 "searching": true,
@@ -250,7 +254,8 @@ $('#myTable1').DataTable( {
 "processing": true,
 "serverSide": true,
 "ajax": baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid')+'&per_page_rec=10',
-'order': [[3, 'desc']]
+'order': [[3, 'desc']],
+
 
 } );
 }, 1000);
@@ -284,7 +289,12 @@ function reloadDatatable(bid,tid,order_id,wo_status,per_page_rec){
 if ( $.fn.DataTable.isDataTable('#myTable1') ) {
   $('#myTable1').DataTable().destroy();
 }
-	$('#myTable1').DataTable({'order': [[2, 'desc']]}).ajax.url(baseUrl + 'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+per_page_rec).load();
+	$('#myTable1').DataTable({
+    'fnCreatedRow': function (nRow, aData, iDataIndex) {
+    //console.log(aData);
+        $(nRow).attr('id', 'wo_' + aData[2]); // or whatever you choose to set as the id
+    },
+    'order': [[2, 'desc']]}).ajax.url(baseUrl + 'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+per_page_rec).load();
 //   $('#myTable1').DataTable( {
 //   "pagingType": "full_numbers",
 //    "lengthChange": true,

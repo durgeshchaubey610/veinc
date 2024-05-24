@@ -198,9 +198,9 @@ if ($this->view_type != 'detail') {
                             <th>Work Order#</th>
                             <th>Current Status</th>
                             <th>Category</th>                            
-                            <th>Work Request</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
+                            <th class="no-sort">Work Request</th>
+                            <th class="no-sort">&nbsp;</th>
+                            <th class="no-sort">&nbsp;</th>
                         </tr>
                     </thead>
     </table>
@@ -559,6 +559,55 @@ if(strlen($descText)>=30){ ?>
 
     }
     scheduleReload(15000);// 30000 milliseconds = 30 sec
+
+
+    function showTenantWorkOrder(woId){
+		
+                   $.ajax({        			
+               url: baseUrl + "dashboard/orderdetail/woId/"+woId,
+               success: function (content) {
+                   //$('.loader').hide();
+                  // $('#order_content_'+woId).html(content);
+                  // $('#workrequest_'+woId).show();
+                  $( "#workrequest_"+woId ).remove();
+
+                   $('<tr id="workrequest_'+woId+'" class="tr-order"><td id="order_content_'+woId+'" colspan="9">'+content+'</td></tr>').insertAfter($('#wo_'+woId));
+
+                  
+                  // $('.loader').hide();
+               }
+
+           });
+
+         console.log('#wo_'+woId);
+    //     if(document.getElementById('workrequest_'+woId).style.display!="none"){
+    //           document.getElementById('workrequest_'+woId).style.display="none";
+    //            $('#plus_'+woId).addClass("fa-plus");
+    //            $('#plus_'+woId).removeClass("fa-minus");
+    //     }else{
+    //         $('.loader').show();
+    //         $('.plus_min_icon').removeClass("fa-minus");
+    //         $('.plus_min_icon').addClass("fa-plus");	
+    //         $('.tr-order').hide();
+    //         $('.order-detail').html('');
+    //         $('#plus_'+woId).removeClass("fa-plus");
+    //         $('#plus_'+woId).addClass("fa-minus");	
+            
+    
+
+    //            $.ajax({        			
+    //            url: baseUrl + "dashboard/orderdetail/woId/"+woId,
+    //            success: function (content) {
+    //                //$('.loader').hide();
+    //                $('#order_content_'+woId).html(content);
+    //                $('#workrequest_'+woId).show();
+    //                $('.loader').hide();
+    //            }
+
+    //        });
+    //    }
+   }
+
  </script>   
 <?php } else { ?>
     You don't have access for this module.

@@ -959,6 +959,7 @@ class WorkorderController extends Ve_Controller_Base {
 			
 
 			  $record_data = array();
+
 			  if(!empty($wolist)){
 				foreach($wolist as $rec){
 					$wo_status = $status_array[$rec->wo_status];
@@ -1023,7 +1024,7 @@ class WorkorderController extends Ve_Controller_Base {
 																		
 
 						$plusicon2='<div style="background-color:#;padding:10px 8px;">';
-						$plusicon2 .= '  <a href="javascript:void(0); onclick="showWorkOrder('. $rec->woId.')";>';
+						$plusicon2 .= '<a href="javascript:void(0)" onclick="showTenantWorkOrder('. $rec->wo_number.')";>';
 
 						$plusicon2 .= '<i id="plus_'. $rec->woId.'" class="fa fa-plus blackfont_color plus_min_icon"></i></a>';
 						$plusicon2 .= '</div>';
