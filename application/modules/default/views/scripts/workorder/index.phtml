@@ -544,8 +544,14 @@ if(strlen($descText)>=30){ ?>
 
                             });
                         }else{
-                            //$('.tenant_tabs .resp-tab-active').trigger('click');
 
+                           // $('.tenant_tabs .resp-tab-active').trigger('click');
+                            var bid = $('.fdw').attr('bid')
+                            var search_wo = $('#search_wo').val();
+                            var record_per_page = $('show_limit').val(); 
+                            var tid = $('.tenant_tabs .resp-tab-active').attr('tid'); 
+                            var order_id = $('#search_wo').val();
+                            reloadDatatable(bid,tid,order_id,null,record_per_page);
 
                         }
                        // alert(obj.tenant);
