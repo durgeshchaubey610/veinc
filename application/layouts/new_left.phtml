@@ -1029,9 +1029,27 @@ if(tenantmenuVersion=="20.12"){
     var bid = $('.fdw').attr('bid');
     var tid = $('.tenant_tabs .resp-tab-active').attr('tid');
    var order_id = $('#search_wo').val();
-   reloadDatatable(bid,tid,order_id,null,null);
+   pre_page_count  = $('show_limit').val(); 
+
+   reloadDatatable(bid,tid,order_id,null,pre_page_count);
 
 });
+$('#searchBystatus').click(function(){
+    var bid = $('.fdw').attr('bid');
+    var tid = $('.tenant_tabs .resp-tab-active').attr('tid');
+    var order_id = $('#search_wo').val();
+    var statusArr = [];
+   $('#ms :selected').each(function(){
+    statusArr.push($(this).val());
+    });
+
+    var status =  statusArr.toString();
+    pre_page_count  = $('show_limit').val(); 
+   reloadDatatable(bid,tid,order_id,status,pre_page_count);
+
+});
+
+
 
  $('#show_limit').on('change', function (e) {
     var optionSelected = $("option:selected", this);

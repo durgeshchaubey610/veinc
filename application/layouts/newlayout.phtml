@@ -239,6 +239,8 @@ if ( $.fn.DataTable.isDataTable('#myTable1') ) {
   $('#myTable1').DataTable().destroy();
 }
 
+  
+
 var tid = $('.tenant_tabs .resp-tab-active').attr('tid');
 $('#myTable1').DataTable( {
   'fnCreatedRow': function (nRow, aData, iDataIndex) {
@@ -267,6 +269,9 @@ $('#myTable1').DataTable( {
 
 function reloadDatatable(bid,tid,order_id,wo_status,per_page_rec){
 	//$('#myTable1').DataTable().ajax.reload();
+ 
+ 
+
   var woid = '', records='', status='';
 
     woid = $('#search_wo').val();
@@ -280,6 +285,13 @@ function reloadDatatable(bid,tid,order_id,wo_status,per_page_rec){
   }
   if(wo_status){
     status = wo_status;
+  }else{
+    var statusArr = [];
+    $('#ms :selected').each(function(){
+    statusArr.push($(this).val());
+    });
+    var status =  statusArr.toString();
+   
   }
     // Destroy the existing DataTable instance (if it exists)
 

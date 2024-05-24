@@ -913,6 +913,9 @@ class WorkorderController extends Ve_Controller_Base {
 			 $filter_data = array();
 			 $filter_data['search_wo'] = $this->_getParam('woid');
 			 $filter_data['search_status'] = $this->_getParam('status');
+			 if($filter_data['search_status']){
+				$filter_data['search_status'] = explode(',',$filter_data['search_status']);
+			 }
 
 			 $order = "created_at";
 			 $dir="DESC";
@@ -964,8 +967,8 @@ class WorkorderController extends Ve_Controller_Base {
 				foreach($wolist as $rec){
 					$wo_status = $status_array[$rec->wo_status];
 					
-					$printStr = '<div class="center">';
-					$printStr .='<div class="text">';				
+					 $printStr = '<div class="center">';
+					 $printStr .='<div class="text">';			
 					
 					 $descText = strip_tags($rec->work_order_request);
 					 $descText = str_replace("&nbsp;", ' ', $descText);
@@ -976,51 +979,48 @@ class WorkorderController extends Ve_Controller_Base {
 					$printStr .='<div class="text-tooltip " >'. $descText.'</div>';
 					 } 
 					 $printStr .='</div>';
-
 					 $plusicon='<a ';
+					if ($dashBoardViewsdetails[0]->report_target == 1) {
+						$plusicon .='target="_blank"';
+					
+					}						 
+					$plusicon .=' href="'. BASEURL;
+					$plusicon .= $report_type;
+					$plusicon .='report_key=' . $dashBoardViewsdetails[0]->report_mrt;
 
-					  if ($dashBoardViewsdetails[0]->report_target == 1) {
-						 $plusicon .='target="_blank"';
-						
-						}
-						 
-						$plusicon .=' href="'. BASEURL;
-						$plusicon .= $report_type;
-						$plusicon .='report_key=' . $dashBoardViewsdetails[0]->report_mrt;
-
-                                                                        if (in_array('[[++user_id]]', $dashBoardViewsdetailsoption)) {
-                                                                            $plusicon .= '&User=' . $this->userId;
-                                                                        }
-                                                                       
-                                                                        if ((in_array('[[++CostCenterNumber]]', $dashBoardViewsdetailsoption))) {
-                                                                            $plusicon .= '&Cost_Center_Number=' . $rec->uniqueCostCenter;
-                                                                        }
-                                                                       
-                                                                        if ((in_array('[[++KeyBuildingNumber]]', $dashBoardViewsdetailsoption))) {
-                                                                            $plusicon .= '&buildkey=' . $rec->building;
-                                                                        }
-                                                                       
-                                                                        if (in_array('[[++BatchNumber]]', $dashBoardViewsdetailsoption) && $rec->wo_batch != 0) {
-                                                                            $plusicon .= '&Batch_Number=' . $rec->wo_batch;
-                                                                        }
-                                                                     
-                                                                        if ((in_array('[[++WONumber]]', $dashBoardViewsdetailsoption))) {
-                                                                            $plusicon .= '&WO_Number=' . $rec->wo_number;
-                                                                        }
-                                                                     
-                                                                        if ((in_array('[[++InvoiceNumber]]', $dashBoardViewsdetailsoption)) && $rec->billable_opt == 1) {
-                                                                            $plusicon .= '&Invoice_Number=' . $rec->wo_number;
-                                                                        }
-                                                                      
-                                                                        if ((in_array('[[++Status_id]]', $dashBoardViewsdetailsoption))) {
-                                                                            $plusicon .= '&Status=' . $rec->wo_status;
-                                                                        }
-																		$plusicon .= '" >';
-																		
-																		$plusicon .='<img';
-																		$plusicon .=' src="'. BASEURL;																		
-																		$plusicon .='public/images\printer.png"' .' style="width:20px;">';
-																		$plusicon .='</a>';
+					if (in_array('[[++user_id]]', $dashBoardViewsdetailsoption)) {
+						$plusicon .= '&User=' . $this->userId;
+					}
+							
+							if ((in_array('[[++CostCenterNumber]]', $dashBoardViewsdetailsoption))) {
+								$plusicon .= '&Cost_Center_Number=' . $rec->uniqueCostCenter;
+							}
+							
+							if ((in_array('[[++KeyBuildingNumber]]', $dashBoardViewsdetailsoption))) {
+								$plusicon .= '&buildkey=' . $rec->building;
+							}
+							
+							if (in_array('[[++BatchNumber]]', $dashBoardViewsdetailsoption) && $rec->wo_batch != 0) {
+								$plusicon .= '&Batch_Number=' . $rec->wo_batch;
+							}
+							
+							if ((in_array('[[++WONumber]]', $dashBoardViewsdetailsoption))) {
+								$plusicon .= '&WO_Number=' . $rec->wo_number;
+							}
+							
+							if ((in_array('[[++InvoiceNumber]]', $dashBoardViewsdetailsoption)) && $rec->billable_opt == 1) {
+								$plusicon .= '&Invoice_Number=' . $rec->wo_number;
+							}
+							
+							if ((in_array('[[++Status_id]]', $dashBoardViewsdetailsoption))) {
+								$plusicon .= '&Status=' . $rec->wo_status;
+							}
+							$plusicon .= '" >';
+							
+							$plusicon .='<img';
+							$plusicon .=' src="'. BASEURL;																		
+							$plusicon .='public/images\printer.png"' .' style="width:20px;">';
+							$plusicon .='</a>';
 																		
 
 						$plusicon2='<div style="background-color:#;padding:10px 8px;">';

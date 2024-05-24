@@ -156,7 +156,7 @@ if ($this->view_type != 'detail') {
                             <span class="my_se_icon">
                               <!-- <a href="javascript:void(0)" name="submit" id="searchBystatus" ><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                     -->
 
-                                <a href="javascript:void(0)" name="submit" onclick="showStatusValidation()"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                    
+                                <a href="javascript:void(0)" name="submit" id="searchBystatus"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                    
                             </span>
                             <?php /* ?>
                               <select name="search_status"  onchange="showStatus(this.value)" class="selectbox awo-sselect">
@@ -511,7 +511,6 @@ if(strlen($descText)>=30){ ?>
         //window.location.reload();
         var tenant_buiding = $('.fdw').attr('bid');
         var tenant_location_info = $('#tenant_data').attr('tenant_location_info');
-        console.log(tenant_buiding);
         $.ajax({
                     type: "POST",
                     url: baseUrl + 'workorder/ajaxworkordernotify',
