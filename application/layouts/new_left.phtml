@@ -1042,7 +1042,6 @@ $('#searchBystatus').click(function(){
    $('#ms :selected').each(function(){
     statusArr.push($(this).val());
     });
-
     var status =  statusArr.toString();
     pre_page_count  = $('show_limit').val(); 
    reloadDatatable(bid,tid,order_id,status,pre_page_count);

@@ -902,7 +902,20 @@ class WorkorderController extends Ve_Controller_Base {
 			//echo $build_ID;
 			$build_ID = $this->_getParam('bid');
 			$tenantId = $this->_getParam('tid');
-			
+			$color_code = array('00FFFF', 'FF0000', 'FF00FF', '800000', '008000', '800080', '808000', '0000FF', '00FF00', '00008075', 'FFFF00', '808000', '008080', 'FFA500');
+			$building_color = array();
+		    $j = 1;
+			$tenantlist = explode(',', $tenantId);
+
+            foreach ($tenantlist as $cb) {
+                if (isset($color_code[$j]))
+                    $building_color[$cb] = $color_code[$j];
+                else {
+                    $j = 0;
+                    $building_color[$cb] = $color_code[$j];
+                }
+                $j++;
+            }
 			 $page=$this->_getParam('start');
 			 if($this->_getParam('per_page_rec')){
 				$show = $this->_getParam('per_page_rec');
@@ -992,48 +1005,44 @@ class WorkorderController extends Ve_Controller_Base {
 						$plusicon .= '&User=' . $this->userId;
 					}
 							
-							if ((in_array('[[++CostCenterNumber]]', $dashBoardViewsdetailsoption))) {
-								$plusicon .= '&Cost_Center_Number=' . $rec->uniqueCostCenter;
-							}
-							
-							if ((in_array('[[++KeyBuildingNumber]]', $dashBoardViewsdetailsoption))) {
-								$plusicon .= '&buildkey=' . $rec->building;
-							}
-							
-							if (in_array('[[++BatchNumber]]', $dashBoardViewsdetailsoption) && $rec->wo_batch != 0) {
-								$plusicon .= '&Batch_Number=' . $rec->wo_batch;
-							}
-							
-							if ((in_array('[[++WONumber]]', $dashBoardViewsdetailsoption))) {
-								$plusicon .= '&WO_Number=' . $rec->wo_number;
-							}
-							
-							if ((in_array('[[++InvoiceNumber]]', $dashBoardViewsdetailsoption)) && $rec->billable_opt == 1) {
-								$plusicon .= '&Invoice_Number=' . $rec->wo_number;
-							}
-							
-							if ((in_array('[[++Status_id]]', $dashBoardViewsdetailsoption))) {
-								$plusicon .= '&Status=' . $rec->wo_status;
-							}
-							$plusicon .= '" >';
-							
-							$plusicon .='<img';
-							$plusicon .=' src="'. BASEURL;																		
-							$plusicon .='public/images\printer.png"' .' style="width:20px;">';
-							$plusicon .='</a>';
-																		
+						if ((in_array('[[++CostCenterNumber]]', $dashBoardViewsdetailsoption))) {
+						$plusicon .= '&Cost_Center_Number=' . $rec->uniqueCostCenter;
+						}
 
-						$plusicon2='<div style="background-color:#;padding:10px 8px;">';
+						if ((in_array('[[++KeyBuildingNumber]]', $dashBoardViewsdetailsoption))) {
+						$plusicon .= '&buildkey=' . $rec->building;
+						}
+
+						if (in_array('[[++BatchNumber]]', $dashBoardViewsdetailsoption) && $rec->wo_batch != 0) {
+						$plusicon .= '&Batch_Number=' . $rec->wo_batch;
+						}
+
+						if ((in_array('[[++WONumber]]', $dashBoardViewsdetailsoption))) {
+						$plusicon .= '&WO_Number=' . $rec->wo_number;
+						}
+							
+						if ((in_array('[[++InvoiceNumber]]', $dashBoardViewsdetailsoption)) && $rec->billable_opt == 1) {
+						$plusicon .= '&Invoice_Number=' . $rec->wo_number;
+						}
+							
+						if ((in_array('[[++Status_id]]', $dashBoardViewsdetailsoption))) {
+						$plusicon .= '&Status=' . $rec->wo_status;
+						}
+						$plusicon .= '" >';
+						$plusicon .='<img';
+						$plusicon .=' src="'. BASEURL;																		
+						$plusicon .='public/images\printer.png"' .' style="width:20px;">';
+						$plusicon .='</a>';	
+
+						$plusicon2='<div style="padding:10px 8px;" tenantid="'.$rec->tenant.'">';
 						$plusicon2 .= '<a href="javascript:void(0)" onclick="showTenantWorkOrder('. $rec->wo_number.','.$rec->woId.')";>';
-
 						$plusicon2 .= '<i id="plus_'. $rec->woId.'" class="fa fa-plus blackfont_color plus_min_icon"></i></a>';
 						$plusicon2 .= '</div>';
+						$backgroundColor= '"#'.$building_color[$rec->tenant].'"';
 
-
-
-					$temp = array(date("m/d/Y", strtotime($rec->date_requested)),$rec->date_requested,$rec->wo_number,$wo_status,
-					stripslashes($rec->categoryName),$printStr,$plusicon,$plusicon2
-				);
+						$temp = array(date("m/d/Y", strtotime($rec->date_requested)),$rec->date_requested,$rec->wo_number,$wo_status,
+							stripslashes($rec->categoryName),$printStr,$plusicon,$plusicon2,$backgroundColor
+						);
 					
 					// array_push($temp,$rec->woId);
 					// array_push($temp,$rec->tenant);
@@ -1041,7 +1050,7 @@ class WorkorderController extends Ve_Controller_Base {
 					// array_push($temp,$rec->date_requested);
 					// array_push($temp,$rec->date_requested);
 					// array_push($temp,$rec->date_requested);
-					$record_data[] = $temp;
+					 $record_data[] = $temp;
 
 				}
 				
