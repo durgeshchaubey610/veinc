@@ -551,7 +551,29 @@ if(strlen($descText)>=30){ ?>
                             var tid = $('.tenant_tabs .resp-tab-active').attr('tid'); 
                             var order_id = $('#search_wo').val();
                            // reloadDatatable(bid,tid,order_id,null,record_per_page);
+                           $.ajax({
+                            type: 'GET',
+                            url: baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid')+'&per_page_rec=10',
+                            success:function(res){
+                             var objArr  = JSON.parse(res);
+                             var dataArr = objArr.data;
+                            //console.log(objArr.data);
+                            for (var i = 0; i < dataArr.length; i++) { 
+                                var celDataArr = dataArr[i];
+                                var cellid = celDataArr[9];                                 
+                                $('[data-woid="'+cellid+'"]').find("td").eq(0).html(celDataArr[0]);
+                                $('[data-woid="'+cellid+'"]').find("td").eq(1).html(celDataArr[1]);
+                                $('[data-woid="'+cellid+'"]').find("td").eq(3).html(celDataArr[3]);
+                                $('[data-woid="'+cellid+'"]').find("td").eq(4).html(celDataArr[4]);
+                                $('[data-woid="'+cellid+'"]').find("td").eq(5).html(celDataArr[5]);
+                              
 
+                             }
+
+
+
+                            }
+                        });
                         }
                        // alert(obj.tenant);
                     }
@@ -566,7 +588,13 @@ if(strlen($descText)>=30){ ?>
 
 
     function showTenantWorkOrder(woId,wo_number){
-		
+               var open_box_id= $('#parentHorizontalTab').attr('open_box_id')
+                 if(open_box_id){
+                   var namopen_boxArr = open_box_id.split(',');
+                 }
+                 namopen_boxArr 
+		          $('#parentHorizontalTab').attr('open_box_id',wo_number);
+
                    $.ajax({        			
                url: baseUrl + "dashboard/orderdetail/woId/"+wo_number,
                success: function (content) {

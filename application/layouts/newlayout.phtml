@@ -246,6 +246,8 @@ $('#myTable1').DataTable( {
   'fnCreatedRow': function (nRow, aData, iDataIndex) {
    // console.log(aData);
         $(nRow).attr('id', 'wo_' + aData[2]);
+        $(nRow).attr('data-woid', aData[9]);
+
         $('td', nRow).eq(7).css('background-color', aData[8]);
 
        // $(nRow).attr('location_id', 'wo_' + aData[2]);
@@ -306,7 +308,8 @@ if ( $.fn.DataTable.isDataTable('#myTable1') ) {
         // console.log(typeof building_color_info);
 
         $(nRow).attr('id', 'wo_' + aData[2]); // or whatever you choose to set as the id
-       $('td', nRow).eq(7).css('background-color', aData[8]);
+        $(nRow).attr('data-woid',aData[9]);
+        $('td', nRow).eq(7).css('background-color', aData[8]);
 
     },
     'order': [[2, 'desc']]}).ajax.url(baseUrl + 'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+per_page_rec).load();

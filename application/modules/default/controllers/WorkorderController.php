@@ -1034,14 +1034,14 @@ class WorkorderController extends Ve_Controller_Base {
 						$plusicon .='public/images\printer.png"' .' style="width:20px;">';
 						$plusicon .='</a>';	
 
-						$plusicon2='<div style="padding:10px 8px;" tenantid="'.$rec->tenant.'">';
+						$plusicon2='<div style="padding:10px 8px;" tenantid="'.$rec->tenant.'" >';
 						$plusicon2 .= '<a href="javascript:void(0)" onclick="showTenantWorkOrder('. $rec->wo_number.','.$rec->woId.')";>';
 						$plusicon2 .= '<i id="plus_'. $rec->woId.'" class="fa fa-plus blackfont_color plus_min_icon"></i></a>';
 						$plusicon2 .= '</div>';
 						$backgroundColor= '"#'.$building_color[$rec->tenant].'"';
 
 						$temp = array(date("m/d/Y", strtotime($rec->date_requested)),$rec->date_requested,$rec->wo_number,$wo_status,
-							stripslashes($rec->categoryName),$printStr,$plusicon,$plusicon2,$backgroundColor
+							stripslashes($rec->categoryName),$printStr,$plusicon,$plusicon2,$backgroundColor,$rec->woId
 						);
 					
 					// array_push($temp,$rec->woId);
