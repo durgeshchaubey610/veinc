@@ -907,15 +907,21 @@ class WorkorderController extends Ve_Controller_Base {
 		    $j = 1;
 			$tenantlist = explode(',', $tenantId);
 
-            foreach ($tenantlist as $cb) {
-                if (isset($color_code[$j]))
-                    $building_color[$cb] = $color_code[$j];
-                else {
-                    $j = 0;
-                    $building_color[$cb] = $color_code[$j];
-                }
-                $j++;
-            }
+            if(count($tenantlist) > 1){
+				foreach ($tenantlist as $cb) {
+					if (isset($color_code[$j]))
+						$building_color[$cb] = $color_code[$j];
+					else {
+						$j = 0;
+						$building_color[$cb] = $color_code[$j];
+					}
+					$j++;
+				}
+								
+				$_SESSION['building_colors'] = $building_color;
+				 }else{
+					$building_color = $_SESSION['building_colors'];
+				}
 			 $page=$this->_getParam('start');
 			 if($this->_getParam('per_page_rec')){
 				$show = $this->_getParam('per_page_rec');
