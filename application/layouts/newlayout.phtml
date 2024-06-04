@@ -263,7 +263,17 @@ $('#myTable1').DataTable( {
 "serverSide": true,
 "ajax": baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid')+'&per_page_rec=10',
 'order': [[3, 'desc']],
-
+"aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+"aoColumns": [
+			{ "sName": "ceated_at" },
+			{ "sName": "ceated_at" },
+			{ "sName": "woId" },
+			{ "sName": "status" },
+      { "sName": "category" },
+			{ "sName": "work_order_request" },
+      { "sName": "pdf" },
+      { "sName": "btn" }
+		]
 
 } );
 }, 1000);
@@ -312,7 +322,22 @@ if ( $.fn.DataTable.isDataTable('#myTable1') ) {
         $('td', nRow).eq(7).css('background-color', aData[8]);
 
     },
-    'order': [[2, 'desc']]}).ajax.url(baseUrl + 'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+per_page_rec).load();
+    'order': [[2, 'desc']],
+    "aoColumns": [
+			{ "sName": "ceated_at" },
+			{ "sName": "ceated_at" },
+			{ "sName": "woId" },
+			{ "sName": "status" },
+      { "sName": "category" },
+			{ "sName": "work_order_request" },
+      { "sName": "pdf" },
+      { "sName": "btn" }
+		],
+    "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+
+  
+  
+  }).ajax.url(baseUrl + 'workorder/getdata?bid='+bid+'&tid='+tid+'&woid='+woid+'&status='+status+'&per_page_rec='+per_page_rec).load();
 //   $('#myTable1').DataTable( {
 //   "pagingType": "full_numbers",
 //    "lengthChange": true,
@@ -344,9 +369,7 @@ if ( $.fn.DataTable.isDataTable('#myTable1') ) {
 </script>	
 <!--Plug-in Initialisation--> 
 <style>
-  div#myTable1_length {
-  display: none;
-}
+ 
 div#myTable1_filter {
   display: none;
 }
