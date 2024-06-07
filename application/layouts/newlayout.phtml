@@ -323,9 +323,9 @@ if ( $.fn.DataTable.isDataTable('#myTable1') ) {
 	$('#myTable1').DataTable({
     "destroy": true,
     "autoWidth": false,
-        "scrollX": true,
-        "scrollY": "300px",
-        "scrollCollapse": true,
+        "scrollX": false,
+      //  "scrollY": "300px",
+        "scrollCollapse": false,
     'fnCreatedRow': function (nRow, aData, iDataIndex) {
     //console.log(aData);
         // var building_color_info = $('#parentHorizontalTab').attr('building_color_info');
