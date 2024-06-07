@@ -309,9 +309,23 @@ function reloadDatatable(bid,tid,order_id,wo_status,per_page_rec){
 //     $('#myTable1').DataTable().destroy();
 // }
 if ( $.fn.DataTable.isDataTable('#myTable1') ) {
-  $('#myTable1').DataTable().destroy();
+  // $('#myTable1').DataTable().destroy();
+  // $('#myTable1').dataTable().clear();
+//   var table = new DataTable('#myTable');
+ 
+//  for (var i = 0; i < 4; i++) {
+//      table.column(i).visible(false, false);
+//  }
+ 
+
+  $("#myTable1").dataTable().fnDestroy();
 }
 	$('#myTable1').DataTable({
+    "destroy": true,
+    "autoWidth": false,
+        "scrollX": true,
+        "scrollY": "300px",
+        "scrollCollapse": true,
     'fnCreatedRow': function (nRow, aData, iDataIndex) {
     //console.log(aData);
         // var building_color_info = $('#parentHorizontalTab').attr('building_color_info');

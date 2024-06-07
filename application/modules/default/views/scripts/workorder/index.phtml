@@ -583,9 +583,9 @@ if(strlen($descText)>=30){ ?>
         setInterval(reloadPage, s); 
 
     }
-    scheduleReload(15000);// 30000 milliseconds = 30 sec
+   // scheduleReload(15000);// 30000 milliseconds = 30 sec
 
-    $(".fa .blackfont_color .plus_min_icon").click(function(e){
+    $(".fa-minus").click(function(e){
         $(this).removeClass("fa-minus");
         $(this).addClass("fa-plus");
         $(".fa-minus").each(function(index,val) {                     
