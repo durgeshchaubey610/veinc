@@ -25,6 +25,7 @@ foreach($tenantLocationArr as $tenantcompany){
     ?>
 
 <?php $j++; }        
+//print_r($building_color);
 
 
         $order = $this->order;
@@ -131,17 +132,17 @@ if ($this->view_type != 'detail') {
                         <li>
                             <span class="ser_sp">Search</span>
                             <input type="text" name="search_wo" id="search_wo" placeholder="Work Order Id" onkeypress="return isNumberKey(event)" value="<?php echo (isset($_REQUEST['search_wo'])) ? $_REQUEST['search_wo'] : ''; ?>"> <span class="my_se_icon">
-                                <a href="javascript:void(0)" name="submit" id="btn_search_wo"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a></span> 
+                                <a href="javascript:void(0)" name="submit" onclick="showStatus()"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a></span> 
                         </li>
                         <li>
                             <span class="ser_sp">Show</span>
-                            <!-- <select id="show_limit"  name="show_limit" style="width:100px !important;" >
+                            <select id="show_limit" onchange="showlimit();" name="show_limit" style="width:100px !important;" >
                                 <option value="10" <?php echo ($this->show == 10 ? "selected" : ""); ?> >10</option>
                                 <option value="25" <?php echo ($this->show == 25 ? "selected" : ""); ?>>25</option>
                                 <option value="50" <?php echo ($this->show == 50 ? "selected" : ""); ?>>50</option>
                                 <option value="100" <?php echo ($this->show == 100 ? "selected" : ""); ?>>100</option>
-                            </select> -->
-
+                                <!--<option value="all" <?php //echo ($this->show == 1000 ? "selected" : "");    ?>>All</option>-->
+                            </select>
                         </li>
 
                         <li style='width:205px;'>
@@ -153,9 +154,7 @@ if ($this->view_type != 'detail') {
                                 </select>
                             </div>
                             <span class="my_se_icon">
-                              <!-- <a href="javascript:void(0)" name="submit" id="searchBystatus" ><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                     -->
-
-                                <a href="javascript:void(0)" name="submit" id="searchBystatus"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                    
+                                <a href="javascript:void(0)" name="submit" onclick="showStatusValidation()"><span aria-hidden="true" class="glyphicon glyphicon-search"></span></a>                                    
                             </span>
                             <?php /* ?>
                               <select name="search_status"  onchange="showStatus(this.value)" class="selectbox awo-sselect">
@@ -179,7 +178,7 @@ if ($this->view_type != 'detail') {
 
         <!--Body middle Part tabbed start-->
         <div class="row" >
-            <div id="parentHorizontalTab" class="datatabed" building_color_info="<?php echo json_encode($building_color);?>">
+            <div id="parentHorizontalTab" class="datatabed">
                 <?php
                 if ($veiw_type == 'line') {
                     $url = BASEURL . 'workorder/index';
@@ -188,32 +187,14 @@ if ($this->view_type != 'detail') {
                    $url = BASEURL . 'workorder/index';
                 }
                 ?>
-
-<table id="myTable1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Date Received</th>
-                            <th>Time Received</th>
-                            <th>Work Order#</th>
-                            <th>Current Status</th>
-                            <th>Category</th>                            
-                            <th class="no-sort">Work Request</th>
-                            <th class="no-sort">&nbsp;</th>
-                            <th class="no-sort">&nbsp;</th>
-                        </tr>
-                    </thead>
-    </table>
-                <div class="resp-tabs-container hor_1" >
+                <div class="resp-tabs-container hor_1">
                     <div>
                         <div class="row">
                             <div class="panel-body padd_order">
                                 <div class="table-responsive">
                                     <div role="grid" class="dataTables_wrapper form-inline" id="dataTables-example_wrapper">
-                                        <div id="reloadworkorder" stlye="display:none;">
-                                            
-                                        
-                                        
-                                        <table id="dataTables-example" class="table table-striped table-bordered table-hover dataTable no-footer" style="display:none;">
+                                        <div id="reloadworkorder">
+                                            <table id="dataTables-example" class="table table-striped table-bordered table-hover dataTable no-footer">
                                                 <thead>
                                                     <tr>
 
@@ -422,22 +403,98 @@ if(strlen($descText)>=30){ ?>
                                         }
 
                                         //echo $this->paginationControl($this->wolist, 'Sliding', 'pagination.phtml', $params);
-                                        // $pageno = $this->pageno;
-                                        // $total_pages = $this->total_pages;
+                                        $pageno = $this->pageno;
+                                        $total_pages = $this->total_pages;
                                         // This is for first and previous disabled class
-                                        // if ($pageno <= 1) {
-                                        //     $disFirstPre = 'disabled';
-                                        // } else {
-                                        //     $disFirstPre = '';
-                                        // }
-                                        // // This is for Next and last disabled class
-                                        // if ($pageno >= $total_pages) {
-                                        //     $disNextLast = 'disabled';
-                                        // } else {
-                                        //     $disNextLast = '';
-                                        // }
+                                        if ($pageno <= 1) {
+                                            $disFirstPre = 'disabled';
+                                        } else {
+                                            $disFirstPre = '';
+                                        }
+                                        // This is for Next and last disabled class
+                                        if ($pageno >= $total_pages) {
+                                            $disNextLast = 'disabled';
+                                        } else {
+                                            $disNextLast = '';
+                                        }
                                         ?>
-                                      
+                                        <ul class="pagination">
+                                            <li class="<?php echo $disFirstPre; ?>"><a href="<?php
+                                                if ($pageno <= 1) {
+                                                    echo '#';
+                                                } else {
+                                                    $params['page'] = 1;
+                                                    //echo BASEURL . "dashboard/workorder/page/1";
+                                                    echo $this->url($params);
+                                                }
+                                                ?>">First</a></li>
+                                            <li class="<?php echo $disFirstPre; ?>">
+                                                <a href="<?php
+                                                if ($pageno <= 1) {
+                                                    echo '#';
+                                                } else {
+                                                    $params['page'] = $pageno - 1;
+                                                    //echo BASEURL . "dashboard/workorder/page/" . ($pageno - 1);
+                                                    echo $this->url($params);
+                                                }
+                                                ?>">Previous</a>
+                                            </li>
+                                            <?php
+                                            $range = 10; //set this to what ever range you want to show in the pagination link
+                                            $range_min = ($range % 2 == 0) ? ($range / 2) - 1 : ($range - 1) / 2;
+                                            $range_max = ($range % 2 == 0) ? $range_min + 1 : $range_min;
+                                            $page_min = $pageno - $range_min;
+                                            $page_max = $pageno + $range_max;
+                                            $page_min = ($page_min < 1) ? 1 : $page_min;
+                                            $page_max = ($page_max < ($page_min + $range - 1)) ? $page_min + $range - 1 : $page_max;
+                                            if ($page_max > $total_pages) {
+                                                $page_min = ($page_min > 1) ? $total_pages - $range + 1 : 1;
+                                                $page_max = $total_pages;
+                                            }
+                                            $page_min = ($page_min < 1) ? 1 : $page_min;
+                                            ?>
+                                            <li>
+                                                <?php
+                                                for ($i = $page_min; $i <= $page_max; $i++) {
+                                                    if ($pageno == $i) {
+                                                        ?>
+                                                        <a class="disabled" href="#"><?php echo $i; ?></a>
+                                                        <?php
+                                                    } else {
+                                                        $params['page'] = $i;
+                                                        ?>
+                                                        <a href="<?php //echo BASEURL . 'dashboard/workorder/page/' . $i;
+                                        echo $this->url($params);
+                                                        ?>"><?php echo $i; ?></a>
+                                                           <?php
+                                                       }
+                                                   }
+                                                   ?>
+                                            </li>
+                                            <li class="<?php echo $disNextLast; ?>">
+                                                <a href="<?php
+                                                if ($pageno >= $total_pages) {
+                                                    echo '#';
+                                                } else {
+                                                    $params['page'] = $pageno + 1;
+                                                    //echo BASEURL . "dashboard/workorder/page/" . ($pageno + 1);
+                                                    echo $this->url($params);
+                                                }
+                                                ?>">Next</a>
+                                            </li>
+                                            <li class="<?php echo $disNextLast; ?>"><a href="<?php
+                                                if ($pageno >= $total_pages) {
+                                                    echo '#';
+                                                } else {
+                                                    $params['page'] = $total_pages;
+                                                    //echo BASEURL . "dashboard/workorder/page/" . $total_pages;
+                                                    echo $this->url($params);
+                                                }
+                                                ?>">Last</a></li>
+                                        </ul>
+                                        <ul class="pull-right list-inline">
+                                            <li><?php echo "Page $pageno of  $total_pages"; ?></li>
+                                        </ul>
                                         <?php
                                         //}
                                         //echo $this->count;
@@ -461,31 +518,6 @@ if(strlen($descText)>=30){ ?>
         </div>
         <!-- /#page-wrapper -->
 <script>
-
-  
-
-
- 
-
-// $.ajax({
-//                     type: "POST",
-//                     url: baseUrl + 'workorder/getdtData',
-//                     data: {
-//                         tid: '721,725,730',
-//                         tenant_buiding:tenant_buiding
-                        
-//                     },
-//                     datatype: 'json',
-//                     contentType: "text/plain",
-//                     success: function (msg) {                      
-                       
-                     
-                      
-//                        // alert(obj.tenant);
-//                     }
-//         });
-
-
     // when page load; for getting las work order
     var tenant_buiding = $('.fdw').attr('bid');
     var tenant_location_info = $('#tenant_data').attr('tenant_location_info');
@@ -510,6 +542,7 @@ if(strlen($descText)>=30){ ?>
         //window.location.reload();
         var tenant_buiding = $('.fdw').attr('bid');
         var tenant_location_info = $('#tenant_data').attr('tenant_location_info');
+        console.log(tenant_buiding);
         $.ajax({
                     type: "POST",
                     url: baseUrl + 'workorder/ajaxworkordernotify',
@@ -542,37 +575,6 @@ if(strlen($descText)>=30){ ?>
                              }
 
                             });
-                        }else{
-
-                           // $('.tenant_tabs .resp-tab-active').trigger('click');
-                            var bid = $('.fdw').attr('bid')
-                            var search_wo = $('#search_wo').val();
-                            var record_per_page = $('show_limit').val(); 
-                            var tid = $('.tenant_tabs .resp-tab-active').attr('tid'); 
-                            var order_id = $('#search_wo').val();
-                           // reloadDatatable(bid,tid,order_id,null,record_per_page);
-                           $.ajax({
-                            type: 'GET',
-                            url: baseUrl + 'workorder/getdata?bid='+$('.fdw').attr('bid')+'&tid='+$('.tenant_tabs .resp-tab-active').attr('tid')+'&per_page_rec=10',
-                            success:function(res){
-                             var objArr  = JSON.parse(res);
-                             var dataArr = objArr.data;
-                            //console.log(objArr.data);
-                            for (var i = 0; i < dataArr.length; i++) { 
-                                var celDataArr = dataArr[i];
-                                var cellid = celDataArr[9];                                 
-                                $('[data-woid="'+cellid+'"]').find("td").eq(0).html(celDataArr[0]);
-                                $('[data-woid="'+cellid+'"]').find("td").eq(1).html(celDataArr[1]);
-                                $('[data-woid="'+cellid+'"]').find("td").eq(3).html(celDataArr[3]);
-                                $('[data-woid="'+cellid+'"]').find("td").eq(4).html(celDataArr[4]);
-                                $('[data-woid="'+cellid+'"]').find("td").eq(5).html(celDataArr[5]);
-                                $('[data-woid="'+cellid+'"]').find("td").eq(7).find('.fa-minus').trigger('click');
-                             }
-
-
-
-                            }
-                        });
                         }
                        // alert(obj.tenant);
                     }
@@ -583,79 +585,7 @@ if(strlen($descText)>=30){ ?>
         setInterval(reloadPage, s); 
 
     }
-   // scheduleReload(15000);// 30000 milliseconds = 30 sec
-
-    $(".fa-minus").click(function(e){
-        $(this).removeClass("fa-minus");
-        $(this).addClass("fa-plus");
-        $(".fa-minus").each(function(index,val) {                     
-                        $(this).removeClass("fa-minus");
-                        $(this).addClass("fa-plus");                   
-                    
-        });
-    });
-
-    
-
-    function showTenantWorkOrder(woId,wo_number){
-               var open_box_id= $('#parentHorizontalTab').attr('open_box_id')
-                 if(open_box_id){
-                   var namopen_boxArr = open_box_id.split(',');
-                 }
-                 namopen_boxArr 
-		          $('#parentHorizontalTab').attr('open_box_id',wo_number);
-
-                   $.ajax({        			
-               url: baseUrl + "dashboard/orderdetail/woId/"+wo_number,
-               success: function (content) {                            
-                   $('.tr-order').hide();
-                   
-                   if($('#plus_'+wo_number ).hasClass("fa-minus")){
-                      $('#plus_'+wo_number).removeClass("fa-minus");
-                      $('#plus_'+wo_number).addClass("fa-plus");
-                      $( "#workrequest_"+woId ).remove();
-
-                   }else{
-                        $('#plus_'+wo_number).removeClass("fa-plus");
-                        $('#plus_'+wo_number).addClass("fa-minus");
-                        $( "#workrequest_"+woId ).remove();
-                        $('<tr id="workrequest_'+woId+'" class="tr-order"><td id="order_content_'+woId+'" colspan="9">'+content+'</td></tr>').insertAfter($('#wo_'+woId));
-
-                   }                   
-                   $('#plus_'+wo_number).addClass("w_open");
-               }
-
-           });
-
-         console.log('#wo_'+woId);
-    //     if(document.getElementById('workrequest_'+woId).style.display!="none"){
-    //           document.getElementById('workrequest_'+woId).style.display="none";
-    //            $('#plus_'+woId).addClass("fa-plus");
-    //            $('#plus_'+woId).removeClass("fa-minus");
-    //     }else{
-    //         $('.loader').show();
-    //         $('.plus_min_icon').removeClass("fa-minus");
-    //         $('.plus_min_icon').addClass("fa-plus");	
-    //         $('.tr-order').hide();
-    //         $('.order-detail').html('');
-    //         $('#plus_'+woId).removeClass("fa-plus");
-    //         $('#plus_'+woId).addClass("fa-minus");	
-            
-    
-
-    //            $.ajax({        			
-    //            url: baseUrl + "dashboard/orderdetail/woId/"+woId,
-    //            success: function (content) {
-    //                //$('.loader').hide();
-    //                $('#order_content_'+woId).html(content);
-    //                $('#workrequest_'+woId).show();
-    //                $('.loader').hide();
-    //            }
-
-    //        });
-    //    }
-   }
-
+    scheduleReload(30000);// 30000 milliseconds = 30 sec
  </script>   
 <?php } else { ?>
     You don't have access for this module.
@@ -727,10 +657,4 @@ if(strlen($descText)>=30){ ?>
         showWorkOrder(hash);
     }
 </script>
-<style>
-    table.dataTable thead .sorting:after{
-        display:none;
-
-    }
-</style>    
 
