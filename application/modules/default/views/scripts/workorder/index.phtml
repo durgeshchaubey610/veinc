@@ -656,5 +656,35 @@ if(strlen($descText)>=30){ ?>
         hash = hash.replace('#', '');
         showWorkOrder(hash);
     }
+
+
+    setInterval(function () {
+        $.ajax({
+            type: "POST",
+            url: baseUrl + 'dashboard/checkstatus/',
+            data: {},
+            success: function (data) {
+                var content = $.parseJSON(data);
+                console.log("total1-" + content.count);
+                var tworkorder = $("#count").val();
+                console.log("total3-" + tworkorder);
+                if (parseInt(tworkorder) < parseInt(content.count)) {
+                    $.ajax({
+                        type: "POST",
+                        url: baseUrl + 'dashboard/reloadworkorder/',
+                        data: {},
+                        success: function (response) {
+                            //alert(response);
+                            $("#reloadworkorder").html(response);
+                            $('.loader').hide();
+
+                        }
+                    });
+                }
+            }
+        });
+    }, 30000);
+
+    
 </script>
 
