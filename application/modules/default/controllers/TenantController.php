@@ -17,6 +17,11 @@ class TenantController extends Ve_Controller_Base {
 
          //called when object intiatate
          $this->tenantModel = new Model_Tenant();
+
+         $this->dline_location = 1;
+         $this->ddetail_location = 2;
+         $this->createnew_location = 3;
+         $this->closewo_location = 4;
     }
 
     // Call befor any action and check is user login or not
@@ -3208,6 +3213,199 @@ public function updatemenuversionAction(){
         }
 
 
+        public function checkstatusAction(){
+        
+            $total = $this->gettotalAction();
+            $totalad = array("count"=>$total);
+            //print_r($total);
+            echo  json_encode($totalad);
+            die;
+        }
+        
+        public function reloadworkorderAction() {
+          
+            $this->_helper->getHelper('layout')->disableLayout();  
+            $companyListing = '';
+            $buildingMapper = new Model_Building();
+            if ($this->roleId == '9') {
+                $companyListing = $buildingMapper->getCompanyBuilding($this->cust_id);
+            } else {
+                $user_build_mod = new Model_UserBuildingModule();
+                $buildinglists = $user_build_mod->getUserBuildingIds($this->userId);
+                if ($buildinglists) {
+                    $build_id_array = array();
+                    foreach ($buildinglists as $buildlist)
+                        $build_id_array[] = $buildlist['building_id'];
+                    $companyListing = $buildingMapper->getBuildingList($build_id_array);
+                }
+            }
+            
+            $page = $this->_getParam('page', 1);
+            $order = $this->_getParam('order', 'woId');
+            $dir = $this->_getParam('dir', 'DESC');
+            $wolist = '';
+            $show =  $_COOKIE['show_limit'];
+            $build_ID = $this->_getParam('bid', '');
+            $select_build_id = $build_ID;
+            /*         * *******set building in cookie ********* */
+            $buildIds = array();
+            foreach ($companyListing as $cl) {
+                $buildIds[] = $cl['build_id'];
+            }
+            if ($build_ID == 'all') {
+                $set_cookie = setcookie('build_cookie', '', time() + (86400 / 24), "/");
+            }
+            if (empty($build_ID) && (isset($_COOKIE['build_cookie']) && in_array($_COOKIE['build_cookie'], $buildIds))) {
+                $build_ID = $_COOKIE['build_cookie'];
+            } else {
+                $set_cookie = setcookie('build_cookie', $build_ID, time() + (86400 / 24), "/");
+                if ($build_ID == 'all') {
+                    $build_ID = '';
+                    $set_cookie = setcookie('build_cookie', '', time() + (86400 / 24), "/");
+                }
+            }
+    
+            /* Show list of workorder */
+            $show = $this->_getParam('show', '');
+            if($show != ""){
+                setcookie('show_limit', $show, 2147483647, '/');
+            }else{
+               $show =  $_COOKIE['show_limit'];
+            }
+            
+            /*if($show == 'all'){
+                $show = 1000;
+            }*/
+            if(unserialize($show)){
+                $show =  unserialize($show);
+            }
+            
+            if($show==""){
+                $show = 10;
+            }
+            //$_COOKIE['build_cookie'];
+    
+            $woModel = new Model_WorkOrder();
+    
+            $search_array = array();
+          
+            if (isset($_REQUEST['submitform'])) {
+                if (isset($_POST['search_chkboxstatus']) && $_POST['search_chkboxstatus'] != '') {
+                    $search_array['search_status'] = $_POST['search_chkboxstatus'];
+    
+                    setcookie('search_chkboxstatus', serialize($_POST['search_chkboxstatus']), 2147483647, '/');
+                } else {
+                    setcookie('search_chkboxstatus', '', 2147483647, '/');
+                }
+            } elseif (!isset($search_array['search_chkboxstatus']) && isset($_COOKIE['search_chkboxstatus'])) {
+    
+                $search_array['search_status'] = unserialize($_COOKIE['search_chkboxstatus']);
+            }
+            $category_name = $this->_getParam('category_name', '');
+            if ($category_name != '') {
+                $search_array['category_name'] = addslashes($category_name);
+                $this->view->category_name = $category_name;
+            }
+    
+            $tenant_name = $this->_getParam('tenant_name', '');
+            if ($tenant_name != '') {
+                $search_array['tenant_name'] = addslashes($tenant_name);
+                $this->view->tenant_name = $tenant_name;
+            }
+    
+            $search_wo = $this->_getParam('search_wo', '');
+            if ($search_wo != '') {
+                $search_array['search_wo'] = $search_wo;
+                $this->view->search_wo = $search_wo;
+            }
+    
+            $from_date = $this->_getParam('from_date', '');
+            if ($from_date != '') {
+                $search_array['from_date'] = date("Y-m-d", strtotime($from_date));
+                $this->view->from_date = date("Y-m-d", strtotime($from_date));
+            }
+    
+            $to_date = $this->_getParam('to_date', '');
+            if ($to_date != '') {
+                $search_array['to_date'] = date("Y-m-d", strtotime($to_date));
+                $this->view->to_date = date("Y-m-d", strtotime($to_date));
+            }
+            if ($companyListing != '') {
+                /* if($this->roleId=='9'){ */
+                if ($build_ID == '') {
+                    $buildIds = array();
+                    foreach ($companyListing as $cl) {
+                        $buildIds[] = $cl['build_id'];
+                    }
+                    $wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array, $page, $show);
+                    $wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
+                } else {
+    
+                    $wolist = $woModel->getBuildingWorkOrder($build_ID, $order, $dir, $search_array, $page, $show );
+                    $wolistcount = $woModel->getBuildingWorkOrderNew($build_ID, $order, $dir, $search_array);
+                }
+            }
+            // from here
+            $total_rows = $wolistcount;
+            $no_of_records_per_page = $show;
+            $total_pages = ceil($total_rows / $no_of_records_per_page);
+            $this->view->total_pages = $total_pages;
+            $this->view->pageno = $page;
+            $this->view->records = sizeof($wolist);
+           
+            $pageObj = new Ve_Paginator();
+            //$paginator = $pageObj->fetchPageDataResult($wolist, $page, $show);
+            $paginatorNew = $pageObj->fetchPageDataResultNew($wolist, $wolistcount, $page, $show);
+            //$lastactivity = $woModel->get_last_activity();
+          
+            $this->view->page = $page;
+            $view_type = $this->_getParam('view_type', 'line');
+            $this->view->custID = $this->cust_id;
+            $this->view->companyListing = $companyListing;
+            $this->view->select_build_id = $build_ID;
+            $this->view->wolist = $paginatorNew;//$paginator;
+            $this->view->order = $order;
+            $this->view->dir = $dir;
+            $this->view->view_type = $view_type;
+            $this->view->roleId = $this->roleId;
+            $this->view->acessHelper = $this->accessHelper;
+            $this->view->dline_location = $this->dline_location;
+            $this->view->ddetail_location = $this->ddetail_location;
+            $this->view->createnew_location = $this->createnew_location;
+            $this->view->closewo_location = $this->closewo_location;
+            $this->view->userId = $this->userId;
+            // refresh outo load 
+           
+            $getsult = $this->gettotalAction();       
+            $this->view->count = $getsult;
+            if (isset($_REQUEST['submitform'])) {
+                if (isset($_POST['search_chkboxstatus']) && $_POST['search_chkboxstatus'] != '') {
+                    $this->view->statusCookieDetails = $_POST['search_chkboxstatus'];
+                }
+            } else {
+    
+                //$statusCookie = new Zend_Controller_Request_Http();
+                //$statusCookieDetails = $statusCookie->getCookie('search_chkboxstatus');
+                //$statusCookieDetails = unserialize($statusCookieDetails);
+                //if ($statusCookieDetails != '') {
+                  //  $this->view->statusCookieDetails = $statusCookieDetails;
+                //}
+            }
+           
+           
+            // $adminNamespace = new Zend_Session_Namespace('Admin_User');
+            // $this->view->admin_role_id = $adminNamespace->role_id;
+        }
+
+        public function gettotalAction(){
+            $woModel = new Model_WorkOrder();        
+            $lastactivity = $woModel->get_last_activity();
+            $lastactivity1 = $woModel->get_last_activity1();
+            $lastactivity2 = $woModel->get_last_activity2();
+            //echo $total = count($lastactivity)+count($lastactivity1)+count($lastactivity2);
+            $total = $lastactivity + $lastactivity1 + $lastactivity2;
+            return $total;
+        } 
 }
 
 
