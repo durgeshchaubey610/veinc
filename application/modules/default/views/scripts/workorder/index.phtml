@@ -661,7 +661,7 @@ if(strlen($descText)>=30){ ?>
     setInterval(function () {
         $.ajax({
             type: "POST",
-            url: baseUrl + 'dashboard/checkstatus/',
+            url: baseUrl + 'tenant/checkstatus/',
             data: {},
             success: function (data) {
                 var content = $.parseJSON(data);
@@ -671,7 +671,7 @@ if(strlen($descText)>=30){ ?>
                 if (parseInt(tworkorder) < parseInt(content.count)) {
                     $.ajax({
                         type: "POST",
-                        url: baseUrl + 'dashboard/reloadworkorder/',
+                        url: baseUrl + 'tenant/reloadworkorder/',
                         data: {},
                         success: function (response) {
                             //alert(response);
