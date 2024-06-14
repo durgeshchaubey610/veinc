@@ -107,15 +107,24 @@ if ($this->roleId != '1' && ($dline_access->is_access == 0 || $ddetail_access->i
         <?php
             $j = 1;
 
-            foreach ($this->companyListing as $cb) {
-                if (isset($color_code[$j]))
-                    $building_color[$cb['build_id']] = $color_code[$j];
-                else {
-                    $j = 0;
-                    $building_color[$cb['build_id']] = $color_code[$j];
-                }
-                $j++;
-            }
+            
+$actionnTenantHelper=Zend_Controller_Action_HelperBroker::getStaticHelper('Tenantaccess'); 
+$tenantLocationArr = $actionnTenantHelper->checkTenantaccess();
+
+
+$color_code = array('00FFFF','FF0000','FF00FF','800000','008000','800080','808000','0000FF','00FF00','000080','FFFF00','808000','008080','FFA500');						
+$building_color = array();
+
+
+$j = 1;
+foreach($tenantLocationArr as $tenantcompany){ 
+// echo '<pre>';
+// print_r($tenantcompany->id);
+$building_color[$tenantcompany->id] = $color_code[$j];
+
+            //$building_color = $this->building_color; 
+            $j++;
+}
         ?>
            
             <?php
@@ -194,6 +203,7 @@ if ($this->roleId != '1' && ($dline_access->is_access == 0 || $ddetail_access->i
                         $timezone_Model = new Model_TimeZone();
                         $build_model = new Model_Building();
                         foreach ($this->wolist as $wl) {
+                          
                             $tz_build_data = $build_model->getbuildingbyid($wl->building);
                             //echo "<pre>";
                             //print_r($wl);
@@ -297,7 +307,7 @@ if ($this->roleId != '1' && ($dline_access->is_access == 0 || $ddetail_access->i
                                 }
                                 ?>" ><img src="<?php echo BASEURL . 'public/images/printer.png'; ?>" style="width:20px;"></a></td>
                             <?php }  ?>
-                    <td style="background-color:#<?php echo $building_color[$wl->building] ?>">
+                    <td style="background-color:#<?php echo $building_color[$wl->tenant] ?>">
                             <?php if ($veiw_type == 'line') { ?>
                             <a href="javascript:void(0)" onclick="showWorkOrder('<?php echo $wl->woId ?>')">
                                 <i id="plus_<?php echo $wl->woId ?>" class="fa fa-plus blackfont_color plus_min_icon"></i></a>

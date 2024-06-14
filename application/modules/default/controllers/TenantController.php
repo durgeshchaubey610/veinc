@@ -3264,7 +3264,8 @@ public function updatemenuversionAction(){
                     $set_cookie = setcookie('build_cookie', '', time() + (86400 / 24), "/");
                 }
             }
-    
+
+
             /* Show list of workorder */
             $show = $this->_getParam('show', '');
             if($show != ""){
@@ -3300,6 +3301,20 @@ public function updatemenuversionAction(){
             } elseif (!isset($search_array['search_chkboxstatus']) && isset($_COOKIE['search_chkboxstatus'])) {
     
                 $search_array['search_status'] = unserialize($_COOKIE['search_chkboxstatus']);
+            }
+
+            $show = $this->_getParam('show', '');
+            if($show != ""){
+                setcookie('show_limit', $show, 2147483647, '/');
+            }else{
+               $show =  $_COOKIE['show_limit'];
+            }   
+            if(unserialize($show)){
+                $show =  unserialize($show);
+            }
+            //if(!is_int($show) || $show==""){
+            if($show==""){
+                $show = 25;
             }
             $category_name = $this->_getParam('category_name', '');
             if ($category_name != '') {
@@ -3340,7 +3355,26 @@ public function updatemenuversionAction(){
                     $wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array, $page, $show);
                     $wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
                 } else {
-    
+                    $tenantId = $this->_getParam('tid');
+                    $color_code = array('00FFFF', 'FF0000', 'FF00FF', '800000', '008000', '800080', '808000', '0000FF', '00FF00', '00008075', 'FFFF00', '808000', '008080', 'FFA500');
+                    $building_color = array();
+                    $j = 1;
+                    $tenantlist = explode(',', $tenantId);
+                    if(count($tenantlist) > 1){
+                        foreach ($tenantlist as $cb) {
+                            if (isset($color_code[$j]))
+                                $building_color[$cb] = $color_code[$j];
+                            else {
+                                $j = 0;
+                                $building_color[$cb] = $color_code[$j];
+                            }
+                            $j++;
+                        }
+                                        
+                        $_SESSION['building_colors'] = $building_color;
+                    }else{
+                        $building_color = $_SESSION['building_colors'];
+                    }
                     $wolist = $woModel->getBuildingWorkOrder($build_ID, $order, $dir, $search_array, $page, $show );
                     $wolistcount = $woModel->getBuildingWorkOrderNew($build_ID, $order, $dir, $search_array);
                 }
@@ -3384,15 +3418,77 @@ public function updatemenuversionAction(){
                 }
             } else {
     
-                //$statusCookie = new Zend_Controller_Request_Http();
-                //$statusCookieDetails = $statusCookie->getCookie('search_chkboxstatus');
-                //$statusCookieDetails = unserialize($statusCookieDetails);
-                //if ($statusCookieDetails != '') {
-                  //  $this->view->statusCookieDetails = $statusCookieDetails;
-                //}
+                $statusCookie = new Zend_Controller_Request_Http();
+                $statusCookieDetails = $statusCookie->getCookie('search_chkboxstatus');
+                $statusCookieDetails = unserialize($statusCookieDetails);
+                if ($statusCookieDetails != '') {
+                   $this->view->statusCookieDetails = $statusCookieDetails;
+                }
             }
            
-           
+            if($this->roleId=='5' || $this->roleId=='7'){
+		
+                $tenantDefualtbuildinglists = $buildinglists;
+    
+                $tId = $this->_getParam('tid');
+                if(isset($tId) && !empty($tId)){
+                    $set_cookie = setcookie('tenant_company', $tId, time() + (86400 / 24), "/");
+                }
+                $tenant = new Model_Tenant();
+                $tId  = $_COOKIE['tenant_company'];
+            if ($tId){				
+                $tenantCompanyList = $tenant->getTenantCompanies($this->userId);     
+                $tenantuser = $tenant->getTenanyUserByTenantGroup($tId);
+    
+                
+                $this->view->tId = $tId;				
+                $this->view->tenantGroupListArr = $tenantCompanyList;
+            }		
+            else
+            $tenantuser = $tenant->getTenantByUser($this->userId);
+    
+             $tenantData = $tenant->getTenantByUser($this->userId);
+             $tenantInfo = $tenantData[0];
+             $page=$this->_getParam('page',1);
+             $order=$this->_getParam('order','woId');
+             $dir=$this->_getParam('dir','DESC');
+             
+             //for tanant Admin
+             $userId = $this->userId;	
+             if($this->roleId=='5'){	
+               $search_array['userId'] = $userId;
+     
+                $wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array,$page, $show);
+                $wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
+             }else if($this->roleId=='7'){		
+                    
+                if (isset($tId)){	
+                        // echo $userId;
+                    $wolist = $this->woMapper->getTenantUserWorkOrder($tId,$order,$dir,$userId,$search_array);	
+                    
+                }else{				
+                    $wolist = $this->woMapper->getTenantUserWorkOrder($tenantInfo->tenantId,$order,$dir,$userId,$search_array);
+                }
+               
+             }		
+            //  if($this->roleId=='7')		 
+            //  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir,$this->userId);
+            //  else
+            //  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir);
+             $pageObj=new Ve_Paginator();
+             $paginator=$pageObj->fetchPageDataResult($wolist,$page,$show);		 
+             $this->view->page = $page;
+             $this->view->roleId = $this->roleId;
+             //$this->view->tenantuser = $tenantuser[0];
+             $this->view->wolist = $paginator;
+             $this->view->order = $order;
+             $this->view->dir = $dir;
+    
+             
+             $this->tenantDefualtbuildinglists = $tenantDefualtbuildinglists;
+             }
+             $this->view->roleId = $this->roleId;
+
             // $adminNamespace = new Zend_Session_Namespace('Admin_User');
             // $this->view->admin_role_id = $adminNamespace->role_id;
         }
