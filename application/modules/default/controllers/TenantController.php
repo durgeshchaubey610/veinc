@@ -3502,6 +3502,24 @@ public function updatemenuversionAction(){
             $total = $lastactivity + $lastactivity1 + $lastactivity2;
             return $total;
         } 
+
+
+        public function orderdetailAction() { 
+            //makes disable layout
+            $this->_helper->getHelper('layout')->disableLayout();
+            $woId = $this->_getParam('woId', '');
+            $woModel = new Model_WorkOrder();
+            $wodetail = $woModel->getWorkOrderInfo($woId);
+                   
+    
+            $this->view->woData = $wodetail[0];
+            $this->view->roleId = $this->roleId;
+            $this->view->userId = $this->userId;
+            $this->view->acessHelper = $this->accessHelper;
+            $this->view->dline_location = $this->dline_location;
+            $adminNamespace = new Zend_Session_Namespace('Admin_User');
+            $this->view->admin_role_id = $adminNamespace->role_id;
+        }
 }
 
 

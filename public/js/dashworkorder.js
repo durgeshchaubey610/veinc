@@ -44,6 +44,36 @@ function showWorkOrder(woId) {
     }
 }
 
+
+function showTenatWorkOrder(woId) {
+
+    if (document.getElementById('workrequest_' + woId).style.display != "none") {
+        document.getElementById('workrequest_' + woId).style.display = "none";
+        $('#plus_' + woId).addClass("fa-plus");
+        $('#plus_' + woId).removeClass("fa-minus");
+        location.hash = '';
+    } else {
+        $('.loader').show();
+        $('.plus_min_icon').removeClass("fa-minus");
+        $('.plus_min_icon').addClass("fa-plus");
+        $('.tr-order').hide();
+        $('.order-detail').html('');
+        $('#plus_' + woId).removeClass("fa-plus");
+        $('#plus_' + woId).addClass("fa-minus"); 
+        $.ajax({
+            url: baseUrl + "tenant/orderdetail/woId/" + woId,
+            success: function (content) {
+                //$('.loader').hide();
+                $('#order_content_' + woId).html(content);
+                $('#workrequest_' + woId).show();
+                $('.loader').hide();
+                location.hash = '#' + woId;
+            }
+    
+        });
+    }
+    }
+
 function showByStatus(status) {
     document.search_form.submit();
 }
