@@ -312,7 +312,7 @@ $building_color[$tenantcompany->id] = $color_code[$j];
                             <?php }  ?>
                     <td style="background-color:#<?php echo $building_color[$wl->tenant] ?>">
                             <?php if ($veiw_type == 'line') { ?>
-                            <a href="javascript:void(0)" onclick="showWorkOrder('<?php echo $wl->woId ?>')">
+                            <a href="javascript:void(0)" onclick="showTenatWorkOrder('<?php echo $wl->woId ?>')">
                                 <i id="plus_<?php echo $wl->woId ?>" class="fa fa-plus blackfont_color plus_min_icon"></i></a>
                                 <?php } else echo '&nbsp;'; ?>
 
@@ -928,7 +928,7 @@ $building_color[$tenantcompany->id] = $color_code[$j];
     var hash = window.location.hash;
     if (hash != '') {
         hash = hash.replace('#', '');
-        showWorkOrder(hash);
+        showTenatWorkOrder(hash);
     }
 
     function showHistoryDescription(whId) {
