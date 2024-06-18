@@ -244,16 +244,19 @@ $building_color[$tenantcompany->id] = $color_code[$j];
                                                                                           <?php } else { ?>
                             <?php echo $wl->wo_number ?>
                         <?php } ?>	     
-                        <?php if ($reminderStatus && ($wl->wo_status != '6' && $wl->wo_status != '7')) echo '&nbsp;&nbsp;<a class="alert tooltip">&nbsp;<span>
+                        <?php if ($reminderStatus && ($wl->wo_status != '6' && $wl->wo_status != '7'))
+                         echo '&nbsp;&nbsp;<a class="alert tooltip">&nbsp;<span>
                         Time Over
-                        </span></a>'; ?>
+                        </span></a>';
+                        
+                        ?>
                     </td>
                     <td><?php echo $status_array[$wl->wo_status]; ?> <?php
         if ($wl->wo_status == 1) {
             $wo_schedule_status = new Model_WoScheduleStatus();
             $wo_scheduledetails = $wo_schedule_status->getCurrentWorkSchedule($wl->woId);
             ?> <?php if ($wo_scheduledetails[0]->ckey != '') { ?> 
-                                <button type="button" class="btn btn-danger btn-xs" style="margin-left:10px;" onclick="acknowledgeWorkorder('<?php echo BASEURL . '/workstatus/change/woId/' . $wo_scheduledetails[0]->worder_id . '/sId/' . $wo_scheduledetails[0]->schedule_id . '/ckey/' . $wo_scheduledetails[0]->ckey . '/statusChange/acknowledge/userId/' . $this->userId; ?>')" >Acknowledge</button>
+                                <!-- <button type="button" class="btn btn-danger btn-xs" style="margin-left:10px;" onclick="acknowledgeWorkorder('<?php echo BASEURL . '/workstatus/change/woId/' . $wo_scheduledetails[0]->worder_id . '/sId/' . $wo_scheduledetails[0]->schedule_id . '/ckey/' . $wo_scheduledetails[0]->ckey . '/statusChange/acknowledge/userId/' . $this->userId; ?>')" >Acknowledge</button> -->
 
                     <?php }
                 }
