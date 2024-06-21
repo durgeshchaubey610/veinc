@@ -544,7 +544,18 @@ echo "<br>pro_prcentage".$pro_prcentage;
 								  
 								   </td>
 									 </tr>
-									 <?php } else if($whl->log_type=='notes'){ ?>   
+									 <?php } else if($whl->log_type=='notes'){ 
+										//if($whl->internal =='0' ){
+
+											//print_r($whl->current_value);
+										
+												if($whl->current_value){
+													$change_value_data = json_decode($whl->current_value);
+													//var_dump($change_value_data->internal);
+												}	
+                                               if($change_value_data->internal !='1'){
+												
+										?>   
 									<tr>
 										  <td><?php echo ucfirst($whl->log_type);?></td>
 										  <td><?php echo $whl->firstName.' '.$whl->lastName;?></td>
@@ -556,7 +567,8 @@ echo "<br>pro_prcentage".$pro_prcentage;
 								  
 								   </td>
 									 </tr>
-									 
+									 <?php }?>
+
 									 <?php } else if($whl->log_type=='Attachment'){ ?>   
 									<tr>
 										  <td><?php echo ucfirst($whl->log_type);?></td>
@@ -597,9 +609,15 @@ echo "<br>pro_prcentage".$pro_prcentage;
                               
                             </div>
                         </div>
+
+
                         <!-- /.panel-body -->
                     </div>
+
+					
         </div>
+
+		<div id="add_history_notes_div" style="display:none" > </div>
 </div> 
 </div>
 
