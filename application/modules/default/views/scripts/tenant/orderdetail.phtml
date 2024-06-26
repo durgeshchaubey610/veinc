@@ -548,12 +548,14 @@ echo "<br>pro_prcentage".$pro_prcentage;
 										//if($whl->internal =='0' ){
 
 											//print_r($whl->current_value);
-										
-												if($whl->current_value){
-													$change_value_data = json_decode($whl->current_value);
-													//var_dump($change_value_data->internal);
-												}	
-                                               if($change_value_data->internal !='1'){
+										    if(!empty($whl->change_value) && !empty($whl->current_value)){
+												$change_value_data = json_decode($whl->change_value);
+											}
+											else if($whl->change_value){
+												$change_value_data = json_decode($whl->change_value);
+												//var_dump($change_value_data->internal);
+											}	
+										   if($change_value_data->internal =="0"){
 												
 										?>   
 									<tr>
@@ -564,7 +566,19 @@ echo "<br>pro_prcentage".$pro_prcentage;
 										  <?php $current_value_histoy=($whl->current_value!='')? $whl->current_value:'null'?>
 										  <td><?php if($whl->current_value!='' && $whl->change_value!=''){ echo HiSTORY_TEXT_EDIT; } else if($whl->change_value=='') { echo HiSTORY_TEXT_DLETED; } else { echo HiSTORY_NEW_TEXT_ADDED; } $notesdecode=json_decode($whl->change_value); ?> <a href="javascript:void(0)" onclick='historyofnotes(<?php echo $woData->building; ?>, <?php echo $whl->whId; ?> )' class="vend_tooltip"><i class="fa fa-file-text-o textFile"></i> </a>
 								   <a href="#add_history_notes_div" id="add_history_notes_div_href" class="modalbox" style="display:none;">&nbsp;</a>
-								  
+<div id="add_new_description_div" style="display:none; width:410px;" >
+
+    <h1>Description Of Work</h1>
+    <div class="desc_row">
+        <div id="work_current_description" >  </div>
+        <div style="text-align:center"><span style="font-size:20px; font-weight:bold;"><i class="fa fa-arrow-circle-down big-arrow"></i>
+            </span> </div>
+        <div id="work_change_description" >  </div>
+    </div>
+    <div class="buttons">
+        <button type="button" name="cancel" id="cancel" value="Cancel" onclick="cancelWoDesc()">Cancel</button>
+    </div> 
+</div>
 								   </td>
 									 </tr>
 									 <?php }?>
