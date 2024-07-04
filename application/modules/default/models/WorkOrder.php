@@ -69,6 +69,7 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
        
     public function getTenantWorkOrder($tenantId,$order,$dir,$userId=''){
 		if($tenantId){
+			
 			//$select = $this->select()->where('status=?','1') ;
 			$orderBy = $order.' '.$dir;
 			$db = Zend_Db_Table::getDefaultAdapter();
@@ -84,12 +85,48 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
             if($userId!=''){
 				$select = $select->where('wo.create_user=?',$userId);
 			}          
-             $select = $select->order(array($orderBy));                      
+             $select = $select->order(array($orderBy)); 
+			 
+			
             $res = $db->fetchAll( $select );        
             return ($res && sizeof($res)>0)? $res : false ;
 		}else
 		 return false;
 	}
+
+
+	public function getTenantUserWorkOrder($tenantId,$order,$dir,$userId='',$search_array){
+		if($tenantId){
+			
+			//$select = $this->select()->where('status=?','1') ;
+			$orderBy = $order.' '.$dir;
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$select = $db->select()
+                      ->from(array('wo' => 'work_order'))
+                      ->joinInner(array('t' => 'tenant'),'t.id = wo.tenant',array('tenantName','tenantContact'))
+                      ->joinLeft(array('bu'=>'buildings'),'bu.build_id = wo.building',array('buildingName'))
+                      ->joinLeft(array('cat'=>'category'),'cat.cat_id = wo.category',array('categoryName'))
+                      ->joinLeft(array('wop'=>'work_order_update'),'wop.wo_id = wo.woId AND wop.current_update=1',array('wop.wo_status','wop.internal_note'))                                                          
+                      ->joinLeft(array('u'=>'users'),'wo.create_user = u.uid',array('firstName','lastName','email'))                      
+                      ->where('wo.tenant=?',$tenantId);
+					 // ->where('wo.master_internal_work_order!=?',1);
+            if($userId!=''){
+				$select = $select->where('wo.create_user=?',$userId);
+			}
+			if(isset($search_array['search_status']) && $search_array['search_status']!='')
+			{
+				$select = $select->where('wop.wo_status in ('.implode(",",$search_array['search_status']).')');
+			}          
+             $select = $select->order(array($orderBy)); 
+			 
+			/// echo $select;
+            $res = $db->fetchAll( $select );        
+            return ($res && sizeof($res)>0)? $res : false ;
+		}else
+		 return false;
+	}
+
+	
 	
 	public function getBuildingWorkOrder($buildID,$order,$dir,$search_array=array(),$page, $show){
             $offset = ($page-1) * $show; 
@@ -133,12 +170,77 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 			   }                          
              $select = $select->order(array($orderBy)); 
              //if(empty($search_array))
+			// echo $select;
+
              $select = $select->limit($show,$offset);
             $res = $db->fetchAll( $select );        
             return ($res && sizeof($res)>0)? $res : false ;
 		}else
 		 return false;
 	}
+
+	public function getBuildingWorkOrderTenantLoc($buildID,$order,$dir,$search_array=array(),$page, $show,$tid){
+		$offset=0;
+		if($page>0){
+		 $offset = ($page-1) * $show; 
+	    }
+	    $show;
+		
+	if($buildID){
+		//$select = $this->select()->where('status=?','1') ;
+		$orderBy = $order.' '.$dir;
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+				  ->from(array('wo' => 'work_order'))
+				  ->joinInner(array('t' => 'tenant'),'t.id = wo.tenant',array('tenantName','tenantContact'))
+				  ->joinLeft(array('bu'=>'buildings'),'bu.build_id = wo.building',array('buildingName','uniqueCostCenter'))
+				  ->joinLeft(array('cat'=>'category'),'cat.cat_id = wo.category',array('categoryName','prioritySchedule'))                      
+				  ->joinLeft(array('wop'=>'work_order_update'),'wop.wo_id = wo.woId AND wop.current_update=1',array('wop.wo_status', 'wop.internal_note', 'wop.wo_request','wop.billable_opt','created_date'=>'wop.created_at','updated_date'=>'wop.updated_at'))                     
+				  ->joinLeft(array('u'=>'users'),'wo.create_user = u.uid',array('firstName','lastName','email'))                      
+				  ->where('wo.building=?',$buildID);
+			
+					if(isset($tid)){
+						$tenant_company_arr = explode(",",$tid);
+						//$select = $select->where('wo.tenant in ('.implode(".",$tenant_company_arr).')');
+						$select = $select->where('wo.tenant in ('.$tid.')');
+
+					}
+				
+		   if(isset($search_array['search_status']) && $search_array['search_status']!='')
+		   {
+			  $select = $select->where('wop.wo_status in ('.implode(",",$search_array['search_status']).')');
+		   } 			   
+		   
+		   if(isset($search_array['category_name']) && $search_array['category_name']!='')
+		   {
+			  $select = $select->where("cat.categoryName LIKE '".$search_array['category_name']."%'");
+		   }
+		   
+		   if(isset($search_array['tenant_name']) && $search_array['tenant_name']!='')
+		   {
+			  $select = $select->where("t.tenantName LIKE '".$search_array['tenant_name']."%'");
+		   }
+		   
+		   if(isset($search_array['search_wo']) && $search_array['search_wo']!='')
+		   {
+			  $select = $select->where('wo.wo_number=?',$search_array['search_wo']);
+		   }
+		   
+		   if(isset($search_array['from_date']) && $search_array['to_date']!='')
+		   {
+			  $select = $select->where("DATE(wo.created_at) BETWEEN '".$search_array['from_date'] ."' AND '".$search_array['to_date']."'");
+		   }                          
+		 $select = $select->order(array($orderBy)); 
+		 //if(empty($search_array))
+		
+
+		 $select = $select->limit($show,$offset);
+		// echo $select;
+		$res = $db->fetchAll( $select );        
+		return ($res && sizeof($res)>0)? $res : false ;
+	}else
+	 return false;
+}
         
         /**
          * This is also for count only
@@ -208,7 +310,13 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
                       ->joinLeft(array('wop'=>'work_order_update'),'wop.wo_id = wo.woId AND wop.current_update = 1',array('wop.wo_status','wop.internal_note','wop.wo_request','wop.billable_opt','created_date'=>'wop.created_at','updated_date'=>'wop.updated_at'))
                       ->joinLeft(array('u'=>'users'),'wo.create_user = u.uid',array('firstName','lastName','email'))                      
                       ->where('wo.building in ('.implode(",", $buildingIds).')');
-              if(isset($search_array['search_status']) && $search_array['search_status']!='')
+             //@kitrila
+			// if(isset($search_array['userId']) && $search_array['userId']!='')
+			// {
+			// $select = $select->where('u.uid ='.$search_array['userId']);
+			// }
+			 //@kitrila
+			  if(isset($search_array['search_status']) && $search_array['search_status']!='')
                {
 				  $select = $select->where('wop.wo_status in ('.implode(",",$search_array['search_status']).')');
 			   }
@@ -229,8 +337,21 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 			   if(isset($search_array['from_date']) && $search_array['to_date']!='')
                {
 				  $select = $select->where("DATE(wo.created_at) BETWEEN '".$search_array['from_date'] ."' AND '".$search_array['to_date']."'");
-			   }                             
+			   } 
+			   if(isset($_SESSION['Admin_User']['role_id']) && $_SESSION['Admin_User']['role_id']=="5"){
+				
+				if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01" ){
+					if(isset($_COOKIE['tenant_company'])){
+						$tenant_company_arr = explode(",",$_COOKIE['tenant_company']);
+						//$select = $select->where('wo.tenant in ('.implode(".",$tenant_company_arr).')');
+						$select = $select->where('wo.tenant in ('.$_COOKIE['tenant_company'].')');
+
+					}
+				}
+			  }
+				                         
              $select = $select->order(array($orderBy));
+			 
              //if(empty($search_array))
              $select = $select->limit($show,$offset);
                                             
@@ -282,7 +403,18 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
                {
 				  $select = $select->where("DATE(wo.created_at) BETWEEN '".$search_array['from_date'] ."' AND '".$search_array['to_date']."'");
 			   }  
-			         
+			    
+			   if(isset($_SESSION['Admin_User']['role_id']) && $_SESSION['Admin_User']['role_id']=="5"){
+				
+				if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01" ){
+					if(isset($_COOKIE['tenant_company'])){
+						$tenant_company_arr = explode(",",$_COOKIE['tenant_company']);
+						//$select = $select->where('wo.tenant in ('.implode(".",$tenant_company_arr).')');
+						$select = $select->where('wo.tenant in ('.$_COOKIE['tenant_company'].')');
+					}
+				}
+			  }
+			   
              //$select = $select->group('wo.woId');
                                  
             $res = $db->fetchAll( $select ); 
@@ -1358,7 +1490,10 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
                {
 				  $select = $select->where("DATE(wo.created_at) BETWEEN '".$search_array['from_date'] ."' AND '".$search_array['to_date']."'");
 			   }                          
-            $select = $select->order(array($order));                      
+            $select = $select->order(array($order));   
+			
+			echo $select;
+			
             $res = $db->fetchAll( $select );        
             return ($res && sizeof($res)>0)? $res : false ;
 		}else
@@ -1642,6 +1777,37 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
                 $count = $res[0]->c;
 		return ($count && $count>0)? $count : false ;
         }
+
+
+		public function getBuildingWorklastOrderDetail($buildID,$tenantids){
+			if($buildID){
+				//$select = $this->select()->where('status=?','1') ;
+
+				$tenantIdArr  = explode(", ", $tenantids);
+				$orderBy = $order.' '.$dir;
+				$db = Zend_Db_Table::getDefaultAdapter();
+				$select = $db->select()
+						  ->from(array('wo' => 'work_order'), array('woId','tenant','wo_number'))
+						  ->joinInner(array('t' => 'tenant'),'t.id = wo.tenant',array('tenantName','tenantContact'))
+						  ->joinLeft(array('bu'=>'buildings'),'bu.build_id = wo.building',array('buildingName','uniqueCostCenter'))
+						  ->joinLeft(array('cat'=>'category'),'cat.cat_id = wo.category',array('categoryName','prioritySchedule'))                      
+						  ->joinLeft(array('wop'=>'work_order_update'),'wop.wo_id = wo.woId',array('wop.wo_status', 'wop.internal_note', 'wop.wo_request','wop.billable_opt','created_date'=>'wop.created_at','updated_date'=>'wop.updated_at'))                     
+						  ->joinLeft(array('u'=>'users'),'wo.create_user = u.uid',array('firstName','lastName','email'))                      
+						  ->where('wo.building=?',$buildID)
+						  ->where('wo.tenant in ('.implode(",", $tenantIdArr).')');
+			    $orderBy = 'wo.woId DESC';
+				$select = $select->order(array($orderBy)); 
+				
+				$select ->limit(1, 0);
+
+				//echo $select;
+
+				$res = $db->fetchAll( $select );
+			
+				return $res[0];
+			}
+		}
+	
 	
 }
 

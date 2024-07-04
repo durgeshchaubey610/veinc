@@ -1,0 +1,95 @@
+<?php
+$actionnTenantHelper=Zend_Controller_Action_HelperBroker::getStaticHelper('Tenantaccess'); 
+$getTenantbuilding = $actionnTenantHelper->getTenantbuilding();
+$tenantLocationArr = $actionnTenantHelper->checkTenantaccess();
+
+$tenantBuildingArr = $actionnTenantHelper->getTenantbuilding();
+
+$controllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+$actioname= Zend_Controller_Front::getInstance()->getRequest()->getActionName();
+$tabs_allow_module_array= array('workorder','tenant');
+$tabs_allow_module_action_array= array('index','tenantuser','createworkorder');
+
+
+
+if(in_array($controllerName,$tabs_allow_module_array)){
+    if(in_array($actioname,$tabs_allow_module_action_array)){
+//allow pages
+if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){
+
+if($getTenantbuilding){
+    foreach($getTenantbuilding as $tenantBuilding){
+      
+       // $tenanttotalwocount = $actionnTenantHelper->getTenantCurrentTotalWorder($tenantBuilding['build_id']);
+
+        ?>
+        <div class="fdw" id="access-matrix" bid="<?php echo $tenantBuilding['build_id'];?>" tenant_order_count="<?php echo $tenanttotalwocount;?>" last_work_order="">
+
+    <ol id="toc" class="pm-work-order-toc-list" >
+            <li><a><span><?php echo $tenantBuilding['buildingName']; ?></span></a>
+             
+            </li>
+    </ol>
+    </div>
+        <?php
+    }
+}
+}
+?>
+<div id="fdw" class="tenantLocationTab">
+	<div class="tabmenu my_tabmenu">
+<?php if($tenantLocationArr){ 
+    $allLocation = array();
+    $alllocationIds = '';
+    foreach($tenantLocationArr as $tenantCompany){
+        $allLocation[] = $tenantCompany->tenantId;
+        $alllocationIds = implode(',',$allLocation);
+    }
+    ?>
+        <div id="tenant_data" style="display:none;" tenant_location_info="<?php echo $alllocationIds;?>"></div>
+         <ul class="tenant_tabs">
+            <?php if(isset($_COOKIE['tenant_version']) && $_COOKIE['tenant_version']=="23.01"){?>
+                 <?php //if(!isset($_COOKIE['tenant_company'])){?>
+                 <?php if($actioname!="createworkorder"){?>
+                    <li style="background-color:#800000;" tid="<?php echo $alllocationIds;?>"  class="<?php echo (isset($_COOKIE['tenant_company']) &&  strpos( $_COOKIE['tenant_company'], ',' ) !== false )?'resp-tab-active':'';?>" >
+                    <a>Work Order for All Locations</a>
+                    </li>
+                <?php } ?>
+           <?php    
+                
+              } ?>     
+  <?php foreach($tenantLocationArr as $tenantCompany){?>
+      <li style="background-color:#800000" class="<?php echo (isset($_COOKIE['tenant_company']) && $tenantCompany->tenantId==$_COOKIE['tenant_company'])?'resp-tab-active':'';?>" tid="<?php echo $tenantCompany->tenantId;?>"><a class="" href="javascript:void(0);" ><?php echo $tenantCompany->tenantName;?></a>
+  <?php } ?>
+        </ul>
+<?php } ?>        
+    </div>	
+</div>		
+<style>
+#fdw .tabmenu .tenant_tabs{
+    padding:0x 4px;
+    margin:0x 4px;
+}
+#fdw .tabmenu .tenant_tabs li{
+    padding:0x 4px;
+
+}
+#fdw .tabmenu .tenant_tabs li a{
+        padding:0x 4px !important;
+        font-family: arial;
+        font-weight: bold;
+        position: relative;
+        font-size: 13px;
+}
+#fdw .tabmenu ul li {
+    margin-right:6px !important;
+    padding: 7px !important;
+}
+</style> 
+<?php 
+  }
+
+   } ?>
+
+
+<!---End Tenant Admin and Tenant User Tab Container-->

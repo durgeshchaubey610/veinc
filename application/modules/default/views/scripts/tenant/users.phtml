@@ -53,6 +53,7 @@ $search_by = '';
 ?>
 <div class="container-right" id="userinfo-data">
     <?php
+   
     if ($this->roleId != 1 && $tenantAccess->is_access == 0 && $tenantAccess->is_read == 1) {
         if ($this->custID != null && $this->custID && $this->companyListing != '' && $this->companyListing != false) {
             ?>
@@ -244,6 +245,7 @@ $search_by = '';
         
         if (!empty($this->tenantList)) {
             foreach ($this->tenantList as $uinfo) {
+               
                 ?>
                     <tr>
                         <td><div class="open_plus" id="open_div_<?php echo $uinfo->id; ?>">

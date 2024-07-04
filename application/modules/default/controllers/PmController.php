@@ -2365,7 +2365,7 @@ $show = $this->_getParam('show', '');
         $template = new Model_PmTemplate();
         $user_id = $_SESSION['Zend_Auth']['storage']->uid;
         $build_id = $_SESSION['current_building'];
-        $tempdata = $template->GetAllEquipmentTemplateName("", $build_id, $user_id);
+        $tempdata = $template->GetAllEquipmentTemplateName("", $build_id, null);
         // send data to view pages
         $this->view->templats = $tempdata;
     }
@@ -5343,6 +5343,9 @@ $show = $this->_getParam('show', '');
         $templateName = "";
         $designationName = "";
         $data = $this->_request->getPost();
+        
+        // print_r($data);
+        // die;
         $equipment = new Model_PmTemplate();
         $templatedata = array();
         $AllEquipment = $equipment->getallEquipmentNameByBuildId($select_build_id);
@@ -5392,7 +5395,19 @@ $show = $this->_getParam('show', '');
             $show = 5;
         }
         $getEquipmentNameList = $equipment->getEquipmentNameList($select_build_id);
-        $equipmentList = $equipment->getEquipmentList($select_build_id, $data = 0);
+
+        if(isset($_COOKIE['eqname']) && !empty($_COOKIE['eqname'])){
+            $data['eqname'] = $_COOKIE['eqname'];
+            if(isset($_COOKIE['eqparts'])&& !empty($_COOKIE['eqparts'])){
+                $data['eqparts'] = $_COOKIE['eqparts'];
+            }
+            $equipmentList = $equipment->searchEquipment($select_build_id, $data);
+        }else{
+            $equipmentList = $equipment->getEquipmentList($select_build_id, $data = 0);
+        }
+        // if(isset($_COOKIE['eqparts']) && !empty($_COOKIE['eqparts'])){
+        //     $data['eqparts'] = $_COOKIE['eqparts'];
+        // }
         $this->view->equipmentList = $equipmentList;
         $this->view->getEquipmentNameList = $getEquipmentNameList;
         $this->view->custID = $cust_id;
@@ -5413,6 +5428,22 @@ $show = $this->_getParam('show', '');
         $this->view->userId = $user_id;
     }
 
+    /**
+     * rest filter By Dadhi
+     * 
+     */
+
+    public function resetfilterAction() {
+        if (isset($_COOKIE['eqname'])) {
+            unset($_COOKIE['eqname']); 
+            setcookie('eqname', '', -1, '/');           
+        }         
+        if (isset($_COOKIE['eqparts'])) {
+            unset($_COOKIE['eqparts']); 
+            setcookie('eqparts', '', -1, '/');           
+        }        
+        $this->_redirect('/pm/equipment');
+    }
     /**
      * This is the sorting purpose
      */
@@ -5593,6 +5624,13 @@ $show = $this->_getParam('show', '');
         $templateName = "";
         $designationName = "";
         $data = $this->_request->getPost();
+        if(isset($data['eqname'])){
+            setcookie('eqname', $data['eqname'], time() + (86400 / 24), "/");
+        }
+        if(isset($data['eqparts'])){
+             setcookie('eqparts', $data['eqparts'], time() + (86400 / 24), "/");
+        }
+
         $equipment = new Model_PmTemplate();
         $templatedata = array();
         $AllEquipment = $equipment->getallEquipmentNameByBuildId($select_build_id);

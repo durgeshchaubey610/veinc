@@ -224,6 +224,29 @@ class Model_ConferenceSchedule extends Zend_Db_Table_Abstract {
         return false;
     }
 
+    public function checkTenantConfRoomByBuidingId($building_id,$role_id){
+        $db = Zend_Db_Table::getDefaultAdapter();
+        if ($building_id != '') {
+            $select = $db->select()
+                    ->from(array('cr' => 'conference_room'))
+                    ->joinInner(array('cba' => 'confroom_building_access'), 'cr.cid = cba.room_id')
+                    ->where('building_id=?', $building_id);
+                if($role_id==7)
+                $select->where('cba.tenant_user=?', 1);   
+                if($role_id==5)
+                $select->where('cba.tenant_admin=?', 1);         
+                $sql = $select->__toString();
+                //echo "$sql\n";
+
+                
+            $res = $db->fetchAll($select);
+            return ($res && sizeof($res) > 0) ? sizeof($res) : 0;
+        }
+        return false;
+    }
+
+   
+
     public function getcrvaliddays($building_id, $date) {
         $days=date("w",strtotime($date));
 

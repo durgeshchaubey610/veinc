@@ -41,30 +41,293 @@ class WorkorderController extends Ve_Controller_Base {
      * 
      */ 
     public function indexAction(){
+
+		if (!Zend_Auth::getInstance()->hasIdentity())
+		$this->_redirect('/index');
+
+		
+		$companyListing = '';
+        $buildingMapper = new Model_Building();
+        if ($this->roleId == '9') {
+            $companyListing = $buildingMapper->getCompanyBuilding($this->cust_id);
+       
+		} else {
+            $user_build_mod = new Model_UserBuildingModule();
+            $buildinglists = $user_build_mod->getUserBuildingIds($this->userId);
+        
+			if ($buildinglists) {
+				$build_ID = $buildinglists[0]['building_id'];
+                // $build_id_array = array();
+                foreach ($buildinglists as $buildlist){
+                        $build_id_array[] = $buildlist['building_id'];
+				 }
+                $companyListing = $buildingMapper->getBuildingList($build_id_array);
+            }
+
+        }	
+        $page = $this->_getParam('page', 1);
+        $order = $this->_getParam('order', 'woId');
+        $dir = $this->_getParam('dir', 'DESC');
+        $wolist = '';
+		$per_page_record = $this->_getParam('show', 1);
+        $show =  (isset($per_page_record))?$per_page_record:$_COOKIE['show_limit'];
+       
+		$build_ID = $this->_getParam('bid', '');  
+          
+        $select_build_id = $build_ID;
+        /*         * *******set building in cookie ********* */
+        $buildIds = array();
+        foreach ($companyListing as $cl) {
+            $buildIds[] = $cl['build_id'];
+        }
+        if ($build_ID == 'all') {
+            $set_cookie = setcookie('build_cookie', '', time() + (86400 / 24), "/");
+        }
+        if (empty($build_ID) && (isset($_COOKIE['build_cookie']) && in_array($_COOKIE['build_cookie'], $buildIds))) {
+            $build_ID = $_COOKIE['build_cookie'];
+        } else {
+            $set_cookie = setcookie('build_cookie', $build_ID, time() + (86400 / 24), "/");
+            if ($build_ID == 'all') {
+                $build_ID = '';
+                $set_cookie = setcookie('build_cookie', '', time() + (86400 / 24), "/");
+            }
+        }
+
+        //$_COOKIE['build_cookie'];
+
+        $woModel = new Model_WorkOrder();
+        $search_array = array();
+
+        if (isset($_REQUEST['submitform'])) {
+            if (isset($_POST['search_chkboxstatus']) && $_POST['search_chkboxstatus'] != '') {
+                $search_array['search_status'] = $_POST['search_chkboxstatus'];
+
+                setcookie('search_chkboxstatus', serialize($_POST['search_chkboxstatus']), 2147483647, '/');
+                
+            } else {
+                setcookie('search_chkboxstatus', '', 2147483647, '/');
+                setcookie('show_limit', serialize($_POST['show_limit']), 2147483647, '/');
+            }
+        } elseif (!isset($search_array['search_chkboxstatus']) && isset($_COOKIE['search_chkboxstatus'])) {
+            $search_array['search_status'] = unserialize($_COOKIE['search_chkboxstatus']);
+            
+        }
+        
+        $show = $this->_getParam('show', '');
+        if($show != ""){
+            setcookie('show_limit', $show, 2147483647, '/');
+        }else{
+           $show =  $_COOKIE['show_limit'];
+        }       
+
+        if(unserialize($show)){
+            $show =  unserialize($show);
+        }
+        //if(!is_int($show) || $show==""){
+        if($show==""){
+            $show = 25;
+        }
+
+		
+        $category_name = $this->_getParam('category_name', '');
+        if ($category_name != '') {
+            $search_array['category_name'] = addslashes($category_name);
+            $this->view->category_name = $category_name;
+        }
+
+        $tenant_name = $this->_getParam('tenant_name', '');
+        if ($tenant_name != '') {
+            $search_array['tenant_name'] = addslashes($tenant_name);
+            $this->view->tenant_name = $tenant_name;
+        }
+
+        $search_wo = $this->_getParam('search_wo', '');
+        if ($search_wo != '') {
+            $search_array['search_wo'] = $search_wo;
+            $this->view->search_wo = $search_wo;
+        }
+
+        $from_date = $this->_getParam('from_date', '');
+        if ($from_date != '') {
+            $search_array['from_date'] = date("Y-m-d", strtotime($from_date));
+            $this->view->from_date = date("Y-m-d", strtotime($from_date));
+        }
+
+        $to_date = $this->_getParam('to_date', '');
+        if ($to_date != '') {
+            $search_array['to_date'] = date("Y-m-d", strtotime($to_date));
+            $this->view->to_date = date("Y-m-d", strtotime($to_date));
+        }
+
+
+        if ($companyListing != '') {
+
+
+            /* if($this->roleId=='9'){ */
+            if ($build_ID == '') {
+				
+                $buildIds = array();
+                foreach ($companyListing as $cl) {
+                    $buildIds[] = $cl['build_id'];
+                }
+               $wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array,$page, $show);
+               $wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
+            } else {
+                $wolist = $woModel->getBuildingWorkOrder($build_ID, $order, $dir, $search_array,$page, $show);
+              $wolistcount = $woModel->getBuildingWorkOrderNew($build_ID, $order, $dir, $search_array);
+            }
+			
+			
+            /* }else{
+              //$eguModel = new Model_EmailGroupUsers();
+              //$egulist =  $eguModel->getGroupIdByUser($this->userId);
+              //$eg_array = array();
+
+              $catIds = array();
+              $catModel = new Model_Category();
+              $catlist = $catModel->getCategoryByUser($this->userId,$build_ID);
+              foreach($catlist as $cl){
+              $catIds[] = $cl['cat_id'];
+              }
+
+              $catEmaillist =  $catModel->getCategoryByEmailUser($this->userId,$build_ID);
+
+              foreach($catEmaillist as $cel){
+              if(!in_array($cel->cat_id,$catIds)){
+              $catIds[] = $cel->cat_id;
+              }
+              }
+
+              $wolist = $woModel->getWorkOrderByCatIds($catIds);
+              } */
+        }
+        // from here
+        $total_rows = $wolistcount;
+        $no_of_records_per_page = $show;
+        $total_pages = ceil($total_rows / $no_of_records_per_page);
+         
+        $this->view->total_pages = $total_pages;
+        $this->view->pageno = $page;
+        $this->view->records = sizeof($wolist);
+        
+        
+        $pageObj = new Ve_Paginator();
+        //$paginator = $pageObj->fetchPageDataResult($wolist, $page, $show);
+        $paginatorNew = $pageObj->fetchPageDataResultNew($wolist, $wolistcount, $page, $show);
+        //$lastactivity = $woModel->get_last_activity();
+        $this->view->page = $page;
+        $view_type = $this->_getParam('view_type', 'line');
+        $this->view->custID = $this->cust_id;
+        $this->view->companyListing = $companyListing;
+        $this->view->select_build_id = $build_ID;
+        $this->view->wolist = $paginatorNew;//$paginator;
+        $this->view->order = $order;
+        $this->view->dir = $dir;
+        $this->view->view_type = $view_type;
+        $this->view->roleId = $this->roleId;
+        $this->view->acessHelper = $this->accessHelper;
+        $this->view->dline_location = $this->dline_location;
+        $this->view->ddetail_location = $this->ddetail_location;
+        $this->view->createnew_location = $this->createnew_location;
+        $this->view->closewo_location = $this->closewo_location;
+        $this->view->userId = $this->userId;
+        // refresh outo load  
+        $getsult = $this->gettotalAction();       
+        $this->view->count = $getsult;
+        $this->view->show = $show;
+        if (isset($_REQUEST['submitform'])) {
+            if (isset($_POST['search_chkboxstatus']) && $_POST['search_chkboxstatus'] != '') {
+                $this->view->statusCookieDetails = $_POST['search_chkboxstatus'];
+            }
+        } else {
+
+            $statusCookie = new Zend_Controller_Request_Http();
+            $statusCookieDetails = $statusCookie->getCookie('search_chkboxstatus');
+            $statusCookieDetails = unserialize($statusCookieDetails);
+            if ($statusCookieDetails != '') {
+                $this->view->statusCookieDetails = $statusCookieDetails;
+            }
+        }
+        $adminNamespace = new Zend_Session_Namespace('Admin_User');
+        $this->view->admin_role_id = $adminNamespace->role_id;
+
+ 
+
+
 		 if($this->roleId=='5' || $this->roleId=='7'){
-		 $tenant = new Model_Tenant();
-		 //$tenantuser = $tenant->getTenantById($this->userId);
+		
+			$tenantDefualtbuildinglists = $buildinglists;
+
+			$tId = $this->_getParam('tid');
+			if(isset($tId) && !empty($tId)){
+				$set_cookie = setcookie('tenant_company', $tId, time() + (86400 / 24), "/");
+			}
+		    $tenant = new Model_Tenant();
+			$tId  = $_COOKIE['tenant_company'];
+		if ($tId){				
+			$tenantCompanyList = $tenant->getTenantCompanies($this->userId);     
+			$tenantuser = $tenant->getTenanyUserByTenantGroup($tId);
+
+			
+			$this->view->tId = $tId;				
+			$this->view->tenantGroupListArr = $tenantCompanyList;
+		}		
+		else
+		$tenantuser = $tenant->getTenantByUser($this->userId);
+
 		 $tenantData = $tenant->getTenantByUser($this->userId);
 		 $tenantInfo = $tenantData[0];
 		 $page=$this->_getParam('page',1);
 		 $order=$this->_getParam('order','woId');
 		 $dir=$this->_getParam('dir','DESC');
-		 if($this->roleId=='7')		 
-		 $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir,$this->userId);
-		 else
-		 $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir);
+		 
+		 //for tanant Admin
+		 $userId = $this->userId;	
+		 if($this->roleId=='5'){	
+           $search_array['userId'] = $userId;
+ 
+			$wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array,$page, $show);
+			$wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
+		 }else if($this->roleId=='7'){		
+				
+			if (isset($tId)){	
+					// echo $userId;
+				$wolist = $this->woMapper->getTenantUserWorkOrder($tId,$order,$dir,$userId,$search_array);	
+				
+			}else{				
+				$wolist = $this->woMapper->getTenantUserWorkOrder($tenantInfo->tenantId,$order,$dir,$userId,$search_array);
+			}
+		   
+		 }		
+		//  if($this->roleId=='7')		 
+		//  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir,$this->userId);
+		//  else
+		//  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir);
 		 $pageObj=new Ve_Paginator();
-		 $paginator=$pageObj->fetchPageDataResult($wolist,$page,10);		 
+		 $paginator=$pageObj->fetchPageDataResult($wolist,$page,$show);		 
 		 $this->view->page = $page;
 		 $this->view->roleId = $this->roleId;
 		 //$this->view->tenantuser = $tenantuser[0];
 		 $this->view->wolist = $paginator;
 		 $this->view->order = $order;
 		 $this->view->dir = $dir;
+
+		 
+		 $this->tenantDefualtbuildinglists = $tenantDefualtbuildinglists;
 		 }
 	   $this->view->roleId = $this->roleId;
 	 }
-   
+    public function gettotalAction(){
+        $woModel = new Model_WorkOrder();        
+        $lastactivity = $woModel->get_last_activity();
+        $lastactivity1 = $woModel->get_last_activity1();
+        $lastactivity2 = $woModel->get_last_activity2();
+        //echo $total = count($lastactivity)+count($lastactivity1)+count($lastactivity2);
+        $total = $lastactivity + $lastactivity1 + $lastactivity2;
+        return $total;
+    } 
+
+
    /***********
     * create work order action
     */
@@ -136,7 +399,8 @@ class WorkorderController extends Ve_Controller_Base {
 	 * Save worke order
 	 */ 
 	public function saveworkorderAction(){
-		$data = $this->getRequest()->getPost();		
+		$data = $this->getRequest()->getPost();	
+						
 		if(isset($data) && $data['building']!=''){
 			$form_key = $data['form_key'];
 			$smsg = new Zend_Session_Namespace('message');
@@ -176,8 +440,20 @@ class WorkorderController extends Ve_Controller_Base {
 					$settimezone = new Model_TimeZone();
 					$settimezone -> setTimezone($data['building']);
 					/******************* end - set timezone through building id ****************************/
+									
+
 					
 					$insertData['tenant'] = $data['tenant'];
+					// for multi tenant and tenant panel					
+                    if(isset($_SESSION['Admin_User']['role_id']) && $_SESSION['Admin_User']['role_id']=="5" ){
+						if(isset($_COOKIE['tenant_company'])){
+						$tenant_company_arr = explode(",",$_COOKIE['tenant_company']);
+						if(isset($tenant_company_arr[0])){
+						  $insertData['tenant'] = $tenant_company_arr[0];
+						 }
+						}
+					}
+
 					$insertData['building'] = $data['building'];
 					if(isset($data['suite_location'])) $insertData['suite_location'] = $data['suite_location'];
 					if(isset($data['suite_location2'])) $insertData['suite_location2'] = $data['suite_location2'];
@@ -477,7 +753,23 @@ class WorkorderController extends Ve_Controller_Base {
 			$tenantData       = (array)$tenantInfo;//->toArray();
 			$sendmail = $this->woMapper->sendWorkOrderEmail($woId,$tenantData);
 			exit;
-		}		
+		}
+		
+		
+		public function ajaxworkordernotifyAction(){
+			$data = $this->getRequest()->getPost();	
+			//print_r($data);	
+			if($this->getRequest()->getMethod() == 'POST'){
+				$buildId = $data['tenant_buiding'];
+				$tenantIds = $data['tenant_location_info'];
+				$woModel = new Model_WorkOrder();
+
+				$last_recods = $woModel->getBuildingWorklastOrderDetail($buildId,$tenantIds);
+				echo json_encode($last_recods);
+				
+			}
+			exit(0);
+		}
 		
 }
 

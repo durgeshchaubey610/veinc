@@ -44,6 +44,36 @@ function showWorkOrder(woId) {
     }
 }
 
+
+function showTenatWorkOrder(woId) {
+
+    if (document.getElementById('workrequest_' + woId).style.display != "none") {
+        document.getElementById('workrequest_' + woId).style.display = "none";
+        $('#plus_' + woId).addClass("fa-plus");
+        $('#plus_' + woId).removeClass("fa-minus");
+        location.hash = '';
+    } else {
+        $('.loader').show();
+        $('.plus_min_icon').removeClass("fa-minus");
+        $('.plus_min_icon').addClass("fa-plus");
+        $('.tr-order').hide();
+        $('.order-detail').html('');
+        $('#plus_' + woId).removeClass("fa-plus");
+        $('#plus_' + woId).addClass("fa-minus"); 
+        $.ajax({
+            url: baseUrl + "tenant/orderdetail/woId/" + woId,
+            success: function (content) {
+                //$('.loader').hide();
+                $('#order_content_' + woId).html(content);
+                $('#workrequest_' + woId).show();
+                $('.loader').hide();
+                location.hash = '#' + woId;
+            }
+    
+        });
+    }
+    }
+
 function showByStatus(status) {
     document.search_form.submit();
 }
@@ -183,7 +213,8 @@ function updateWorkorder(woId) {
 
 function ValidateForm() {
 
-    var order_status = $('#order_status').val();
+   // var order_status = $('#order_status').val();
+    var order_status = $('#order_status').attr('selected','selected').val();
     var exist_schedule = $('#exist_schedule').val();
     var priority = $('#priority').val();
 
@@ -224,7 +255,7 @@ function ValidateForm() {
         
         time = $('#Time').val();
         slength = $('#length').val();
-        order_status = $('#order_status').val();
+        //order_status = $('#order_status').val(); //code commented by @dvk on 11 Dec 2023
         priority = $('#priority').val();
         work_order_id = $('#work_order_id').val();
         
@@ -233,7 +264,7 @@ function ValidateForm() {
                 $.ajax({
                     type: "POST",
                     url: baseUrl + 'dashboard/updateorder',
-                    data: {work_order_id:work_order_id, priority:priority, length: slength, Time: time,order_status:order_status},
+                    data: {work_order_id:work_order_id, priority:priority, length: slength, Time: time,order_status:order_status,current_wstatus:current_status},
                     success: function (msg) {
                         $('.loader').hide();
                         $.ajax({    
@@ -245,7 +276,7 @@ function ValidateForm() {
                                         $("#reloadworkorder").html(response);
                                       }
                              });
-                        console.log(msg);
+                        //console.log(msg);
                     }
                 });
         

@@ -60,6 +60,21 @@ class Model_WoNote extends Zend_Db_Table_Abstract {
         return false;
 	}
     
+    public function getWoNoteByWoIdInternalNo($woId){
+		$db = Zend_Db_Table::getDefaultAdapter();
+		if(!empty($woId)){
+		    $select = $db->select()  
+			->from(array('wn' => 'wo_note'))		
+			->joinLeft(array('u'=>'users'),'u.uid = wn.user_id',array('firstName', 'lastName'))	            		
+			 ->where( 'internal != ? ', 1 ) 		
+			 ->where( 'woId = ? ', $woId );  
+            $res = $db->fetchAll( $select );    
+			$res = json_encode($res);
+			$res = json_decode($res, true);
+            return ($res && sizeof($res)>0)? $res : false ;
+        }else
+        return false;
+	}
     
     /********delete Work Order Note********/	
 	public function deleteWoNote($wnId){

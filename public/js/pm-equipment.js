@@ -703,6 +703,7 @@ function attach_template() {
             $('.loader').hide();
         },*/
         success: function (data) {
+          
             //$("#tempalte-detail-view-change").html(data);
              $.ajax({
                  type: "POST",

@@ -361,7 +361,7 @@ if(strlen($descText)>=30){ ?>
                                                                     ?>
                                                                 <td style="background-color:#<?php echo $building_color[$wl->tenant] ?>">
                                                                    
-                                                                   <a href="javascript:void(0)" onclick="showTenatWorkOrder('<?php echo $wl->woId ?>')">
+                                                                   <a href="javascript:void(0)" onclick="showWorkOrder('<?php echo $wl->woId ?>')">
                                                                        <i id="plus_<?php echo $wl->woId ?>" class="fa fa-plus blackfont_color plus_min_icon"></i></a>
                                                               
                                                                 </td>
@@ -522,19 +522,19 @@ if(strlen($descText)>=30){ ?>
     var tenant_buiding = $('.fdw').attr('bid');
     var tenant_location_info = $('#tenant_data').attr('tenant_location_info');
     $.ajax({
-                    type: "POST",
-                    url: baseUrl + 'workorder/ajaxworkordernotify',
-                    data: {tenant_buiding: tenant_buiding,
-                        tenant_location_info:tenant_location_info
-                    },
-                    datatype: 'json',
-                    success: function (msg) {                      
-                       
-                        obj = JSON.parse(msg);                      
-                        $('.fdw').attr('last_work_order',obj.wo_number);
-                      
-                       // alert(obj.tenant);
-                    }
+            type: "POST",
+            url: baseUrl + 'workorder/ajaxworkordernotify',
+            data: {tenant_buiding: tenant_buiding,
+                tenant_location_info:tenant_location_info
+            },
+            datatype: 'json',
+            success: function (msg) {                      
+                
+                obj = JSON.parse(msg);                      
+                $('.fdw').attr('last_work_order',obj.wo_number);
+                
+                // alert(obj.tenant);
+            }
         });
 
 
@@ -575,6 +575,8 @@ if(strlen($descText)>=30){ ?>
                              }
 
                             });
+                        }else{
+                            $('.tenant_tabs .resp-tab-active').trigger('click');
                         }
                        // alert(obj.tenant);
                     }
@@ -598,7 +600,7 @@ if(strlen($descText)>=30){ ?>
     var hash = window.location.hash;
     if (hash != '') {
         hash = hash.replace('#', '');
-        showTenatWorkOrder(hash);
+        showWorkOrder(hash);
     }
 </script>
 
@@ -646,7 +648,6 @@ if(strlen($descText)>=30){ ?>
         
    });
 
-
     //$('.container-right').css('max-width','100%');
     
     //Fixed the responsive design issue with Tenant Admin - By Dadhi Vallabh
@@ -655,42 +656,7 @@ if(strlen($descText)>=30){ ?>
     var hash = window.location.hash;
     if (hash != '') {
         hash = hash.replace('#', '');
-        showTenatWorkOrder(hash);
+        showWorkOrder(hash);
     }
-
-
-
-
-
-    setInterval(function () {
-        $.ajax({
-            type: "POST",
-            url: baseUrl + 'tenant/checkstatus/',
-            data: {},
-            success: function (data) {
-                var content = $.parseJSON(data);
-                console.log("total1-" + content.count);
-                var tworkorder = $("#count").val();
-                console.log("total3-" + tworkorder);
-                if (parseInt(tworkorder) < parseInt(content.count)) {
-                    $.ajax({
-                        type: "POST",
-                        url: baseUrl + 'tenant/reloadworkorder/',
-                        data: {
-                            tid : $('.tenant_tabs .resp-tab-active').attr('tid')
-                        },
-                        success: function (response) {
-                            //alert(response);
-                            $("#reloadworkorder").html(response);
-                            $('.loader').hide();
-
-                        }
-                    });
-                }
-            }
-        });
-    }, 30000);
-
-    
 </script>
 

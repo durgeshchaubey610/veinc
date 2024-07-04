@@ -144,46 +144,8 @@
               </div>
               <!-- Split button -->
               <div class="form_field_div">
-			  <?php
-			      
-			  $wnModel = new Model_WoNote();
-													 $wnList = $wnModel->getWoNoteByWoId( $woData->woId);
-													 if($wnList){
-			  ?>
-			  <div class="table-responsive">
-			  <table>
+			
 			  
-			  <tr class='addnotetable'>
-				  <th>Date/Time </th>   
-				  <th> Notes/Details</th> 
-				  <th>Internal(Y/N) </th> 
-				  <th>Entered By</th> 
-				 <?php  if($this->admin_role_id == 1 || $this->roleId == 2  || $this->roleId == 3 || $this->roleId == 4 ) { ?> <th>Action</th> <?php } ?>
-			  </tr>
-			  <?php
-														 foreach($wnList as $wn){ ?>
-														 
-														 <tr> 
-														 <td><?php  $dateConversion = strtotime($wn['created_at']);
-																    echo date('Y-m-d H:i:s A', $dateConversion); ?></td> 
-														 <td><?php echo $wn['note']; ?></td> 
-														 <td align="center"><?php echo ($wn['internal']=='1')?'Yes':'No';?></td> 
-														 <td width="120" align="center"> <?php echo $wn['firstName'].' '.$wn['lastName'] ; ?></td>
-														 <?php  if($this->admin_role_id == 1 || $this->roleId == 2  || $this->roleId == 3 || $this->roleId == 4 ) { ?>
-															 <td width="60" align="center">
-															 <?php  if($this->admin_role_id == 1 || $this->roleId == 2  || $this->roleId == 3 || $this->roleId == 4 ) { ?>
-																<a class="close_bt_hide_cls" title="Edit" href="javascript:void(0)" onclick="showEditNote('<?php echo $wn['wnId'];?>')"><img src="<?php echo BASEURL . 'public/images/edit.png'?>" /></a>
-															 <?php } ?>
-															  <?php if($this->admin_role_id == 1) { ?>
-																<a class="close_bt_hide_cls" href="javascript:void(0);"  title="Delete" onclick="deleteNote('<?php echo $wn['wnId'];?>', '<?php echo $woData->woId;?>')"><img src="<?php echo BASEURL . 'public/images/delete.png'?>" /></a>
-															  <?php } ?>
-															  </td>
-														 <?php } ?>
-														 
-														<?php }  ?>
-			 
-			  </tr>
-			  </table> </div><?php } ?>
 			  <div class='clearfix'>  &nbsp; </div>
 			  </div>
 			  
@@ -284,15 +246,15 @@
               <div class="form_field_div">
 			  <?php
 			      
-			  $wnModel = new Model_WoNote();
-													 $wnList = $wnModel->getWoNoteByWoId( $woData->woId);
-													 if($wnList){
+				  $wnModel = new Model_WoNote();
+				  $wnList = $wnModel->getWoNoteByWoIdInternalNo( $woData->woId);
+				  if($wnList){
 			  ?>
 			  <div class="table-responsive">
 			  <table>
 			  
 			  <tr class='addnotetable'>
-				  <th>Date/Time </th>   
+				  <th>Date/Time</th>   
 				  <th> Notes/Details</th> 
 				  <th>Internal(Y/N) </th> 
 				  <th>Entered By</th> 
@@ -582,7 +544,20 @@ echo "<br>pro_prcentage".$pro_prcentage;
 								  
 								   </td>
 									 </tr>
-									 <?php } else if($whl->log_type=='notes'){ ?>   
+									 <?php } else if($whl->log_type=='notes'){ 
+										//if($whl->internal =='0' ){
+
+											//print_r($whl->current_value);
+										    if(!empty($whl->change_value) && !empty($whl->current_value)){
+												$change_value_data = json_decode($whl->change_value);
+											}
+											else if($whl->change_value){
+												$change_value_data = json_decode($whl->change_value);
+												//var_dump($change_value_data->internal);
+											}	
+										   if($change_value_data->internal =="0"){
+												
+										?>   
 									<tr>
 										  <td><?php echo ucfirst($whl->log_type);?></td>
 										  <td><?php echo $whl->firstName.' '.$whl->lastName;?></td>
@@ -591,10 +566,11 @@ echo "<br>pro_prcentage".$pro_prcentage;
 										  <?php $current_value_histoy=($whl->current_value!='')? $whl->current_value:'null'?>
 										  <td><?php if($whl->current_value!='' && $whl->change_value!=''){ echo HiSTORY_TEXT_EDIT; } else if($whl->change_value=='') { echo HiSTORY_TEXT_DLETED; } else { echo HiSTORY_NEW_TEXT_ADDED; } $notesdecode=json_decode($whl->change_value); ?> <a href="javascript:void(0)" onclick='historyofnotes(<?php echo $woData->building; ?>, <?php echo $whl->whId; ?> )' class="vend_tooltip"><i class="fa fa-file-text-o textFile"></i> </a>
 								   <a href="#add_history_notes_div" id="add_history_notes_div_href" class="modalbox" style="display:none;">&nbsp;</a>
-								  
+
 								   </td>
 									 </tr>
-									 
+									 <?php }?>
+
 									 <?php } else if($whl->log_type=='Attachment'){ ?>   
 									<tr>
 										  <td><?php echo ucfirst($whl->log_type);?></td>
@@ -635,9 +611,34 @@ echo "<br>pro_prcentage".$pro_prcentage;
                               
                             </div>
                         </div>
+
+
                         <!-- /.panel-body -->
                     </div>
+
+					
         </div>
+
+		<div id="add_history_notes_div" style="display:none" > </div>
+		<div id="add_new_description_div" style="display:none; width:410px;" >
+
+    <h1>Description Of Work</h1>
+    <div class="desc_row">
+        <div id="work_current_description" >  </div>
+        <div style="text-align:center"><span style="font-size:20px; font-weight:bold;"><i class="fa fa-arrow-circle-down big-arrow"></i>
+            </span> </div>
+        <div id="work_change_description" >  </div>
+    </div>
+    <div class="buttons">
+        <button type="button" name="cancel" id="cancel" value="Cancel" onclick="cancelWoDesc()">Cancel</button>
+    </div> 
+</div>
+<div id="add_new_labor_div" style="display:none" > </div> 
+<div id="add_history_building_div" style="display:none" > </div> 
+<div id="add_history_material_div" style="display:none" > </div>
+<div id="add_history_outside_div" style="display:none" > </div>
+
+
 </div> 
 </div>
 

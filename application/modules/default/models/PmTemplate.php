@@ -1336,15 +1336,15 @@ class Model_PmTemplate extends Zend_Db_Table_Abstract {
         $db = Zend_Db_Table::getDefaultAdapter();
 
         $select = $db->select()
-                ->from(array('t1'=>'pm_au_template_task'),array('AU_Template_Task_ID'=>'t1.AU_Template_Task_ID','Task_Instruction'=>'t1.Task_Instruction','AU_Frequency_ID'=>'t1.AU_Frequency_ID', 'Start_date'=>'t1.Start_date','Seasonal_Task'=>'t1.Seasonal_Task','Startdate_month'=>'t1.Startdate_month'))
+                ->from(array('t1'=>'pm_au_template_task'),array('AU_Template_Task_ID'=>'t1.AU_Template_Task_ID','Task_Instruction'=>'t1.Task_Instruction','AU_Frequency_ID'=>'t1.AU_Frequency_ID', 'Start_date'=>'t1.Start_date','Seasonal_Task'=>'t1.Seasonal_Task','Startdate_month'=>'t1.Startdate_month','Interval_Value'=>'t1.Interval_Value'))
                 ->joinLeft(array('t2' => 'email_group'), 't2.id = t1.Assigned_to', array('group_name' => 't2.group_name'))
                 ->where("t1.Parent_ID=?", 0);
         if (!empty($desig_id)) {
             $select = $select->where('t1.AU_Template_Designation_ID=?', $desig_id);
         }
         $select = $select->order('t1.view_order ASC');
-        //echo $select;
-        //die;
+        // echo $select;
+        // die;
         $res = $db->fetchAll($select);
         return $res;
         //return ($res && sizeof($res) > 0) ? $res : false;
@@ -2199,7 +2199,9 @@ class Model_PmTemplate extends Zend_Db_Table_Abstract {
                     ->from(array('patn' => 'pm_au_template_name'))
                     ->joinInner(array('patt' => 'pm_au_template_typedesignation'), 'patn.AU_Template_Name_ID = patt.AU_Template_Name_ID')
                     ->where("BuildingID =?", $build_ID)
-                    ->order('patn.AU_Template_Name');
+                    ->order(array('patn.AU_Template_Name ASC', 'patt.AU_TypeDesignation ASC'));
+                    //ordering changed and commented By Dadhi 
+                    //->order('patn.AU_Template_Name DESC, patt.AU_TypeDesignation DESC');
         }
 
         $res = $db->fetchAll($select);
@@ -2985,8 +2987,9 @@ Where t1.AU_Template_Designation_ID='" . $desig_id . "'");
         $db = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select();
         $select->from(array('t1' => 'pm_au_equipment_name'), array('equipmentnameid' => 't1.AU_Equipment_Name_ID', 'AU_Equipment_Name' => 't1.AU_Equipment_Name', 'BuildingID' => 't1.BuildingID'))
-                     ->where('t1.BuildingID  = ?', $buildingId);
-        
+                     ->where('t1.BuildingID  = ?', $buildingId)
+                     ->order('AU_Equipment_Name ASC');
+                     
         $res = $db->fetchAll($select);
         foreach ($res as $data) {
             $datas[] = (array) $data;
@@ -3010,10 +3013,10 @@ Where t1.AU_Template_Designation_ID='" . $desig_id . "'");
                 ->group(array('t2.AU_Equipment_Detail_ID'))
                 ->where('t2.BuildingID  = ?', $buildingId)
                 ->where('t1.AU_Equipment_Name  = ?', $sortingData['eqname']);
-        if (!empty($sortingData['eqparts'])) {
-            //$select->where('t2.Equipment_Location LIKE ?', $sortingData['eqparts'].'%');
-            $select->where("t2.Equipment_Floor LIKE '" . $a1 . "%' or t2.Equipment_Unit LIKE '" . $a1 . "%' or t2.Equipment_Location LIKE '" . $a1 . "%' or t2.Equipment_Make_Model LIKE '" . $a1 . "%' or t5.AU_TypeDesignation LIKE '" . $a1 . "%'");
-        }
+            if (!empty($sortingData['eqparts'])) {
+                //$select->where('t2.Equipment_Location LIKE ?', $sortingData['eqparts'].'%');
+                $select->where("t2.Equipment_Floor LIKE '" . $a1 . "%' or t2.Equipment_Unit LIKE '" . $a1 . "%' or t2.Equipment_Location LIKE '" . $a1 . "%' or t2.Equipment_Make_Model LIKE '" . $a1 . "%' or t5.AU_TypeDesignation LIKE '" . $a1 . "%'");
+            }
 
         //$select->ORwhere('t2.Equipment_Make_Model LIKE ?', $sortingData['eqparts'].'%');
         //$sql = $select->__toString();

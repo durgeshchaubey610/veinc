@@ -2,6 +2,34 @@
 echo $this->headScript()->appendFile($this->baseUrl() . '/public/js/conference.js'); 
 $tenantInfo = $this->tenantuser;
 $isvId="";
+$userId = Zend_Auth::getInstance()->getStorage()->read()->uid;
+
+$userRoleID = Zend_Auth::getInstance()->getStorage()->read()->role_id;
+
+$tenantcountcrRoom = 0;
+if ($userRoleID == 5 || $userRoleID == 7) {
+    $tenant = new Model_Tenant();
+    $tenantuser = $tenant->getTenantByUser($userId); 
+    if(isset($tenantuser[0]->buildingId) && !empty($tenantuser[0]->buildingId)){
+        $buildingId = $tenantuser[0]->buildingId;
+        $cscheduleMapper = new Model_ConferenceSchedule();
+          //Tenant Admin
+        if($userRoleID == 5){          
+            $tenantcountcrRoom = $cscheduleMapper->checkTenantConfRoomByBuidingId($buildingId,5);
+		}
+        //Tenant User
+        if($userRoleID == 7){
+          $tenantcountcrRoom = $cscheduleMapper->checkTenantConfRoomByBuidingId($buildingId,7);
+         
+          
+        }
+       
+   
+    }
+}
+
+
+
 //echo $tenantInfo->role_id;
 if($tenantInfo->role_id==7){
     $isvId=$tenantInfo->uid;
@@ -42,10 +70,10 @@ if($tenantInfo->role_id==7){
 		$yn = date("Y") + 1;
 	}
 	
-	
+	$today_day = date('j');
 	$tdate = date('t', mktime(0, 0, 0, $month, 1, $year));
 	$add_date= 06 - date("w",strtotime("$tdate-$month-$year"));
-        $add_date=sprintf("%02d",$add_date);
+    $add_date=sprintf("%02d",$add_date);
 	$from_date = $y . '-' . $m . '-' . '01';
 	$to_date = $y . '-' . $mn . '-' .$add_date;
 	$cscheduleMapper = new Model_ConferenceSchedule();
@@ -62,7 +90,7 @@ if($tenantInfo->role_id==7){
 	?>
 
 <div id="calender_change">
-	<div style='text-align:center;'>
+	<div style='text-align:left;'>
 		<h2>
 			<a href="#" onclick="changeMonth('<?php echo $mp; ?>', '<?php echo $yp; ?>','<?php echo $isvId; ?>')">< </a>
 			<?php echo $mName." ".$year; ?>
@@ -93,6 +121,7 @@ if($tenantInfo->role_id==7){
 	$running_day1  = $running_day-1;
 	$running_day = 0;
 
+	$tenent_calender_access = false;
 	/* print "blank" days until the first of the current week */
 
 	/* print "blank" days until the first of the current week */
@@ -113,6 +142,7 @@ if($tenantInfo->role_id==7){
 	
 	/* keep going with days.... */
         $roomname=array();
+
 	for ($list_day = 1; $list_day <= $days_in_month; $list_day++):
 		
 		if($list_day > $days ){
@@ -120,7 +150,8 @@ if($tenantInfo->role_id==7){
 		}else if($running_day==0 || $running_day==6 ){
 			$calendar.= '<td class="calendar-day weekday">';
 		}else{
-			$calendar.= '<td class="calendar-day">';
+			$today_class = ( $list_day==$today_day)?"today":'';
+			$calendar.= '<td class="calendar-day '.$today_class.'">';
 		}
 		
 		if($list_day > $days ){
@@ -171,10 +202,11 @@ if($tenantInfo->role_id==7){
                                       // print_r($bookingDetailsVal); 
                                     
                                         //getcrDetailsuseraccess
+										$tenent_calender_access = true;
 										$rname= md5($bookingDetailsVal->room_name);
                                         $calendar.= '<div  class="tooltip-vcm  book_week book_det_container  '.$rname.' ">';
                                         $roomname[$rname]=$rname;
-                                        $calendar.='<div>'. $bookingDetailsVal->start_time . ' - ' . $bookingDetailsVal->end_time ;
+                                        $calendar.='<div class="mtime">'. $bookingDetailsVal->start_time . ' - ' . $bookingDetailsVal->end_time ;
                                         $calendar.= "&nbsp;&nbsp;".$bookingDetailsVal->room_name.'</div>';
                                         $calendar.= '<span><div class="t_name">'.$tndetail[0]->tenantName.'</div>';
                                         $calendar.= '<div class="r_name">'.$bookingDetailsVal->room_name.'</div>';
@@ -187,6 +219,7 @@ if($tenantInfo->role_id==7){
                                                         . '<a href="javascript:void(0);" onclick="deleteCrRoom('.$bookingDetailsVal->crid.')" class="delCat" data-id="" title="Delete">'
                                                 . '<img src="'.BASEURL . 'public/images/delete.png'.'"></a></div>';                                                       
                                     else:
+										
                                         $calendar.= '<div  class="book_week book_det_container book-details-'.$i.' book_hot_schedule'.$i.'">';
                                         $calendar.='<div>'. $bookingDetailsVal->start_time . ' - ' . $bookingDetailsVal->end_time ;
                                         $calendar.= "&nbsp;&nbsp;".$bookingDetailsVal->room_name.'</div>';
@@ -260,4 +293,38 @@ foreach($roomname as $val){
 }
 	/* sample usages */
 	?>
+	<?php
+	if(empty($tenantcountcrRoom)){?>
+		<script type="text/javascript">			
+	       window.location.href = baseUrl+'/tenant/noaccess';
+	  </script>
+	<?php }	?>
+<script type="text/javascript">
+$(".calendar-day .readmore").click(function(){
+    $(this).parent().parent().addClass("moreinfo");
+    $(this).parent().find('.tooltip-vcm').removeClass('hide').show();
+    $(this).parent().find('.tooltip-vcm').show();
+    $(this).hide();
+});
 
+if($(".calendar-day .conbooking").length>0){
+	$(".nav .conavailability").show();
+}else{
+	$(".nav .conavailability").hide();
+}
+
+
+$('.calendar-day').each(function () {
+    var meetingCount = $(this).find('.tooltip-vcm').length;       
+     if (meetingCount >3 ) {
+        jQuery(this).find('.readmore').show();
+        $(this).find('.readmore').css("display", "block");
+        $(this).find('.tooltip-vcm').each(function (index) {
+            if(index>2){
+               $meetingDiv =  $(this);
+               $meetingDiv.addClass("hide");
+            }
+        });
+     }   
+});
+</script>

@@ -174,7 +174,8 @@ class Model_User extends Zend_Db_Table_Abstract {
 				 ->joinInner(array('cp' => 'company'), 'u.cust_id = cp.cust_id', array('companyName', 'cust_id'))
 				 ->where('u.remove_status = ?', '0')
 				 ->where('u.role_id = ?', '9')
-				 ->where('cp.status = ?', '1');				 				 
+				 ->where('cp.status = ?', '1')
+                 ->order('cp.companyName ASC');			 				 
 			$res = 	 $db->fetchAll($select);
         return ($res && sizeof($res)>0)? $res : false ;
 	}

@@ -56,7 +56,9 @@ class IndexController extends Ve_Controller_Base {
 
             // Get our form and validate it
             $formData = $this->_request->getPost();
-
+            if(!isset($_COOKIE['tenant_version']) ){
+                setcookie('tenant_version', '23.01', time() + (86400 / 24), "/");
+            }
             if (!empty($formData['remember'])) {
                 setcookie('user_id', $formData['email'], time() + (10 * 365 * 24 * 60 * 60), '/');
                 setcookie('password', base64_encode($formData['password']), time() + (10 * 365 * 24 * 60 * 60), '/');
@@ -387,6 +389,9 @@ class IndexController extends Ve_Controller_Base {
         $uid = $_SESSION['Admin_User']['user_id'];
         $updateUser = $userModel->updateUser(array("ip" => ""), $uid);
 
+        if(isset($_COOKIE['tenant_company'])){
+            setcookie('tenant_company', "", time() -3600, '/');
+        }
 
         $Auth->doLogout();
         //echo 'dddddd'; die;
@@ -588,4 +593,5 @@ class IndexController extends Ve_Controller_Base {
         }
     }
 
+   
 }

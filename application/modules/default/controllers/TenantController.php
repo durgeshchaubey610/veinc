@@ -17,6 +17,11 @@ class TenantController extends Ve_Controller_Base {
 
          //called when object intiatate
          $this->tenantModel = new Model_Tenant();
+
+         $this->dline_location = 1;
+         $this->ddetail_location = 2;
+         $this->createnew_location = 3;
+         $this->closewo_location = 4;
     }
 
     // Call befor any action and check is user login or not
@@ -129,7 +134,7 @@ class TenantController extends Ve_Controller_Base {
 
         $userModel = new Model_User();
         $userDetail = $userModel->isUserExist($email);
-
+        //echo false;
         if (!empty($userDetail))
             echo true;
         else
@@ -137,6 +142,15 @@ class TenantController extends Ve_Controller_Base {
 
         exit();
     }
+
+
+    public function checktenantinfoAction() {
+        $tid = $this->_getParam('tid');
+        $tenantModel = new Model_Tenant();
+        $userDetail = $tenantModel->checkTenantInfoByTenantGroupId($tid,$this->userId);
+       return $userDetail;       
+    }
+
 
     public function createtenantAction() {
         $data = $this->getRequest()->getPost();
@@ -261,12 +275,13 @@ class TenantController extends Ve_Controller_Base {
                 $tuser = new Zend_Session_Namespace('tenant_user');
                 $tuser->detail = $detail;
                 $res = $this->getWelcomeLetter($detail);
+               echo $res['content']; 
             } else {
                 $res = false;
             }
 
 
-            print_r($res['content']);
+           // print_r($res['content']);
         }
         exit();
     }
@@ -298,9 +313,121 @@ class TenantController extends Ve_Controller_Base {
                 foreach ($buildinglists as $buildlist)
                     $build_id_array[] = $buildlist['building_id'];
                 $companyListing = $buildingMapper->getBuildingList($build_id_array);
+             
+               
             }
         }
         $build_ID = $this->_getParam('bid', '');
+        foreach ($companyListing as $cl) {
+            $buildIds[] = $cl['build_id'];
+        }
+        if (empty($build_ID) && (isset($_COOKIE['build_cookie']) && in_array($_COOKIE['build_cookie'], $buildIds)))
+            $build_ID = $_COOKIE['build_cookie'];
+        else
+            $set_cookie = setcookie('build_cookie', $build_ID, time() + (86400 / 24), "/");
+        $msg = '';
+        if ($msgId == 1) {
+            $msg = 'Tenant user has been created successfully.';
+        }
+        if ($msgId == 2) {
+            $msg = 'Tenant user has been updated successfully.';
+        }
+        if ($msgId == 3) {
+            $msg = 'Tenant has been deleted successfully.';
+        }
+        $tm = new Zend_Session_Namespace('tenant_message');
+        if (!isset($tm->msg) && $msgId != 0) {
+            $tm->msg = $msg;
+            $tparam = ($tId != 0) ? '/tId/' . $tId : '';
+            $this->_redirect('/tenant/users/bid/' . $build_ID . '' . $tparam);
+        }
+        $this->view->companyListing = $companyListing;
+        $this->view->custID = $this->cust_id;
+        $this->view->roleId = $this->roleId;
+        $tenantList = '';
+        $tenant = new Model_Tenant();
+         
+        //if(empty($search_array)){
+            if ($this->roleId == '5') {
+                $tenantList = $tenant->getTenantById($this->userId);
+                $this->view->select_build_id = $build_ID;
+            } else {
+                if ($build_ID != '') {
+                    $tenantList = $tenant->getTenantByBuildingId($build_ID);
+                    $this->view->select_build_id = $build_ID;
+                } else {
+                    if ($companyListing != '') {
+                        $tenantList = $tenant->getTenantByBuildingId($companyListing[0]['build_id']);
+                        $this->view->select_build_id = $companyListing[0]['build_id'];
+                        $build_ID=$companyListing[0]['build_id'];
+                    }
+                }
+            }        
+            $nottenant="";
+            $show = $this->_getParam('show', '');
+           // print_r($show);
+           // die;
+            if($show==""){
+               $show=10; 
+            }
+            $search_array = array_map("addslashes", $search_array);
+            $search_array = array_map("addslashes", $search_array);
+            $search_array = array_map("addslashes", $search_array);
+            if(!empty($search_array))
+            $tenantList = $tenant->gettenantsearchresult($build_ID, $search_array);
+            
+          
+            if($show!='all'){
+                $page = $this->_getParam('page', 1);
+                $pageObj = new Ve_Paginator();
+                $paginator = $pageObj->fetchPageDataResult($tenantList, $page, $show);            
+                $this->view->crDetails = $paginator;
+                $this->view->tenantList = $paginator;
+            }else{
+                $this->view->tenantList = $tenantList;
+            }
+            $this->view->show=$show;
+            $this->view->acesshelper = $this->accessHelper;
+            $this->view->tenant_location = $this->tenant_location;
+            
+            $this->view->select_build_id = $build_ID;
+            $this->view->tId = $tId;
+            $this->view->userId = $this->userId;
+    }
+
+    public function tenantoptionsAction() {
+        $companyListing = '';
+        $search_array = array();
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $data = $this->getRequest()->getPost();
+            $search_array['search_by'] = $data['search_by'];
+            $search_array['search_value'] = $data['search_value'];
+            $this->view->search = $search_array;
+        }
+        $msgId = $this->_getParam('msg', 0);
+        $tId = $this->_getParam('tId', 0);
+        $tuid = $this->_getParam('id');
+        $bid = $this->_getParam('bid');                  
+
+        $buildingMapper = new Model_Building();
+        
+        if ($this->roleId == '9') {
+            $companyListing = $buildingMapper->getCompanyBuilding($this->cust_id);
+        } else {
+            $user_build_mod = new Model_UserBuildingModule();
+
+            $buildinglists = $user_build_mod->getUserBuildingIds($this->userId);
+            if ($buildinglists) {
+                $build_id_array = array();
+                foreach ($buildinglists as $buildlist)
+                    $build_id_array[] = $buildlist['building_id'];
+                $companyListing = $buildingMapper->getBuildingList($build_id_array);
+             
+               
+            }
+        }
+        $build_ID = $this->_getParam('bid', '');
+       
         foreach ($companyListing as $cl) {
             $buildIds[] = $cl['build_id'];
         }
@@ -374,7 +501,272 @@ class TenantController extends Ve_Controller_Base {
             $this->view->select_build_id = $build_ID;
             $this->view->tId = $tId;
             $this->view->userId = $this->userId;
+        
+        
+
+
+        unset($_COOKIE['by_wonumber']);
+        $pmTemplate = new Model_PmTemplate();
+        $user_id = $_SESSION['Zend_Auth']['storage']->uid;
+        $cust_id = $_SESSION['Zend_Auth']['storage']->cust_id;
+        $role_id = $_SESSION['Zend_Auth']['storage']->role_id;
+        $companyListing = '';
+        $buildingMapper = new Model_Building();
+        if ($role_id == '9') {
+            $companyListing = $buildingMapper->getCompanyBuilding($cust_id);
+        } else {
+            $user_build_mod = new Model_UserBuildingModule();
+
+            $buildinglists = $user_build_mod->getUserBuildingIds($user_id);
+            if ($buildinglists) {
+                $build_id_array = array();
+                foreach ($buildinglists as $buildlist)
+                    $build_id_array[] = $buildlist['building_id'];
+                $companyListing = $buildingMapper->getBuildingList($build_id_array);
+            }
+        }
+        foreach ($companyListing as $cl) {
+            $buildIds[] = $cl['build_id'];
+        }
+
+        $build_ID = $this->_getParam('bid', '');
+        if (empty($build_ID) && (isset($_COOKIE['build_cookie']) && in_array($_COOKIE['build_cookie'], $buildIds))) {
+            $build_ID = $_COOKIE['build_cookie'];
+        } else {
+            setcookie('build_cookie', $build_ID, time() + (86400 / 24), "/");
+        }
+
+        if ($companyListing != '') {
+            if ($build_ID != '')
+                $select_build_id = $build_ID;
+            else
+                $select_build_id = $companyListing[0]['build_id'];
+        }
+        $page = $this->_getParam('page', 1);
+        $show = $this->_getParam('show', '');
+        if($show != ""){
+            setcookie('show_limit', $show, 2147483647, '/');
+        }else{
+           $show =  $_COOKIE['show_limit'];
+        }
+        if($show==""){
+            $show = 5;
+        }
+        $this->view->companyListing = $companyListing;
+        $this->view->select_build_id = $select_build_id;
+        $workorderList = $pmTemplate->getWorkorderListByEquipment($select_build_id, $data = 0);
+        $allEquipment = $pmTemplate->getallEquipmentNameByBuildId($select_build_id);
+        $this->view->workorderList = $workorderList;
+        
+        //Email Template
+        $email_group_model = new Model_EmailGroup();
+        $emailGroup = $email_group_model->get_email_group_by_building_id_PM($select_build_id);
+       
+        $this->view->email_group = $emailGroup;
+       
+        $pageObj = new Ve_Paginator();
+        $paginator = $pageObj->fetchPageDataResult($workorderList, $page, $show);
+        
+        $pmCompleteJobTime = $pmTemplate->getPmCompleteJobTime($select_build_id);
+        $this->view->workorderList = $paginator;
+
+        $this->view->allEquipment = $allEquipment;
+        $this->view->custID = $cust_id;
+        $this->view->userId = $user_id;
+        $this->view->page = $page;
+        $this->view->show = $show;
+        $this->view->pmCompleteJobTime = $pmCompleteJobTime[0];
+
     }
+
+
+    public function checktenantuseremailAction(){
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $email = $this->_getParam('email');
+        $bid = $this->_getParam('bid');
+		$tenantModel = new Model_Tenant();
+		$tenantDetail = $tenantModel->checkTenantUserEmail($email,$bid);
+        // check allow
+        $data = array();
+        $data['email'] = $email;
+        $data['bid'] = $bid;
+        $allowtenantDetail = $tenantModel->filterTenentMultiUserList($data);  
+       
+
+
+        $html = '';  
+        $html .= '<tr>';                             
+        $html .= '<th><strong>User Name</strong></th>';
+        $html .= '<th><strong>Email Address</strong></th>';
+        $html .= '<th><strong>Building Name</strong></th>';
+        $html .= '<th><strong>Location</strong></th>';
+
+         $html .= '</tr>';
+        if(isset($tenantDetail[0]) && !empty($tenantDetail)){
+       
+        $html .= '<tr id="userdetail" class"userdetail" data-userid='.$tenantDetail[0]->UserID.'  data-buildingid='.$tenantDetail[0]->BuildingId.' data-tenantid='.$tenantDetail[0]->TenantId.'>';
+        $html .= '<td>'.$tenantDetail[0]->User_First_Name .' '.$tenantDetail[0]->User_Last_Name.'</td>';
+        $html .= '<td>'.$tenantDetail[0]->User_EMail.'</td>';
+        $html .= '<td>'.$tenantDetail[0]->Building_Name.'</td>';
+        $html .= '<td>'.$tenantDetail[0]->User_Suit_Location.'</td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
+        $html .= '<td>';
+            
+        $html .= '<div class="tntopt-btn-section">
+               <a id="byequipment" type="button" class="btn btn-csttm btn-success group-btn-custom" href="">Cancel</a>
+               <a id="addtenantOption" type="button" class="btn btn-csttm btn-success" href="javascript:void(0);" onclick=addTenantOption('.$tenantDetail[0]->BuildingId.','.$tenantDetail[0]->UserID.','.$tenantDetail[0]->TenantId.');>Add</a>';
+        }
+        $html .= '</td>';
+        $html .= '</tr>';
+
+        if(empty($allowtenantDetail)){
+          echo $html;
+        }
+     
+	 }
+
+
+    public function filtertenantoptionAction(){
+        $this->_helper->layout()->disableLayout();
+        $cust_id = $_SESSION['Zend_Auth']['storage']->cust_id;
+        $role_id = $_SESSION['Zend_Auth']['storage']->role_id;
+        $companyListing = '';
+        $buildingMapper = new Model_Building();
+
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $email = $this->_getParam('email');
+        $data = $this->_request->getParams();
+		$tenantModel = new Model_Tenant();
+		$multiUserList = $tenantModel->filterTenentMultiUserList($data);
+      
+       // echo json_encode($tenantDetail);
+       //$this->view->multiUserList = $multiUserList;
+        $this->_helper->viewRenderer('sortmultiuserAction');
+       
+
+    }
+
+    
+   
+    public function checkmultiusersAction(){
+
+     
+        $finalResultArr = array();
+        $this->_helper->layout()->disableLayout();
+        $email = $this->_getParam('email');
+        $build_ID = $this->_getParam('bid');
+        $tenantModel = new Model_Tenant();
+        $data = $this->_request->getParams();
+        $data['email'] = $email;
+        $data['bid'] = $build_ID;
+        $tenantDetail = $tenantModel->filterTenentMultiUserList($data);  
+        if(isset($tenantDetail[0])){          
+		$tenantDetailArr = $tenantModel->checkTenantUserEmail($email,$build_ID);
+           echo json_encode((array)$tenantDetailArr[0]);
+        }else{
+            echo '0';
+        }
+       exit();
+              
+     }
+
+     public function checktenaninfoAction(){
+        $finalResultArr = array();
+        $this->_helper->layout()->disableLayout();
+        $email = $this->_getParam('email');
+        $build_ID = $this->_getParam('bid');
+        $tenantModel = new Model_Tenant();
+        $data = $this->_request->getParams();
+        $data['email'] = $email;
+        $data['bid'] = $build_ID;
+          if($email){          
+            $tenantDetailArr = $tenantModel->checkTenantUserEmail($email);
+            echo json_encode((array)$tenantDetailArr[0]);
+            }else{
+                echo '0';
+            }
+            exit();
+
+     }
+
+ public function sortmultiuserAction(){
+    $finalResultArr = array();
+    $this->_helper->layout()->disableLayout();
+    $data = $this->_request->getParams();
+    $email = $this->_getParam('email');
+    $tenantModel = new Model_Tenant();
+    $tenantDetail = $tenantModel->filterTenentMultiUserList($data);
+
+    setcookie('multiuser_search_email', $email, time() + (86400 / 24), "/");
+    
+
+    foreach($tenantDetail as $rec){
+        $temp_array = array();
+        $temp_array['data']['allowed_user_data'] = $rec;
+        $tenantlist =  $tenantModel->getTenatUserByUserid($rec->UserID);
+        $temp_array['data']['list'] = $tenantlist;
+        $finalResultArr[] = $temp_array;
+
+    }
+    $this->view->multiUserList = $tenantDetail;
+    $this->view->finalResultArr = $finalResultArr;
+    
+ }
+
+ public function addtenantusersAction(){
+           $this->_helper->layout()->disableLayout();
+         
+            $tenantUserData = array();
+            $tenantUserModel = new Model_TenantUser();
+            $bid = $this->_getParam('bid');
+            $uid = $this->_getParam('uid');
+            $tid = $this->_getParam('tid');
+            $ccenable = $this->_getParam('ccenable');
+            $suite_location = $this->_getParam('suitelocation');
+            $completenotification = $this->_getParam('completenotification');
+
+            $tenantUserData['userId'] = $uid;
+            $tenantUserData['tenantId'] = $tid;
+            $tenantUserData['suite_location'] =  $suite_location;
+            $tenantUserData['cc_enable'] = $ccenable;// 1 for tenant admin & 0 for tenant user
+            $tenantUserData['send_as'] = 1; // HTML by default
+            $tenantUserData['complete_notification'] = 0; // no by default
+            $tenantUserModel->insertTenantUser($tenantUserData);
+            
+            echo 1;
+ }
+
+ public function addtenantoptionAction(){
+    //echo 'test';
+    $this->_helper->layout()->disableLayout();
+    $this->_helper->viewRenderer->setNoRender(true);
+    $bid = $this->_getParam('bid');
+    $uid = $this->_getParam('uid');
+    $tid = $this->_getParam('tid');
+
+    $tenentdata = array();
+    $tenentdata['UserID'] = (int)$uid;
+    $tenentdata['BuidlingID'] = (int)$bid;
+    $tenentdata['TenantID'] = (int)$tid;
+   // echo $tenentdata['UserID']. '--'.$tenentdata['BuidlingID'].'--'.$tenentdata['TenantID'];
+    $tenantOptionModel = new Model_TenantOption();
+     // echo $tenentdata['UserID']. '--'.$tenentdata['BuidlingID'].'--'.$tenentdata['TenantID'];
+    try{
+     $tenantOptionModel->insertTenantOption($tenentdata);
+     echo 1;
+     exit(0);
+    } catch (Exception $e) {
+        echo $e->getMessage();  
+
+    }
+
+   
+
+ }
 
     public function createuserAction() {
         $roleMapper = new Model_Role();
@@ -923,6 +1315,40 @@ class TenantController extends Ve_Controller_Base {
      * Show tenant user's detail
      */
 
+    // public function tenantuserAction() {
+
+       
+    //  //   print_r($data);
+    //  //   die;
+    //     $msgId = $this->_getParam('msg', 0);
+    //     $msg = '';
+    //     if ($msgId == 1) {
+    //         $msg = 'Tenant user has been created successfully.';
+    //     }
+
+    //     if ($msgId == 2) {
+    //         $msg = 'Tenant user has been updated successfully.';
+    //     }
+    //     if ($msgId == 3) {
+    //         $msg = 'Tenant has been deleted successfully.';
+    //     }
+    //     $tm = new Zend_Session_Namespace('tenant_message');
+    //     if (!isset($tm->msg) && $msgId != 0) {
+    //         $tm->msg = $msg;
+    //         $this->_redirect('/tenant/tenantuser');
+    //     }
+    //     $tenant = new Model_Tenant();
+    //     $tenantuser = array();
+    //     $tId = $this->_getParam('company');
+
+    //     $tenantuser =  $tenant->getTenantByUser($this->userId,$tId);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            er = $tenant->getTenantByTenantUser($this->userId);
+
+    //     $tenantcompanyListArr = $tenant->getTenantCompanies($this->userId);
+    //     //var_dump($tenantuser);
+    //     $this->view->roleId = $this->roleId;
+    //     $this->view->tenantuser = $tenantuser[0];
+    //     $this->view->tenantcompanyListArr = $tenantcompanyListArr;
+    // }
     public function tenantuserAction() {
         $msgId = $this->_getParam('msg', 0);
         $msg = '';
@@ -942,11 +1368,23 @@ class TenantController extends Ve_Controller_Base {
             $this->_redirect('/tenant/tenantuser');
         }
         $tenant = new Model_Tenant();
+        $tId = $this->_getParam('company');
+        $tenantCompanyList = $tenant->getTenantCompanies($this->userId);
+      
+     
+        if($tId){
+            $set_cookie = setcookie('tenant_company', $tId, time() + (86400 / 24), "/");
+            $tenantuser = $tenant->getTenanyUserByTenantGroup($tId);
+            $this->view->tId = $tId;
+        }
+        else
         $tenantuser = $tenant->getTenantByUser($this->userId);
-        //var_dump($tenantuser);
-
+            
+        $this->view->tenantGroupListArr = $tenantCompanyList;
         $this->view->roleId = $this->roleId;
+       
         $this->view->tenantuser = $tenantuser[0];
+        $this->view->tenantusers = $tenantuser;
     }
 
     /**
@@ -1113,6 +1551,7 @@ class TenantController extends Ve_Controller_Base {
     public function edittuserAction() {
         $this->_helper->layout()->setLayout('popuplayout');
         $tuId = $this->_getParam('tuId');
+        $locationuser = $this->_getParam('locationuser');       
         $message = array();
         $tenantUserModel = new Model_TenantUser();
         $tenant = new Model_Tenant();
@@ -1222,9 +1661,11 @@ class TenantController extends Ve_Controller_Base {
             $this->view->tenantData = $tenantData[0];
             $this->view->tuserDetial = $tuserDetail;
             $this->view->userId = $this->userId;
+           
 
         } else
             $message['msg'] = 'Invalid Data';
+        $this->view->locationuser = $locationuser;
         $this->view->message = $message;
     }
 
@@ -1234,6 +1675,9 @@ class TenantController extends Ve_Controller_Base {
         $tId = $this->_getParam('tId');
         $tenant = new Model_Tenant();
         $tenantData = $tenant->getTenantById($tId);
+
+      
+
         if ($this->getRequest()->getMethod() == 'POST') {
             $data = $this->getRequest()->getPost();
             //print_r($data);
@@ -1255,6 +1699,8 @@ class TenantController extends Ve_Controller_Base {
             $userModel = new Model_User();
             $tenantUserModel = new Model_TenantUser();
             $userDetail = $userModel->isUserExist($data['email']);
+            echo json_encode($userDetail);
+        
             if (!$userDetail) {
                 try {
                     $userData['uid'] = $userModel->insertUser($userData);
@@ -1357,7 +1803,19 @@ class TenantController extends Ve_Controller_Base {
                     $message['status'] = 'error';
                     $message['msg'] = 'Some error occurred during create new user.';
                 }
-            } else {
+            }else if( isset($tenantUserData['tenantId']) && $tenantUserData['tenantId']!= $tId){
+               
+                $tenantUserData['userId'] = $userData['uid'];
+                $tenantUserData['tenantId'] = $data['tenantId'];
+                $tenantUserData['suite_location'] = $data['suite_location'];
+                $tenantUserData['cc_enable'] = $data['cc_enable'];
+                $tenantUserData['send_as'] = $data['send_as'];
+                $tenantUserData['complete_notification'] = $data['complete_notification'];
+                $tenantUserModel->insertTenantUser($tenantUserData);
+
+            }
+            
+            else {
                 $message['status'] = 'email_error';
                 $message['msg'] = 'This email id is exists.';
             }
@@ -1737,6 +2195,8 @@ class TenantController extends Ve_Controller_Base {
         $this->view->userId = $this->userId;
     }
 
+   
+
     public function loadtenantinactiveuserAction() {
         $this->_helper->layout()->disableLayout();
         $tenant = new Model_TenantUser();
@@ -1871,6 +2331,21 @@ class TenantController extends Ve_Controller_Base {
         exit();
     }
 
+    public function gettenantsAction() {
+        $query = $this->_request->getParams();
+		$tenantModel = new Model_Tenant();
+		$tenantDetails = $tenantModel->getTenantUserEmail($query['q'],$query['bid']);
+        
+        if(!empty($tenantDetails)) {
+            foreach($tenantDetails as $key => $tenant) {
+                $tenantDetail[$key]['label'] = $tenant->User_EMail;
+                $tenantDetail[$key]['value'] = $tenant->User_EMail;
+            }
+        }
+        echo $query["callback"]."(".json_encode($tenantDetail).")";
+        exit(0);
+    }
+    
     public function createtuserAction() {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -2624,6 +3099,427 @@ class TenantController extends Ve_Controller_Base {
         }
       
     }
+
+    public function removetenantlocationAction() {
+        $data = $this->getRequest()->getPost();
+        $user = new Model_User();
+        $tenant = new Model_Tenant();
+        $tenantuser = new Model_TenantUser();
+        $tuusersId = (int)$data['tuId']; 
+        $uId = (int)$data['uId']; 
+        
+
+              
+        $userData['is_location_removed'] = '1';
+       
+        if(isset($tuusersId) && !empty($tuusersId)){
+         // $tenantuser->updateTenantUser($userData,$tuusersId);
+          $tenantuser->updateTenantUser($userData, $tuusersId);
+          $json_data = array();
+            $json_data['msg'] = "Record successfully de!";
+            $json_data['url'] = '/tenant/myaccountsetting/msg/2';
+            echo json_encode($json_data);
+            exit;
+       }
+
+             
+    }
+
+    public function recoverytenantlocationAction() {
+        $data = $this->getRequest()->getPost();
+        $user = new Model_User();
+        $tenant = new Model_Tenant();
+        $tenantuser = new Model_TenantUser();
+        $tuusersId = (int)$data['tuId'];       
+        $userData['is_location_removed'] = '0';
+        $uId = (int)$data['uId']; 
+       
+        if(isset($tuusersId) && !empty($tuusersId)){
+            $tenantuser->updateTenantUser($userData, $tuusersId);
+          $json_data = array();
+            $json_data['msg'] = "Record successfully de!";
+            $json_data['url'] = '/tenant/myaccountsetting/msg/2';
+            echo json_encode($json_data);
+            exit;
+       }
+             
+    }
+
+    public function updatetenantsuitAction() {
+        $data = $this->getRequest()->getPost();
+        $user = new Model_User();
+        $tenant = new Model_Tenant();
+        $usersId = $data['userid'];
+        $tenantId = $data['tenantid'];
+        $tenanuserid = $data['tenanuserid'];
+        $build_ID = $data['buildID'];
+
+             
+    }
+
+    public function getmultiluserbylocationAction(){
+        $this->_helper->layout()->disableLayout();
+        $data = $this->getRequest()->getPost();
+        $tenantUserModel = new Model_TenantUser();        
+        $json_data = $tenantUserModel->getMutiluserInfo($data);
+        if($json_data){
+          echo '1';
+        }else{
+            echo '0';
+        }
+
+        exit;
+         
+    }
+
+    public function resettenantoptionfilterAction(){
+       // multiuser_search_email
+        if (isset($_COOKIE['multiuser_search_email'])) {
+            unset($_COOKIE['multiuser_search_email']); 
+            setcookie('multiuser_search_email', '', -1, '/');           
+        }         
+        $this->_redirect('/tenant/tenantoptions');    
+
+    }
+
+// update tenant menu version
+
+public function updatemenuversionAction(){   
+    $data = $this->getRequest()->getPost();
+
+        $tenantversion = $this->_getParam('tenantversion');      
+        if(isset($tenantversion)){            
+            setcookie('tenant_version', $tenantversion, time() + (86400 / 24), "/");
+        }  
+        echo $tenantversion;    
+        exit();
+       
+
+    }
+
+    // update tenant company version
+
+    public function updattenantcompanyAction(){   
+        $data = $this->getRequest()->getPost();
+
+            $tenant_company = $this->_getParam('tenant_company');      
+            if(isset($tenant_company)){            
+                setcookie('tenant_company', $tenant_company, time() + (86400 / 24), "/");
+            }  
+            echo $tenant_company;    
+            exit();
+        
+
+        }
+
+
+        public function checkstatusAction(){
+        
+            $total = $this->gettotalAction();
+            $totalad = array("count"=>$total);
+            //print_r($total);
+            echo  json_encode($totalad);
+            die;
+        }
+        
+        public function reloadworkorderAction() {
+          
+            $this->_helper->getHelper('layout')->disableLayout();  
+            $companyListing = '';
+            $buildingMapper = new Model_Building();
+            if ($this->roleId == '9') {
+                $companyListing = $buildingMapper->getCompanyBuilding($this->cust_id);
+            } else {
+                $user_build_mod = new Model_UserBuildingModule();
+                $buildinglists = $user_build_mod->getUserBuildingIds($this->userId);
+                if ($buildinglists) {
+                    $build_id_array = array();
+                    foreach ($buildinglists as $buildlist)
+                        $build_id_array[] = $buildlist['building_id'];
+                    $companyListing = $buildingMapper->getBuildingList($build_id_array);
+                }
+            }
+            
+            $page = $this->_getParam('page', 1);
+            $order = $this->_getParam('order', 'woId');
+            $dir = $this->_getParam('dir', 'DESC');
+            $wolist = '';
+            $show =  $_COOKIE['show_limit'];
+            $build_ID = $this->_getParam('bid', '');
+            $select_build_id = $build_ID;
+            /*         * *******set building in cookie ********* */
+            $buildIds = array();
+            foreach ($companyListing as $cl) {
+                $buildIds[] = $cl['build_id'];
+            }
+            if ($build_ID == 'all') {
+                $set_cookie = setcookie('build_cookie', '', time() + (86400 / 24), "/");
+            }
+            if (empty($build_ID) && (isset($_COOKIE['build_cookie']) && in_array($_COOKIE['build_cookie'], $buildIds))) {
+                $build_ID = $_COOKIE['build_cookie'];
+            } else {
+                $set_cookie = setcookie('build_cookie', $build_ID, time() + (86400 / 24), "/");
+                if ($build_ID == 'all') {
+                    $build_ID = '';
+                    $set_cookie = setcookie('build_cookie', '', time() + (86400 / 24), "/");
+                }
+            }
+
+
+            /* Show list of workorder */
+            $show = $this->_getParam('show', '');
+            if($show != ""){
+                setcookie('show_limit', $show, 2147483647, '/');
+            }else{
+               $show =  $_COOKIE['show_limit'];
+            }
+            
+            /*if($show == 'all'){
+                $show = 1000;
+            }*/
+            if(unserialize($show)){
+                $show =  unserialize($show);
+            }
+            
+            if($show==""){
+                $show = 10;
+            }
+            //$_COOKIE['build_cookie'];
+    
+            $woModel = new Model_WorkOrder();
+    
+            $search_array = array();
+          
+            if (isset($_REQUEST['submitform'])) {
+                if (isset($_POST['search_chkboxstatus']) && $_POST['search_chkboxstatus'] != '') {
+                    $search_array['search_status'] = $_POST['search_chkboxstatus'];
+    
+                    setcookie('search_chkboxstatus', serialize($_POST['search_chkboxstatus']), 2147483647, '/');
+                } else {
+                    setcookie('search_chkboxstatus', '', 2147483647, '/');
+                }
+            } elseif (!isset($search_array['search_chkboxstatus']) && isset($_COOKIE['search_chkboxstatus'])) {
+    
+                $search_array['search_status'] = unserialize($_COOKIE['search_chkboxstatus']);
+            }
+
+            $show = $this->_getParam('show', '');
+            if($show != ""){
+                setcookie('show_limit', $show, 2147483647, '/');
+            }else{
+               $show =  $_COOKIE['show_limit'];
+            }   
+            if(unserialize($show)){
+                $show =  unserialize($show);
+            }
+            //if(!is_int($show) || $show==""){
+            if($show==""){
+                $show = 25;
+            }
+            $category_name = $this->_getParam('category_name', '');
+            if ($category_name != '') {
+                $search_array['category_name'] = addslashes($category_name);
+                $this->view->category_name = $category_name;
+            }
+    
+            $tenant_name = $this->_getParam('tenant_name', '');
+            if ($tenant_name != '') {
+                $search_array['tenant_name'] = addslashes($tenant_name);
+                $this->view->tenant_name = $tenant_name;
+            }
+    
+            $search_wo = $this->_getParam('search_wo', '');
+            if ($search_wo != '') {
+                $search_array['search_wo'] = $search_wo;
+                $this->view->search_wo = $search_wo;
+            }
+    
+            $from_date = $this->_getParam('from_date', '');
+            if ($from_date != '') {
+                $search_array['from_date'] = date("Y-m-d", strtotime($from_date));
+                $this->view->from_date = date("Y-m-d", strtotime($from_date));
+            }
+    
+            $to_date = $this->_getParam('to_date', '');
+            if ($to_date != '') {
+                $search_array['to_date'] = date("Y-m-d", strtotime($to_date));
+                $this->view->to_date = date("Y-m-d", strtotime($to_date));
+            }
+            if ($companyListing != '') {
+                /* if($this->roleId=='9'){ */
+                if ($build_ID == '') {
+                    $buildIds = array();
+                    foreach ($companyListing as $cl) {
+                        $buildIds[] = $cl['build_id'];
+                    }
+                    $wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array, $page, $show);
+                    $wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
+                } else {
+                    $tenantId = $this->_getParam('tid');
+                    $color_code = array('00FFFF', 'FF0000', 'FF00FF', '800000', '008000', '800080', '808000', '0000FF', '00FF00', '00008075', 'FFFF00', '808000', '008080', 'FFA500');
+                    $building_color = array();
+                    $j = 1;
+                    $tenantlist = explode(',', $tenantId);
+                    if(count($tenantlist) > 1){
+                        foreach ($tenantlist as $cb) {
+                            if (isset($color_code[$j]))
+                                $building_color[$cb] = $color_code[$j];
+                            else {
+                                $j = 0;
+                                $building_color[$cb] = $color_code[$j];
+                            }
+                            $j++;
+                        }
+                                        
+                        $_SESSION['building_colors'] = $building_color;
+                    }else{
+                        $building_color = $_SESSION['building_colors'];
+                    }
+                    $wolist = $woModel->getBuildingWorkOrder($build_ID, $order, $dir, $search_array, $page, $show );
+                    $wolistcount = $woModel->getBuildingWorkOrderNew($build_ID, $order, $dir, $search_array);
+                }
+            }
+            // from here
+            $total_rows = $wolistcount;
+            $no_of_records_per_page = $show;
+            $total_pages = ceil($total_rows / $no_of_records_per_page);
+            $this->view->total_pages = $total_pages;
+            $this->view->pageno = $page;
+            $this->view->records = sizeof($wolist);
+           
+            $pageObj = new Ve_Paginator();
+            //$paginator = $pageObj->fetchPageDataResult($wolist, $page, $show);
+            $paginatorNew = $pageObj->fetchPageDataResultNew($wolist, $wolistcount, $page, $show);
+            //$lastactivity = $woModel->get_last_activity();
+          
+            $this->view->page = $page;
+            $view_type = $this->_getParam('view_type', 'line');
+            $this->view->custID = $this->cust_id;
+            $this->view->companyListing = $companyListing;
+            $this->view->select_build_id = $build_ID;
+            $this->view->wolist = $paginatorNew;//$paginator;
+            $this->view->order = $order;
+            $this->view->dir = $dir;
+            $this->view->view_type = $view_type;
+            $this->view->roleId = $this->roleId;
+            $this->view->acessHelper = $this->accessHelper;
+            $this->view->dline_location = $this->dline_location;
+            $this->view->ddetail_location = $this->ddetail_location;
+            $this->view->createnew_location = $this->createnew_location;
+            $this->view->closewo_location = $this->closewo_location;
+            $this->view->userId = $this->userId;
+            // refresh outo load 
+           
+            $getsult = $this->gettotalAction();       
+            $this->view->count = $getsult;
+            if (isset($_REQUEST['submitform'])) {
+                if (isset($_POST['search_chkboxstatus']) && $_POST['search_chkboxstatus'] != '') {
+                    $this->view->statusCookieDetails = $_POST['search_chkboxstatus'];
+                }
+            } else {
+    
+                $statusCookie = new Zend_Controller_Request_Http();
+                $statusCookieDetails = $statusCookie->getCookie('search_chkboxstatus');
+                $statusCookieDetails = unserialize($statusCookieDetails);
+                if ($statusCookieDetails != '') {
+                   $this->view->statusCookieDetails = $statusCookieDetails;
+                }
+            }
+           
+            if($this->roleId=='5' || $this->roleId=='7'){
+		
+                $tenantDefualtbuildinglists = $buildinglists;
+    
+                $tId = $this->_getParam('tid');
+                if(isset($tId) && !empty($tId)){
+                    $set_cookie = setcookie('tenant_company', $tId, time() + (86400 / 24), "/");
+                }
+                $tenant = new Model_Tenant();
+                $tId  = $_COOKIE['tenant_company'];
+            if ($tId){				
+                $tenantCompanyList = $tenant->getTenantCompanies($this->userId);     
+                $tenantuser = $tenant->getTenanyUserByTenantGroup($tId);
+    
+                
+                $this->view->tId = $tId;				
+                $this->view->tenantGroupListArr = $tenantCompanyList;
+            }		
+            else
+            $tenantuser = $tenant->getTenantByUser($this->userId);
+    
+             $tenantData = $tenant->getTenantByUser($this->userId);
+             $tenantInfo = $tenantData[0];
+             $page=$this->_getParam('page',1);
+             $order=$this->_getParam('order','woId');
+             $dir=$this->_getParam('dir','DESC');
+             
+             //for tanant Admin
+             $userId = $this->userId;	
+             if($this->roleId=='5'){	
+               $search_array['userId'] = $userId;
+     
+                $wolist = $woModel->getWorkOrderByBuilIds($buildIds, $order, $dir, $search_array,$page, $show);
+                $wolistcount = $woModel->getWorkOrderByBuilIdsNew($buildIds, $order, $dir, $search_array);
+             }else if($this->roleId=='7'){		
+                    
+                if (isset($tId)){	
+                        // echo $userId;
+                    $wolist = $this->woMapper->getTenantUserWorkOrder($tId,$order,$dir,$userId,$search_array);	
+                    
+                }else{				
+                    $wolist = $this->woMapper->getTenantUserWorkOrder($tenantInfo->tenantId,$order,$dir,$userId,$search_array);
+                }
+               
+             }		
+            //  if($this->roleId=='7')		 
+            //  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir,$this->userId);
+            //  else
+            //  $wolist = $this->woMapper->getTenantWorkOrder($tenantInfo->tenantId,$order,$dir);
+             $pageObj=new Ve_Paginator();
+             $paginator=$pageObj->fetchPageDataResult($wolist,$page,$show);		 
+             $this->view->page = $page;
+             $this->view->roleId = $this->roleId;
+             //$this->view->tenantuser = $tenantuser[0];
+             $this->view->wolist = $paginator;
+             $this->view->order = $order;
+             $this->view->dir = $dir;
+    
+             
+             $this->tenantDefualtbuildinglists = $tenantDefualtbuildinglists;
+             }
+             $this->view->roleId = $this->roleId;
+
+            // $adminNamespace = new Zend_Session_Namespace('Admin_User');
+            // $this->view->admin_role_id = $adminNamespace->role_id;
+        }
+
+        public function gettotalAction(){
+            $woModel = new Model_WorkOrder();        
+            $lastactivity = $woModel->get_last_activity();
+            $lastactivity1 = $woModel->get_last_activity1();
+            $lastactivity2 = $woModel->get_last_activity2();
+            //echo $total = count($lastactivity)+count($lastactivity1)+count($lastactivity2);
+            $total = $lastactivity + $lastactivity1 + $lastactivity2;
+            return $total;
+        } 
+
+
+        public function orderdetailAction() { 
+            //makes disable layout
+            $this->_helper->getHelper('layout')->disableLayout();
+            $woId = $this->_getParam('woId', '');
+            $woModel = new Model_WorkOrder();
+            $wodetail = $woModel->getWorkOrderInfo($woId);
+                   
+    
+            $this->view->woData = $wodetail[0];
+            $this->view->roleId = $this->roleId;
+            $this->view->userId = $this->userId;
+            $this->view->acessHelper = $this->accessHelper;
+            $this->view->dline_location = $this->dline_location;
+            $adminNamespace = new Zend_Session_Namespace('Admin_User');
+            $this->view->admin_role_id = $adminNamespace->role_id;
+        }
 }
 
 

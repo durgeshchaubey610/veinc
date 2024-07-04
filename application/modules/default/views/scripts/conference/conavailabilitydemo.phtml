@@ -19,8 +19,8 @@
     $crDetails = $this->crDetails;
     $not_permit = array(2, 3, 6);
     $today_day = date('j');
-    $current_month = date('m');
-    
+    $current_month = date('n');
+
     // echo $this->roleId;
     // echo $this->croom_location;
 	
@@ -245,9 +245,9 @@
 
             <div id="calender_change">
                 <div style='text-align:left;'><h2>
-                        <a href="#" onclick="changeMonth('<?php echo $mp; ?>', '<?php echo $yp; ?>','auser')">< </a> 
+                        <a href="#" onclick="changeMonth('<?php echo $mp; ?>', '<?php echo $yp; ?>','auser')"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 128 128"><path fill="#666" d="M88.2 3.8L35.8 56.23 28 64l7.8 7.78 52.4 52.4 9.78-7.76L45.58 64l52.4-52.4z"></path></svg> </a> 
                             <?php echo $mName.' '.$year; ?>
-                        <a href="#" onclick="changeMonth('<?php echo $mn; ?>', '<?php echo $yn; ?>','auser')"> > </a>
+                        <a href="#" onclick="changeMonth('<?php echo $mn; ?>', '<?php echo $yn; ?>','auser')"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 128 128"><path fill="#666" d="M38.8 124.2l52.4-52.42L99 64l-7.77-7.78-52.4-52.4-9.8 7.77L81.44 64 29 116.42z"></path></svg> </a>
                         <a  style="display:none" id="curr_mo" href="#" onclick="changeMonth('<?php echo $m; ?>', '<?php echo $y; ?>', '<?php echo "auser"; ?>')"> > </a>
                     </h2></div>
                 <?php //echo draw_calendar($m, $y);  ?>
@@ -308,6 +308,8 @@
 					
                     
 					if($list_day > $days ){
+
+                       
 						if($list_day==($days+1))
 						{
 							$month=($month+1);
@@ -320,6 +322,7 @@
 						$num_padded = sprintf("%02d", $l_days);
 						$index2 = $year . '-' . $month . '-' . $num_padded;
 					}else{
+                                               
 						$calendar.= '<div class="day-number">' . $list_day . '</div>';
 						$url = "'" . $this->baseUrl() . '/conference/createbooking/month/' . $month . '/year/' . $year . '/bid/' . $this->select_build_id . '/day/' . $list_day . "'";
                                                	$num_padded = sprintf("%02d", $list_day);
@@ -329,11 +332,9 @@
 					{
 					$i=1;
 					$calendar.= '<div class="date-bg">';
-                    $totals_booking = 0;                                    
-                    $totals_booking = count($bookingDetails);
+                                        
 					foreach ($bookingDetails as $bookingDetailsVal)
 					{
-                        
 						//print_r($bookingDetailsVal);
 							//print_r($bookingDetailsVal); 
 							$index = date('Y-m-d', strtotime($bookingDetailsVal->requested_date));
@@ -376,7 +377,6 @@
 							}
 							
 					}
-                  
                     $calendar.= '<span class="readmore" alt="show more">...</span>';
                     
 					$calendar.= '</div>';
@@ -497,9 +497,6 @@ $('.calendar-day').each(function () {
      }   
 });
 </script>
-
-
-
 
 
 

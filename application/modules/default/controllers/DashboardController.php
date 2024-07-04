@@ -50,7 +50,13 @@ class DashboardController extends Ve_Controller_Base {
             $rolenfo = $roleDetail[0];            
             $message = 'You are in building\'s <b>' . $rolenfo['title'] . '</b> area.';
         }
+        //Added By Dadhi for redirection
         $this->view->message = $message;
+        $redirect = array(5, 7);
+        if (in_array($this->roleId, $redirect)) {
+            $this->_redirect('/workorder/index');
+        }
+
         $noredirect = array(1, 5, 7);
         if (!in_array($this->roleId, $noredirect)) {
             $this->_redirect('/dashboard/workorder');

@@ -137,7 +137,10 @@ jQuery(document).ready(function() {
   </nav>
   <div id="page-wrapper"> 
     <!--Body Top Part start-->
-    
+	<!----------Tenant Admin and User Tab Conatiner---->
+	<?php echo $this->render('tenant_headertabs.phtml'); ?>
+	<!----------Tenant Admin and User Tab Conatiner Added By DVK On 26th Feb 2024---->
+
 							 <?php echo $this->layout()->content ?>
 					<div class="clearfix"></div>	                 
                    </div>
@@ -197,9 +200,17 @@ if($userRoleID == 5 ||  $userRoleID == 7) {
  <script>
 var tenanturl= "<?php echo $myprourl; ?>";
 var content = "<?php echo $myaccount; ?>"; 
+var userrole = "<?php echo $userRoleID; ?>";
+var check_default_loc = '<?php echo (!isset($_COOKIE['tenant_company']))?"all":'';?>';
+if(check_default_loc=="all" && (userrole=="5" ||userrole=="7" )){
+	setTimeout(function(){
+        $(".tenant_tabs li:first").addClass("resp-tab-active");
+    },600);
+}
 $(document).ready(function(){
     $('#myaccount').popover({content: content, html: true, placement: "bottom"}); 
 });
+
 
 function myaccountinfo() {
 	window.location.assign(tenanturl)

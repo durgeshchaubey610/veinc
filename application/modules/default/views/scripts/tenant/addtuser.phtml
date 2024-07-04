@@ -20,10 +20,11 @@ $sendDetail = $sendMapper->getSendAs();
 						<?php }?>
 				   </div>
 				   
-					  <form name="addNewUser" id="addNewUser" action="<?php echo BASEURL.'tenant/addtuser/tId/'.$this->tenantId;?>" method="post">
+					  <form name="addNewUser" id="addNewUser" action="<?php echo BASEURL.'tenant/addtuser/tId/'.$this->tenantId;?>" method="post" >
 						  <input type="hidden" value="<?php echo $this->tenantId;?>" name="tenantId" id="tenantId"/>
 						  <input type="hidden" value="<?php echo $this->tenantData->buildingId;?>" name="building" id="building"/>
-						  <input type="hidden" value="<?php echo $this->roleId;?>" name="role_id" id="role_id"/>						  					  						  					  						  					  
+						  <input type="hidden" value="<?php echo $this->roleId;?>" name="role_id" id="role_id"/>
+						  					  						  					  						  					  
 						  <div class="row">
 							<label>E-mail :<span class="required">*</span></label> <span class="uemailErr" id="email-error"></span>
 							<input type="text" value="" id="email" name="email"  autofocus>
@@ -112,5 +113,40 @@ $sendDetail = $sendMapper->getSendAs();
 			  </div>
 			  
 <script type="text/javascript">
-	 $("#phone").mask("?999.999.9999")
+	 $("#phone").mask("?999.999.9999");
+	 $('input[name=email]').change(function() { 
+		$.ajax({
+        type: "POST",
+        url: baseUrl + 'tenant/checkmultiusers',
+        data: {email: $("#email").val(),
+			   bid: '<?php echo $this->tenantData->buildingId;?>'
+		
+		},
+        success: function (data) {
+          var finalData =  JSON.parse(data);
+           if(finalData.UserID){
+			//alert('mutiluser have access');
+			console.log(finalData);
+			$('#firstname').val(finalData.User_First_Name);
+			$('#lastname').val(finalData.User_Last_Name);
+			$('#phone').val(finalData.phoneNumber);
+			$( "#firstname" ).prop("disabled", true );
+			$( "#lastname" ).prop("disabled", true );
+			$('#phone').prop("disabled", true );           
+           }else{
+			$('#firstname').val('');
+			$('#lastname').val('');
+			$('#phone').val('');
+			$( "#firstname" ).prop("disabled", false );
+			$( "#lastname" ).prop("disabled", false );
+			$('#phone').prop("disabled", false );
+			
+		   }
+           
+        }
+    });
+
+	 });
+
+	
 </script>
