@@ -175,7 +175,12 @@ class Model_User extends Zend_Db_Table_Abstract {
 				 ->where('u.remove_status = ?', '0')
 				 ->where('u.role_id = ?', '9')
 				 ->where('cp.status = ?', '1')
+<<<<<<< HEAD
                  ->order('cp.companyName ASC');			 				 
+=======
+                 ->order('cp.companyName ASC');	//Added by @dvk for shorting on 17 Nov				 				 
+			 				 
+>>>>>>> 526ad9c4f5d2afc985857f8f77d72ed25df8c3b0
 			$res = 	 $db->fetchAll($select);
         return ($res && sizeof($res)>0)? $res : false ;
 	}

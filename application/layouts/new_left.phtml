@@ -857,16 +857,20 @@ $(document).ready(function(){
     $('.menuver23').hide();
     $('.tentVesionWrap .inner-switch').removeClass('tnt-v22').addClass('tnt-v23');
     $('.tentVesionWrap .inner-switch').text('23.0');
+    //not required to go live switch 
+    $('.tentVesionWrap').hide();
 }else if(getCookie("tenantversion")=="23.01"){
+    //not required to go live switch 
+    $( ".tentVesionWrap" ).trigger( "click" );
+    $('.tentVesionWrap').hide(); 
     $('.tentVesionWrap .inner-switch').removeClass('tnt-v23').addClass('tnt-v22');
     $('.tentVesionWrap .inner-switch').text('22.12'); 
-    $('.menuver22').hide();    
-    $('.menuver23').show();
 }else{
     $('.tentVesionWrap .inner-switch').removeClass('tnt-v22').addClass('tnt-v23');
     $('.tentVesionWrap .inner-switch').text('23.01'); 
     $('.menuver22').show();
-    $('.menuver23').hide();    
+    $('.menuver23').hide(); 
+    $('.tentVesionWrap').hide();   
 }
 **/
 //  $(".tentVesionWrap").click(function(){
