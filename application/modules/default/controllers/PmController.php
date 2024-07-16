@@ -5427,23 +5427,7 @@ $show = $this->_getParam('show', '');
         $this->view->noofreading = sizeof($readingData);
         $this->view->userId = $user_id;
     }
-    /**
-     * rest filter By @dvk on 16 Nov 2023
-     * 
-     */
-
-    public function resetfilterAction() {
-        if (isset($_COOKIE['eqname'])) {
-            unset($_COOKIE['eqname']); 
-            setcookie('eqname', '', -1, '/');           
-        }         
-        if (isset($_COOKIE['eqparts'])) {
-            unset($_COOKIE['eqparts']); 
-            setcookie('eqparts', '', -1, '/');           
-        }        
-        $this->_redirect('/pm/equipment');
-    }
-    /**
+     /**
      * rest filter By Dadhi
      * 
      */
