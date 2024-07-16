@@ -1334,7 +1334,6 @@ class Model_PmTemplate extends Zend_Db_Table_Abstract {
 
     public function GetAllEquipmentTemplatetaskparent($desig_id = "") {
         $db = Zend_Db_Table::getDefaultAdapter();
-        //added Interval_Value'=>'t1.Interval_Value @dvk on 16 Nov 2023
 
         $select = $db->select()
                 ->from(array('t1'=>'pm_au_template_task'),array('AU_Template_Task_ID'=>'t1.AU_Template_Task_ID','Task_Instruction'=>'t1.Task_Instruction','AU_Frequency_ID'=>'t1.AU_Frequency_ID', 'Start_date'=>'t1.Start_date','Seasonal_Task'=>'t1.Seasonal_Task','Startdate_month'=>'t1.Startdate_month','Interval_Value'=>'t1.Interval_Value'))
@@ -2200,11 +2199,7 @@ class Model_PmTemplate extends Zend_Db_Table_Abstract {
                     ->from(array('patn' => 'pm_au_template_name'))
                     ->joinInner(array('patt' => 'pm_au_template_typedesignation'), 'patn.AU_Template_Name_ID = patt.AU_Template_Name_ID')
                     ->where("BuildingID =?", $build_ID)
-<<<<<<< HEAD
                     ->order(array('patn.AU_Template_Name ASC', 'patt.AU_TypeDesignation ASC'));
-=======
-                   ->order(array('patn.AU_Template_Name ASC', 'patt.AU_TypeDesignation ASC'));
->>>>>>> 526ad9c4f5d2afc985857f8f77d72ed25df8c3b0
                     //ordering changed and commented By Dadhi 
                     //->order('patn.AU_Template_Name DESC, patt.AU_TypeDesignation DESC');
         }
@@ -2988,28 +2983,20 @@ Where t1.AU_Template_Designation_ID='" . $desig_id . "'");
         }
         return $datas;
     }
-    
     public function getEquipmentNameList($buildingId) {
         $db = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select();
         $select->from(array('t1' => 'pm_au_equipment_name'), array('equipmentnameid' => 't1.AU_Equipment_Name_ID', 'AU_Equipment_Name' => 't1.AU_Equipment_Name', 'BuildingID' => 't1.BuildingID'))
                      ->where('t1.BuildingID  = ?', $buildingId)
-<<<<<<< HEAD
                      ->order('AU_Equipment_Name ASC');
                      
-=======
-                      ->order('t1.AU_Equipment_Name ASC'); // added by @dvk on 17 Nov 2023
-        
->>>>>>> 526ad9c4f5d2afc985857f8f77d72ed25df8c3b0
         $res = $db->fetchAll($select);
         foreach ($res as $data) {
             $datas[] = (array) $data;
         }
         return $datas;
     }
-     // function edited By @dvk on 18 Nov 2023
-    
-     public function searchEquipment($buildingId, $sortingData) {
+    public function searchEquipment($buildingId, $sortingData) {
         $a1 = $sortingData['eqparts'];
         $db = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select();
@@ -5785,6 +5772,7 @@ Where t1.AU_Template_Designation_ID='" . $desig_id . "'");
         $res = $db->fetchAll($select);
        return $res;
     }
+    
     
     
 }
