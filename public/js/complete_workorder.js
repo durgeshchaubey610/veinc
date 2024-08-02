@@ -2748,34 +2748,34 @@ function saveNoteTemp(woId) {
     if ($('#notify_account_user').is(":checked")) {
         notify_account_user = 1;
     }
-    $('#save_note').attr('disabled', 'disabled');
 
+    $('#save_note').attr('disabled', 'disabled');
     var note_date = $('#note_date').val();
     var internal = $('#internal').val();
     var note = $('#note').val();
+
     var submit_flag = true;
+
     if (note_date == '') {
         $('#cwerr_date').html('Date can not be blank.');
         submit_flag = false;
     } else {
         $('#cwerr_date').html('');
     }
+
     if (note == '') {
         $('#cwerr_note').html('Note can not be blank.');
         submit_flag = false;
     } else {
         $('#cwerr_note').html('');
     }
+
+
     if (submit_flag == false) {
-        $('#save_outside').attr('disabled', false);
+        $('#save_note').attr('disabled', false);
         return false;
     } else {
-        $('#save_note').attr('disabled', 'disabled');
-        // savenoteArray[savenote] = {note_date: note_date, internal: internal, note: note, woId: woId};
-        // console.log(savenoteArray);
-        // var internal_set = $("#internal option:selected").text();
-        // $('#notes_tab_table').append('<tr id="notes_tab_table_' + savenote + '"><td >' + note_date + '</td><td>' + note + '</td><td>' + internal_set + '</td><td><a title="Edit" href="javascript:void(0)" onclick="showEditNoteTemp(' + savenote + ')" class="close_bt_hide_cls"><img src="' + baseUrl + 'public/images/edit.png"  /></a><a href="javascript:void(0);"  title="Delete" onclick="deleteTempNotes(' + savenote + ')"><img src="' + baseUrl + 'public/images/delete.png"  /></a></td></tr>');
-        // savenote++;
+        $('.loader').show();
         $.ajax({
             url: baseUrl + "complete/savenote",
             type: "post",
@@ -2816,11 +2816,6 @@ function saveNoteTemp(woId) {
             }
 
         });
-        
-        // $("div.fancybox-close").trigger("click");
-        // $("#note_form").html('');
-        // $('.showmodel').hide();
-        // $('.hidemodel').show();
     }
 }
 
