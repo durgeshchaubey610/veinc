@@ -7635,6 +7635,8 @@ $show = $this->_getParam('show', '');
         $this->view->completewo = $param['wo_number'];
         $this->view->completeRadingTask = $param['reading_task'];
         $this->view->userId = $user_id;
+        $this->view->custID = $cust_id;
+
         
     }
 

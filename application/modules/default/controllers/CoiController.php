@@ -118,6 +118,7 @@ class CoiController extends Ve_Controller_Base {
         $this->view->roleId = $role_id;
         $this->view->acessHelper = $this->accessHelper;
 		$this->view->userId = $user_id;
+        $this->view->custID = $cust_id;
         //to set the access of Building Information
         $this->view->user_info_id = 33;
     }
