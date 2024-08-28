@@ -105,8 +105,10 @@ class PmhistoryController extends Ve_Controller_Base {
         $this->view->pmEquipmentName = $pmEquipmentName;
         $this->view->pmwoHistoryDetails = $pmwoHistoryDetails;
         //$this->view->pmwoHistorySortDetails = $pmwoHistorySortDetails;
+        $this->view->custID = $cust_id;
         $this->view->userId = $user_id;
         $this->view->pmHistoryNotes = $pmHistoryNotes;
+
         
     }
     
@@ -152,6 +154,7 @@ class PmhistoryController extends Ve_Controller_Base {
         }
         $this->view->companyListing = $companyListing;
         $this->view->select_build_id = $select_build_id;
+        $this->view->custID = $cust_id;
 
         $pmtemplate = new Model_PmTemplate();
         $AllEquipment = $pmtemplate->getEquipmentDetailForHistory($select_build_id, $data);
@@ -201,6 +204,7 @@ class PmhistoryController extends Ve_Controller_Base {
         }
         $this->view->companyListing = $companyListing;
         $this->view->select_build_id = $select_build_id;
+        $this->view->custID = $cust_id;
 
         $pmtemplate = new Model_PmTemplate();
         $AllEquipment = $pmtemplate->getWoByequipment($select_build_id, $data);
@@ -295,6 +299,7 @@ class PmhistoryController extends Ve_Controller_Base {
         $this->view->select_build_id = $select_build_id;
         $this->view->pmwoHistorySortDetails = $pmwoHistorySortDetails;
         $this->view->pmHistoryNotes = $pmHistoryNotes;
+        $this->view->custID = $cust_id;
         $this->view->userId = $user_id;
         
         
@@ -393,6 +398,7 @@ class PmhistoryController extends Ve_Controller_Base {
         $this->view->companyListing = $companyListing;
         $this->view->select_build_id = $select_build_id;
         $this->view->pmwoHistorySortDetails = $pmwoHistorySortDetails;
+        $this->view->custID = $cust_id;
         
         
         $this->_helper->viewRenderer('pmhistoryreadingdetails');
@@ -555,6 +561,7 @@ class PmhistoryController extends Ve_Controller_Base {
         $pmHistoryNotes = $pmTemplate->getPmWoNotes($select_build_id,$data);
         $this->view->pmHistoryNotes = $pmHistoryNotes;
         $this->view->id = $data['id'];
+        $this->view->custID = $cust_id;
     }
     
     public function sortpmhistorybyworkorderAction(){
@@ -626,6 +633,7 @@ class PmhistoryController extends Ve_Controller_Base {
         $this->view->userId = $user_id;
         $this->view->pmHistoryNotes = $pmHistoryNotes;
         $this->_helper->viewRenderer('sortpmhistorybyworkorder');
+        $this->view->custID = $cust_id;
         
     }
     
@@ -698,6 +706,7 @@ class PmhistoryController extends Ve_Controller_Base {
         $this->view->pmEquipmentName = $pmEquipmentName;
         $this->view->pmwoHistoryDetails = $pmwoHistoryDetails;
         $this->view->userId = $user_id;
+        $this->view->custID = $cust_id;
         $this->view->pmHistoryNotes = $pmHistoryNotes;
         $this->_helper->viewRenderer('sortpmhistoryreadingbyworkorder');
         

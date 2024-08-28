@@ -7366,7 +7366,7 @@ $show = $this->_getParam('show', '');
         $equipment = new Model_PmTemplate();
         $AllEquipment = $equipment->wosearchEquipment($select_build_id, $data);
         echo json_encode($AllEquipment);
-        die;
+       // die;
     }
 
     /**
@@ -7635,6 +7635,8 @@ $show = $this->_getParam('show', '');
         $this->view->completewo = $param['wo_number'];
         $this->view->completeRadingTask = $param['reading_task'];
         $this->view->userId = $user_id;
+        $this->view->custID = $cust_id;
+
         
     }
 

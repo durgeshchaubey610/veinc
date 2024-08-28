@@ -103,6 +103,9 @@ class WorkstatusController extends Ve_Controller_Base {
 			$msg = false;
 		}		
 		$this->view->msg = $msg;
+
+		//header('Location: '.BASEURL.'dashboard/workorder');//@dvkOn16Aug for redirection after email
+
 	} // close of change function
     
 	public function sendOnlyBadge($woId) { 

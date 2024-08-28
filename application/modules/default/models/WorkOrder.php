@@ -548,7 +548,9 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 					$sendEmail[] = $acuser['email'];
 				   $htmlContent = $this->getHtmlContent(1,$woData,$tenantData,$accounData);
 				   //print_r($htmlContent);
-				   $activateURL = BASEURL.'/workstatus/change/woId/'.$woData['woId'].'/sId/'.$wssData['schedule_id'].'/ckey/'.$wssData['ckey'];
+				  // $activateURL = BASEURL.'/workstatus/change/woId/'.$woData['woId'].'/sId/'.$wssData['schedule_id'].'/ckey/'.$wssData['ckey'];
+				   $activateURL = BASEURL.'/workstatus/change/woId/'.$woData['woId'].'/sId/'.$wssData['schedule_id'].'/userId/'.$acuser['uid'].'/ckey/'.$wssData['ckey'];
+				   //Added UserId for updating history log of the user
 				   $acknowledge = '<a href="'.$activateURL.'" target="_blank">Click here to acknowledge this work order</a>';
 				   $htmlContent['content'] = str_replace('[[++acknowledge]]', $acknowledge, $htmlContent['content'] );
 				   //print_r($htmlContent);
@@ -567,7 +569,7 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 						   $sendEmail[] = $gpuser->email;
 						   $htmlContent = $this->getHtmlContent($gpuser->sid,$woData,$tenantData,$accounData);
 						   //print_r($htmlContent);
-						   $activateURL = BASEURL.'/workstatus/change/woId/'.$woData['woId'].'/sId/'.$wssData['schedule_id'].'/ckey/'.$wssData['ckey'];
+						   $activateURL = BASEURL.'/workstatus/change/woId/'.$woData['woId'].'/sId/'.$wssData['schedule_id'].'/userId/'.$gpuser->uid.'/ckey/'.$wssData['ckey'];
 				           $acknowledge = '<a href="'.$activateURL.'" target="_blank">Click here to acknowledge this work order</a>';
 				           $htmlContent['content'] = str_replace('[[++acknowledge]]', $acknowledge, $htmlContent['content'] );
 				           
@@ -618,7 +620,7 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 						$sendEmail[] = $acuser['email'];
 					   $htmlContent = $this->getHtmlContent(1,$woData,$tenantData,$accounData);
 					   //print_r($htmlContent);
-					   $activateURL = BASEURL.'/workstatus/change/woId/'.$woData['woId'].'/sId/'.$wssData['schedule_id'].'/ckey/'.$wssData['ckey'];
+					   $activateURL = BASEURL.'/workstatus/change/woId/'.$woData['woId'].'/sId/'.$wssData['schedule_id'].'/userId/'.$acuser['uid'].'/ckey/'.$wssData['ckey'];
 					   $acknowledge = '<a href="'.$activateURL.'" target="_blank">Click here to acknowledge this work order</a>';
 					   $htmlContent['content'] = str_replace('[[++acknowledge]]', $acknowledge, $htmlContent['content'] );
 					   //print_r($htmlContent);
@@ -639,7 +641,7 @@ class Model_WorkOrder extends Zend_Db_Table_Abstract {
 						   $sendEmail[] = $gpuser->email;
 						   $htmlContent = $this->getHtmlContent(1,$woData,$tenantData,$accounData);
 						   //print_r($htmlContent);
-						   $activateURL = BASEURL.'/workstatus/change/woId/'.$woData['woId'].'/sId/'.$wssData['schedule_id'].'/ckey/'.$wssData['ckey'];
+						   $activateURL = BASEURL.'/workstatus/change/woId/'.$woData['woId'].'/sId/'.$wssData['schedule_id'].'/userId/'.$gpuser->uid.'/ckey/'.$wssData['ckey'];
 				           $acknowledge = '<a href="'.$activateURL.'" target="_blank">Click here to acknowledge this work order</a>';
 				           $htmlContent['content'] = str_replace('[[++acknowledge]]', $acknowledge, $htmlContent['content'] );
 				           
